@@ -1,0 +1,238 @@
+﻿  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+<link rel="stylesheet" href="~/Content/Oze.css">
+    <link rel="stylesheet" href="~/Themes/plugins/datatables/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="~/Content/Oze.css">
+    <div class="tab-title">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a aria-controls="Tính giá phòng" role="tab" data-toggle="tab">Tính giá phòng</a></li>
+         
+        </ul>
+    </div>
+        <div class="row">
+            <form id="formSearch" class="form-horizontal MarginTop20">
+                <div class="col-md-4 .col-sm-3">
+                    <div class="form-group form-group-sm" style="position:relative;">
+                        <label class="col-md-3 control-label" style="text-align:left">Từ</label>
+                        <div class="col-md-9">
+                            <div class="input-group input-group-sm date-search-picker_fdate" id="SearchPeriodFormdate">
+                                <input type="text" placeholder="Từ ngày" class="form-control" id="dtFrom" value="@DateTime.Now.ToString("dd/MM/yyyy 08:00")">
+                                <span class="input-group-addon input-group-addon-custom">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label" style="text-align:left">Tới</label>
+                        <div class="col-md-9">
+                            <div class="input-group input-group-sm date-search-picker_tdate" id="SearchPeriodFormdate">
+                                <input type="text" placeholder="Từ ngày" class="form-control" id="dtTo" value="@DateTime.Now.ToString("dd/MM/yyyy 18:00")">
+                                <span class="input-group-addon input-group-addon-custom">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-4 control-label" style="text-align:left">Hạng phòng</label>
+                        <div class="col-md-8">
+                            <select id="ddlRoomTypeID" class="form-control">
+                                <option value="0" selected>--Chọn--</option>
+                                @foreach (var roomType in (new Oze.Services.CommService().GetAllRoomType()))
+                                {
+                                    <option value="@roomType.Id">@roomType.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-4 control-label" style="text-align:left">Số phòng</label>
+                        <div class="col-md-8">
+                            <select id="ddlRoomID" class="form-control">
+                                <option value="0" selected>--Chọn--</option>
+                                @foreach (var roomType in (new Oze.Services.RoomService().getAll(null)))
+                                {
+                                    <option value="@roomType.Id">@roomType.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-4 control-label" style="text-align:left">Cách tính</label>
+                        <div class="col-md-8">
+                            <select id="ddlTypePrice" class="form-control">
+                                <option value="-1" selected>--Tự động--</option>
+                                <option value="0" >Theo giờ</option>
+                                <option value="1" >Theo ngày</option>
+                                <option value="2" >Theo đêm</option>                               
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-4 control-label" style="text-align:left">Người lớn</label>
+                        <div class="col-md-8">
+                            <select id="ddlAdult" class="form-control">
+                                <option value="1" selected>--1--</option>
+                                <option value="2" >--2--</option>
+                                <option value="3">--3--</option>
+                                <option value="4">--4--</option>
+                                <option value="5">--5--</option>
+                                <option value="6">--6--</option>                               
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-4 control-label" style="text-align:left">Trẻ em</label>
+                        <div class="col-md-8">
+                            <select id="ddlChildren" class="form-control">
+                                <option value="1" selected>--1--</option>
+                                <option value="2">--2--</option>
+                                <option value="3">--3--</option>
+                                <option value="4">--4--</option>
+                                <option value="5">--5--</option>
+                                <option value="6">--6--</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class=" col-md-offset-10">
+                    <button id="btnSearch" class="btn btn-info btn-sm" type="button">Tính giá</button>
+                </div>
+            </form>
+            <div class="col-md-12">
+                <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Hạng phòng</th>
+                            <th>Phòng</th>                           
+                            <th>Chính sách giá</th>
+                            <th>Số lượng</th>
+                            <th>Giá</th>
+                            <th>Thời gian từ</th>
+                            <th>Thời gian đến</th>                           
+                            <th>Loại giá</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+     </div>
+
+ 
+     
+    <!--script-->
+    <script src="~/Themes/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="~/Themes/plugins/datatables/dataTables.bootstrap.js"></script>
+    <script src="~/Themes/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/oze.common.js"></script>
+
+    <script type="text/javascript">
+        /*
+        public static int HOUR = 0;
+        public static int DAY = 1;
+        public static int NIGHT = 2;
+        public static int ALL = -1;
+
+        public static int EXTRA_EARLY_NIGHT = 5;
+        public static int EXTRA_LATE_NIGHT = 6;
+        public static int EXTRA_EARLY_DAY = 7;
+        public static int EXTRA_LATE_DAY = 8;
+        */
+        var $table;
+        $(document).ready(function () {
+            toggleMenu("menu_catdat");
+            showDialogLoading();
+            $table = $('#example').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "initComplete": function (settings, json) {
+                    hideDialogLoading();
+                },
+                "dom": '<"top">rt<"bottom" lip><"clear">',
+                "ajax": {
+                    "url": "/PriceEstimate/estimatePrice",
+                    "data": function (d) {
+                        delete d.columns;
+                        d.roomid = $("#ddlRoomID").val();
+                        d.roomtypeid = $("#ddlRoomTypeID").val();
+                        d.dtFrom = $("#dtFrom").val();
+                        d.dtTo = $("#dtTo").val();
+                        d.typePrice = $("#ddlTypePrice").val();
+                        d.adult = $("#ddlAdult").val();
+                        d.children = $("#ddlChildren").val();
+
+
+                    }
+                },
+                "columns":
+                    [
+                    
+
+                     { "data": "roomtypeName", "orderable": "false", "width": "35px" },//1
+                     { "data": "roomName", "orderable": "false", "width": "50px" },//1
+                     { "data": "pricePolicyName", "orderable": "false", "width": "50px" },//1
+                     { "data": "quantiy", "orderable": "false", "width": "35px" },//1
+                     { "data": "price", "orderable": "false", "width": "50px" },//1
+                     {
+                         "data": "dtFrom", "width": "50px", render: function (data, type, row)//2
+                         {
+                             return row.dtFrom === null ? "" : moment(new Date(parseInt(row.dtFrom.slice(6, -2)))).format("DD-MM-YYYY HH:mm");
+                         }
+                     },
+                     {
+                          "data": "dtTo", "width": "50px", render: function (data, type, row)//2
+                          {
+                              return row.dtTo === null ? "" : moment(new Date(parseInt(row.dtTo.slice(6, -2)))).format("DD-MM-YYYY HH:mm");
+                          }
+                      },
+                     {
+                         "data": "typePrice", "width": "50px", render: function (data, type, row)//2
+                        {
+                              var sContent;
+                              if (row.typePrice == 0) sContent = "Theo giờ";
+                              else if (row.typePrice == 1) sContent = "Theo ngày";
+                              else if (row.typePrice == 2) sContent = "Theo đêm";
+
+                              else if (row.typePrice == 5) sContent = "Phụ trội sớm đêm";
+                              else if (row.typePrice == 6) sContent = "Phụ trội trễ đêm";
+                              else if (row.typePrice == 7) sContent = "Phụ trội sớm ngày";
+                              else if (row.typePrice == 8) sContent = "Phụ trội trễ ngày";
+                              else if (row.typePrice == 9) sContent = "Phụ trội người lớn";
+                              else if (row.typePrice == 10) sContent = "Phụ trội trẻ em";
+                              else sContent = "Không xác định";                          
+                              return sContent;
+                        }
+                    }
+                    ]
+            });
+           
+            $("#btnSearch").click(function () {
+                searchGrid();
+            });
+            $('#dtFrom').datetimepicker({
+                format: 'DD/MM/YYYY HH:mm'
+            });
+
+            $('#dtTo').datetimepicker({
+                format: 'DD/MM/YYYY HH:mm'
+            });
+        });
+        function searchGrid() {
+            //$table.bootstrapTable('refresh');
+            $table.ajax.reload();
+        }
+        
+    </script>

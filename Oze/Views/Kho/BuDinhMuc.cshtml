@@ -1,0 +1,117 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Root.cshtml";
+}
+<link rel="stylesheet" href="~/Content/hungpvCustom.css">
+@section Script{
+    <script src="~/Scripts/oze/Store/budinhmuc.js"></script>
+}
+<div class="tab-title">
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a aria-controls="Quản lý NCC" role="tab" data-toggle="tab">Bù định mức</a></li>
+    </ul>
+</div>
+<div class="box-info">
+    <div class="box-body">
+        <fieldset>
+            <legend>Thông tin phiếu</legend>
+            <form id="frmOrder">
+            <div class="form-group row">
+                <label class="col-md-2 control-label">Kho nguồn chính </label>
+                <div class="col-md-4">
+                    <select id="SrcStoreId" required="1" class="form-control">
+                        <option value="">Chọn kho nguồn</option>
+                        @{
+                            var srcstore = new Oze.Services.StoreService().GetMainStore();
+
+                            foreach (var item in srcstore)
+                            {
+                                <option value="@item.Id">@item.title</option>
+
+                            }
+                        }
+                    </select>
+                </div>
+                <label class="col-md-2 control-label">Chọn minibar </label>
+                <div class="col-md-4">
+                    <select id="DesStoreId" required="1" class="form-control">
+                        <option value="0">Tất cả</option>
+                        @{
+                            var store = new Oze.Services.StoreService().GetAllStore().Where(p=>p.typeStore==2).ToList();
+
+                            foreach (var item in store)
+                            {
+                                <option value="@item.Id">@item.title</option>
+
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <label class="col-md-2 control-label">Chọn sản phẩm</label>
+                <div class="col-md-4">
+                    <select id="Product" required="1" class="form-control">
+                        <option value="0">Tất cả</option>
+                        @{
+                            var product = new Oze.Services.StoreService().GetallProducts();
+
+                            foreach (var item in product)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+                </form>
+
+
+        </fieldset>
+        <div class="box-footer">
+            <button type="button" id="btnSave" class="btn btn-primary">Bù kho</button>
+        </div>
+        <fieldset>
+            <legend>Danh sách tồn kho</legend>
+            <table id="product-table" class="table table-striped table-responsive">
+                <thead>
+               
+                <tr>
+                    <td>STT</td>
+                    <td>
+                        Bù tay
+                    </td>
+                    <td>
+                      Tên minibar/ Mã sản phẩm
+                    </td>
+                    <td>
+                       Số lượng tồn
+                    </td>
+                    <td>
+                       Số lượng thiếu
+                    </td>
+                    <td>
+                      Định mức tối thiểu
+                    </td>
+                    <td>
+                       <input type="checkbox" id="cboAuto"/> Bù tự động
+                    </td>
+                                    
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </fieldset>
+    </div>
+
+   
+</div>
+<script src="~/Scripts/oze.common.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        toggleMenu("menu_kho");
+    });
+</script>

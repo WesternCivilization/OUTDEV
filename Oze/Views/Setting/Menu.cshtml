@@ -1,0 +1,57 @@
+﻿@using Oze.Models;
+@{
+    ViewBag.Title = "Menu";
+    List<MenusModel> data = new List<MenusModel>();
+     data = ViewData["menuList"] as List<MenusModel>;
+}
+
+<h2>Menu</h2>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+ <!-- DataTables -->
+<link rel="stylesheet" href="~/Themes/plugins/datatables/dataTables.bootstrap.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.2/css/fixedHeader.dataTables.min.css">
+
+<div class="box-body">
+    <table id="tbMenu" class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Link</th>
+                <th>ParentID</th>
+                <th>Level</th>
+                <th>Order</th>
+                <th>Icon</th>
+                <th>Module Name</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in data)
+            {
+                <tr>
+                    <td>@item.ID</td>
+                    <td>@item.Name</td>
+                    <td>@item.Link</td>
+                    <td>@item.ParentID</td>
+                    <td>@item.Level</td>
+                    <td>@item.Order</td>
+                    <td>@item.Icon</td>
+                    <td>@item.ModuleName</td>
+                    <td>@item.Status</td>
+                </tr>
+               
+            }
+        </tbody>
+       
+    </table>
+</div>
+<!-- DataTables -->
+<script src="~/Themes/plugins/datatables/jquery.dataTables.js"></script>
+<script src="~/Themes/plugins/datatables/dataTables.bootstrap.js"></script>
+<script src="https://cdn.datatables.net/fixedheader/3.1.2/js/dataTables.fixedHeader.min.js"></script>
+
+<!-- SlimScroll -->
+<script src="~/Themes/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- Menu -->
+<script src="~/Scripts/oze/oze.menu.js">

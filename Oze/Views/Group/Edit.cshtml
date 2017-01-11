@@ -1,0 +1,270 @@
+﻿@using Oze.Models;
+@model Oze.Models.GroupModels
+@{
+    ViewBag.Title = "Edit Group";
+    Layout = "~/Views/Shared/_Root.cshtml";
+}
+<!-- DataTables -->
+<link rel="stylesheet" href="~/Themes/plugins/datatables/dataTables.bootstrap.css">
+<!-- iCheck for checkboxes and radio inputs -->
+<link rel="stylesheet" href="/Themes/plugins/iCheck/all.css">
+<style>
+    .dataTables_length {
+        float: left;
+    }
+
+    .dataTables_filter {
+        float: right;
+    }
+</style>
+
+<div class="nav-tabs-custom tab-title">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#GroupGeneral" data-toggle="tab">Thông tin chung</a></li>
+        <li><a href="#AccessRight" data-toggle="tab">Quyền thao tác</a></li>
+        <li><a href="#GroupMenu" data-toggle="tab">Quyền Menu</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="active tab-pane" id="GroupGeneral">
+            <div class="box box-primary box-none-border">
+                <!-- /.box-header -->
+                <!-- form start -->
+                <!--Modal-->
+                @using (Html.BeginForm(new { @rule = "form" }))
+                {
+                    <div class="box-body">
+
+                        <div data-insert="hide" class="form-group hide">
+                            @Html.LabelFor(m => m.Id, new { @class = "control-label col-md-3" })
+                            <div class="col-md-9">
+                                @Html.TextBoxFor(m => m.Id, new { @class = "form-control txt-content", @data = "ID", disabled = "disabled" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.GroupName, htmlAttributes: new { @class = "control-label col-md-3" })
+                            <div class="col-md-9">
+                                @Html.EditorFor(model => model.GroupName, new { htmlAttributes = new { @class = "form-control txt-content", @data = "GroupName" } })
+                                @Html.ValidationMessageFor(model => model.GroupName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.GroupType, htmlAttributes: new { @class = "control-label col-md-3" })
+                            <div class="col-md-9">
+                                @if (ViewData.ContainsKey("ListGroupType"))
+                                {
+                                    @Html.DropDownList("GroupType", (SelectList)ViewData["ListGroupType"], String.Empty, new { @class = "form-control dll-content", @data = "GroupType" })
+                                    @Html.ValidationMessageFor(model => model.GroupType, "", new { @class = "text-danger" })
+                                }
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.SysHotelCode, htmlAttributes: new { @class = "control-label col-md-3" })
+                            <div class="col-md-9">
+                                @if (ViewData.ContainsKey("Hotel"))
+                                {
+                                    @Html.DropDownList("SysHotelCode", (SelectList)ViewData["Hotel"], String.Empty, new { @class = "form-control dll-content", @data = "SysHotelID" })
+                                    @Html.ValidationMessageFor(model => model.SysHotelCode, "", new { @class = "text-danger" })
+                                }
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-3" })
+                            <div class="col-md-9">
+                                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control txt-content", @data = "Description" } })
+                                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-3" })
+                            <div class="col-md-9">
+                                @* can goi ham build style *@
+                                @foreach (var item in @EnumHelper<Status>.GetValues(Status.Close))
+                                {
+                                    var name = EnumHelper<Status>.GetDisplayValue(item);
+                                    <div class="radio-group">
+                                        <label data="@item">
+                                            <input data="@item" type="radio" name="r3" class="minimal-red radio-btn" value="@name" checked>
+                                            @name
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="box-footer">
+                            <button id="btnSave" type="button" class="btn btn-block btn-oze btn-oze-add btn-flat">
+                                <div class="btn-border"><p>Hoàn thành</p></div>
+                            </button>
+                        </div>
+
+                    </div>
+                }
+            </div>
+
+        </div>
+        <div class="tab-pane" id="AccessRight">
+            @if (ViewData["ListRule"] != null)
+            {
+                var data = (List<Oze.Models.AccessRightModels>)ViewData["ListRule"];
+
+                <div class="box-body">
+                    <div class="box-access-right">
+                        <input id="btnSave" type="button" value="Hoàn thành" class="btn btn-block btn-oze-add btn-flat" />
+                    </div>
+                    <table class="table table-bordered table-hover" id="ListRule">
+                        <thead>
+                            <tr>
+                                <td>STT</td>
+                                <td>RuleID</td>
+                                <td>Nhóm</td>
+                                @*<td>Module Name</td>*@
+                                <td>Xem</td>
+                                <td>Thêm mới</td>
+                                <td>Sửa</td>
+                                <td>Xóa</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ int i = 0;}
+                            @foreach (var item in data)
+                            {
+                                var re = item.Read ? "checked" : "";
+                                var wr = item.Write ? "checked" : "";
+                                var cr = item.Create ? "checked" : "";
+                                var de = item.Delete ? "checked" : "";
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@item.RuleID</td>
+                                    <td>@item.ModelName</td>
+                                    <td name="Read" id="@item.Read"><input type="checkbox" class="minimal" @re></td>
+                                    <td name="Create" id="@item.Create"><input type="checkbox" class="minimal" @cr></td>
+                                    <td name="Write" id="@item.Write"><input type="checkbox" class="minimal" @wr></td>
+                                    <td name="Delete" id="@item.Delete"><input type="checkbox" class="minimal" @de></td>
+                                </tr>
+                                i++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                                }
+        </div>
+        <div class="tab-pane" id="GroupMenu">
+            <!-- form start create GroupMenu-->
+            @using (Html.BeginForm("CreateGroupMenu", "Group", FormMethod.Post, new { @id = "frmCreateGroupMenu", @name = "frmCreateGroupMenu", @class = "form-horizontal" }))
+            {
+                @Html.HiddenFor(model => model.Id, new { id = "GroupID" })
+                <div class="box-body box-create col-md-5">
+                    <div class="form-group">
+                        <label class="control-label col-md-2" id="SysMenuID" for="SysMenuID">Chọn Menu</label>
+                        <div class="col-md-6">
+                            @if (TempData.ContainsKey("MenuList"))
+                            {
+                                @Html.DropDownList("Menu", (SelectList)TempData["MenuList"], String.Empty, new { @class = "form-control", id = "SysMenuID" })
+                            }
+                        </div>
+                        <div class="col-md-4">
+                            <a id="btnCreate" class="btn btn-block btn-oze btn-oze-add btn-flat"><i class="glyphicon glyphicon-plus"></i>Thêm mới</a>
+                        </div>
+                    </div>
+                </div>
+            }
+            <!--Show Message-->
+            <div class="modal fade" id="modalthongbao" role="dialog">
+                <div class="modal-dialog">
+
+                    Modal content
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Thông Báo</h4>
+                        </div>
+                        <div class="modal-body">
+                            <h2 id="messthongbao" style="color:red"> </h2>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!--End Show Message-->
+            
+            @if (TempData["ListGroupMenu"] != null)
+            {
+                var data = (List<Oze.Models.SysGroupMenu_RelModels>)TempData["ListGroupMenu"];
+                <div class="box-body">
+                    <table class="table table-bordered table-striped" id="ListGroupMenu">
+                        <thead>
+                            <tr>
+                                <td>STT</td>
+                                <td>Group ID</td>
+                                <td>Menu</td>
+                                <td>Level</td>
+                                <td>Thao tác</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ int i = 0;}
+                            @foreach (var item in data)
+                            {
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@item.SysGroupID</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.Level</td>
+                                    <td class="td-modify">
+                                        <div class="edit-delete-table">
+                                            <div class="delete-table" data-toggle="modal" data-backdrop="static" data-target="#mdDelete">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    @*<td>@Html.ActionLink("Delete", "DeleteGroupMenu", new { ID = item.ID }, new { id = "liDeleteGroupMenu" })</td>*@
+                                </tr>
+                                i++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Modal xóa -->
+                <div class="modal modal-delete fade" id="mdDelete" tabindex="-1" role="dialog" aria-labelledby="lblTitle">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="lblTitle">Xóa Quyền Menu</h4>
+                            </div>
+                            <div class="modal-body clearfix">
+                                <div class="modal-body-content">
+                                    <p></p>
+                                </div>
+                            </div>
+                            <div class="modal-footer clearfix">
+                                <button id="btnDelete" type="button" class="btn btn-block btn-oze-delete btn-flat">
+                                    <div class="btn-border"><p>Xóa</p></div>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div>
+    @Html.ActionLink("Back to List", "Create")
+</div>
+<!-- DataTables -->
+<script src="~/Themes/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="~/Themes/plugins/datatables/dataTables.bootstrap.js"></script>
+<script src="~/Themes/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="~/Themes/plugins/iCheck/icheck.js"></script>
+<script src="~/Scripts/oze/oze.AccessRight.js"></script>
+@*<script src="~/Scripts/oze/oze.Group.js"></script>*@
+<script src="~/Scripts/oze/oze.createMenuGroup.js"></script>

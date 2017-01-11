@@ -1,0 +1,150 @@
+﻿@using Oze.Models;
+<style>
+    .form-control, .input-group-addon {
+        border: 0px;
+        border-bottom: 1px solid #a6a6a6;
+        outline: none;
+        border-color: #a6a6a6 !important;
+    }
+</style>
+
+<form id="dummyRoomMate" action="javascript:none">
+    <div class="col-sm-6 not-padding-left">
+        <div class="box-body not-padding-left">
+            <div class="form-group col-sm-10 not-padding-left">
+                <span>Họ và tên:</span>
+            </div>
+            <!-- txtname -->
+            <div class="form-group col-sm-10 not-padding-left">
+                <input type="text" class="form-control" id="txtnamef" name="txtnamef" autocomplete="off">
+                <!-- /.input group -->
+            </div>
+
+
+            <!-- /.form group -->
+            <!-- txtIdentify -->
+            <div class="form-group col-sm-10 not-padding-left">
+                <input type="text" class="form-control" id="txtIdentifyf" name="txtIdentifyf" placeholder="Số chứng minh thư/GPLX" autocomplete="off">
+                <!-- /.input group -->
+            </div>
+
+
+            <!-- /.form group -->
+            <!-- txtDOB -->
+            @*<div class="form-group col-sm-10 ">*@
+            <div class="form-group col-sm-10 not-padding-left pop-form-group">
+                <div class="input-group date" id="dpDOBf">
+                    <input type="text" class="form-control" placeholder="Ngày tháng năm sinh" id="txtDOBf" name="txtDOBf" autocomplete="off">
+                    <span class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </span>
+                </div>
+                <!-- /.input group -->
+            </div>
+
+            <!-- /.form group -->
+            <!-- txtMobile -->
+            <div class="form-group col-sm-10 not-padding-left ">
+                <input type="text" class="form-control" id="txtMobilef" name="txtMobilef" placeholder="Số điện thoại" autocomplete="off">
+                <!-- /.input group -->
+            </div>
+            <!-- /.form group -->
+            <!-- txtEmail -->
+            <div class="form-group col-sm-10 not-padding-left ">
+                <input type="text" class="form-control" id="txtEmailf" name="txtEmailf" placeholder="Email" autocomplete="off">
+                <!-- /.input group -->
+            </div>
+            <!-- /.form group -->
+            <!-- txtaddress -->
+            <div class="form-group col-sm-10 not-padding-left ">
+                <input type="text" class="form-control" id="txtaddressf" name="txtaddressf" placeholder="Địa chỉ" autocomplete="off">
+                <!-- /.input group -->
+            </div>
+            <!-- /.form group -->
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+    <!-- /.col (left) -->
+    <div class="col-sm-6 not-padding-left">
+        <div class="box-body not-padding-right">
+            <!-- rSex -->
+            <div class="form-group col-sm-12 not-padding-right">
+                <div class="form-group col-sm-6 not-padding-left" id="cbLeader">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" id="chkLeaderf" name="chkLeaderf" value="1">Trưởng đoàn
+                    </label>
+                </div>
+                <div class="form-group col-sm-6 not-padding-left" style="padding-right: 0px !important;" id="cbPayer">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" id="chkPayerf" name="chkPayerf" value="1">Người thanh toán
+                    </label>
+                </div>
+            </div>
+            <div class="form-group col-sm-12 not-padding-right">
+                <div id="rbSex">
+                    <span>
+                        Giới tính:
+                    </span>
+                    <span class="paddingrb">
+                        <input type="radio" name="r2f" class="minimal-red" value="1" checked>
+                        Nam
+                    </span>
+                    <span class="paddingrb">
+                        <input type="radio" name="r2f" class="minimal-red" value="0">
+                        Nữ
+                    </span>
+                </div>
+            </div>
+            <!-- /.form group -->
+            <!-- cbQuocTich -->
+            <div class="form-group col-sm-12 not-padding-right">
+                <span>Quốc tịch</span>
+                <select class="form-control select2" id="dllQuocTichf">
+                    @foreach (var country in (new Oze.Services.CommService().GetAllCountry()))
+                    {
+                        var sSelected = "";
+                        if (Model!=null && Model.countryid == country.id) { sSelected = "selected"; }
+                        else if (country.Name.ToLower() == "vietnam") { sSelected = "selected"; }                         
+                        <option value="@country.id" @sSelected>@country.Name</option>
+                    }
+                </select>
+            </div>
+            <!-- /.form-group -->
+            <!-- txtCompany -->
+            <div class="form-group col-sm-12 not-padding-right">
+                <input type="text" class="form-control" id="txtCompanyf" name="txtCompanyf" placeholder="Công ty" autocomplete="off">
+                <!-- /.input group -->
+            </div>
+            <!-- /.form group -->
+            <!-- cbĐoàn -->
+            <div class="form-group col-sm-12 not-padding-right">
+                <span>Đoàn</span>
+                <select class="form-control select2" id="dllOrgf">
+                    <option value="1" selected="selected">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+            </div>
+            <!-- /.form-group -->
+            <!-- cbGhep -->
+            <div class="form-group col-sm-12 not-padding-right">
+                <span>Ghép đoàn</span>
+                <select class="form-control select2" id="dllOrgJoinf">
+                    <option value="1" selected="selected">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                </select>
+            </div>
+            <!-- /.form-group -->
+        </div>
+        <!-- /.box -->
+    </div>
+</form>
+            
+
+

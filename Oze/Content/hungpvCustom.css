@@ -1,0 +1,68 @@
+﻿.bootstrap-datetimepicker-widget {
+    /*z-index: 999;
+    position: absolute;*/
+    overflow: visible;
+}
+/*hungpv xóa phải hỏi ý kiến anh trước nhé*/
+.fix-table-datepicker .fixed-table-body,
+.fix-table-datepicker .fixed-table-container,
+.fix-table-datepicker .table > tbody > tr > td {
+    overflow: visible;
+}
+
+.form-group {
+    overflow: visible;
+}
+
+.form-inline .input-group > .form-control {
+    width: 100%;
+}
+
+
+.error {
+    color: red;
+    font-size: small;
+    display: block;
+    white-space: nowrap;
+}
+
+.form-group .control-label {
+    font-family: -webkit-body;
+}
+
+.modal-header {
+    background-color: #f39c12;
+    height: 48px;
+    margin-bottom: 15px;
+}
+
+.form-horizontal .control-label {
+    text-align: left;
+}
+
+.mp {
+    margin: 0;
+    padding: 0;
+}
+
+.modal-open1 .modal {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.dt-body-right {
+    text-align: right;
+}
+
+.table-bordered tr th {
+    text-align: center;
+}
+
+.add-icon-hungpv {
+    margin-top: 10px;
+}
+.add-textcenter-hungpv {
+ text-align: center
+}
+
+/*innit*/

@@ -1,0 +1,540 @@
+﻿@model oze.data.Entity.Vw_RoomPriceLevel
+<div class="col-md-12">
+
+    <div class="box-body">
+        <form id="formDetail_f1" name="formDetail_f1" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8" tion="javascript:void();">
+            <input id="Id" name="Id" value="0" type="hidden" />
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-sm-5" id="">
+                                <p id="" class="control-label">Từ ngày</p>
+                            </div>
+                            <div class="col-sm-7">
+
+                                <div class="input-group input-group-sm date-add-picker_fdate_full" id="">
+                                    <input type="text" placeholder="Từ ngày" required class="form-control date-picker" name="Formdate" id="Formdate" value="@Model.dateFrom.GetValueOrDefault().ToString("dd/MM/yyyy hh:mm")">
+                                    <span class="input-group-addon input-group-addon-custom">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12">
+
+                        <div class="form-group">
+                            <div class="col-sm-5" id="">
+                                <p id="" class="control-label">Tiêu đề</p>
+                            </div>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" required name="txtTitle" id="txtTitle" />
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-sm-5" id="divlblName">
+                                <p id="lblName" class="control-label">Khách sạn</p>
+                            </div>
+                            <div class="col-sm-7">
+                                @if (Model.IsSuperAdmin)
+                                {
+                                    <select name="ListHotel" id="ListHotel" required class="form-control">
+                                        <option value="">--Chọn khách sạn--</option>
+                                        @for (var i = 0; i < @Model.ListHotel.Count; i++)
+                                        {
+                                            <option @(Model.SysHotelID == Model.ListHotel[i].Id ? "selected" : "") value="@Model.ListHotel[i].Id">@Model.ListHotel[i].Name</option>
+                                        }
+
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select name="ListHotel" disabled id="ListHotel" required class="form-control">
+                                        <option value="@Model.SysHotelID">@Model.HotelName</option>
+                                    </select>
+                                }
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-5" id="divlblName">
+                                <p id="lblName" class="control-label">Hạng phòng</p>
+                            </div>
+                            <div class="col-sm-7">
+
+                                <select name="ListRoomType" id="ListRoomType" required="1" class="form-control">
+                                    <option value="">--Chọn hạng phòng--</option>
+                                    @for (var i = 0; i < @Model.ListRoomType.Count; i++)
+                                    {
+                                        <option value="@Model.ListRoomType[i].Id">@Model.ListRoomType[i].Name</option>
+                                    }
+
+                                </select>
+                                @*<input type="hidden" id="" value="0" name="hiddenRoomTypeID" />
+                                    <input class="form-control" required="1" id="txtRoomType" name="txtRoomType" placeholder="" min="">*@
+                            </div>
+                        </div>
+                        @*<div class="form-group">
+                                <div class="col-sm-5" id="divlblName">
+                                    <p id="lblName" class="control-label">Hạng phòng</p>
+                                </div>
+                                <div class="col-sm-7">
+
+                                    <input type="text" class="form-control" id="txtHangRoom" name="txtHangRoom" placeholder="">
+                                </div>
+                            </div>*@
+                        @*<div class="form-group">
+                                <div class="col-sm-5" id="divlblName">
+                                    <p id="lblName">Loại giường:</p>
+                                </div>
+                                <div class="col-sm-4" style="padding-left:15px;">
+                                    <input type="checkbox" id="cbodon" />
+                                    <label for="cbodon">Đơn</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input type="checkbox" id="cbodoi" />
+                                    <label for="cbodoi">Đôi</label>
+                                </div>
+                            </div>*@
+                        <div class="form-group" style="display:none">
+                            <div class="col-sm-5" id="divlblName">
+                                <p id="lblName" class="control-label">Loại giường:</p>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="col-sm-1">
+                                    <p class="control-label">Đơn</p>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input class="form-control amount-double-mask" value="0" name="twin"  id="numberdon" min="0" />
+                                </div>
+                                <div class="col-sm-1">
+                                    <p class="control-label">Đôi</p>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input class="form-control  amount-double-mask" value="0" name="single"  id="numberdoi" min="0" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-5" id="divlblName">
+                                <p class="control-label">Số người lớn tiêu chuẩn:</p>
+                            </div>
+                            <div class="col-sm-7">
+                                <input class="form-control amount-number-mask" required="1" id="txtNumber_Adult" name="txtNumber_Adult" placeholder="0" min="0">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-5">
+                                <p class="control-label">Giá theo ngày:</p>
+                            </div>
+                            <div class="input-group col-sm-7">
+                                <input class="form-control amount-double-mask" required="1" id="txtGiatheongay" name="txtGiatheongay" placeholder="0" min="0">
+                                <span class="input-group-addon">VNĐ</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-5">
+                                <p class="control-label">Giá qua đêm:</p>
+                            </div>
+                            <div class="input-group col-sm-7">
+                                <input class="form-control amount-double-mask" required="1" id="txtGiaquadem" name="txtGiaquadem" placeholder="0" min="0">
+                                <span class="input-group-addon">VNĐ</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-5">
+                                <p class="control-label">Giá theo tháng:</p>
+                            </div>
+                            <div class="input-group col-sm-7">
+                                <input class="form-control amount-double-mask" required="1" id="txtGiatheothang" name="txtGiatheothang" placeholder="0" min="0">
+                                <span class="input-group-addon">VNĐ</span>
+                            </div>
+                        </div>
+
+                        <div class="pricebytime">
+                            <div class="itemptgtnpricebytime">
+                                <div class="form-group">
+                                    <div class="giatheogio col-sm-5" style="display: flex;">
+                                        <div class='col-sm-12 mp'>
+                                            <p class="control-label col-sm-4 mp">Giá:</p>
+                                            <div class="input-group col-sm-8 mp">
+                                                <input class="form-control amount-number-mask" accept="0" required id="txtGio" name="txtGio" placeholder="0" min="0">
+                                                <span class="input-group-addon">H</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-7" style="display: flex; padding-left: 0px; padding-right: 0px;">
+                                        <div class='col-sm-12 mp'>
+                                            <div class="col-sm-10 mp">
+                                                <div class="input-group">
+                                                    <input class="form-control amount-double-mask" accept="0" required id="txtGiatheogio" name="txtGiatheogio" placeholder="0" min="0">
+                                                    <span class="input-group-addon">VNĐ</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2 mp">
+                                                <i class="fa fa-plus-square" id="addpricemain"></i>
+                                                @*<i class="fa fa-remove"></i>*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @*<span>Hiển thị lỗi</span>*@
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <p class="text-red">Lưu ý *</p>
+                            <textarea class="form-control" rows="2" id="txtLuuy" name="txtLuuy"></textarea>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.col -->
+                <div class="col-md-4">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-sm-5" id="">
+                                <p id="" class="control-label">Tới ngày</p>
+                            </div>
+                            <div class="col-sm-7">
+
+                                <div class="input-group input-group-sm date-add-picker_tdate_full" id="">
+                                    <input type="text" placeholder="Tới ngày" required class="form-control date-picker" name="Todate" value="@Model.dateTo.GetValueOrDefault().ToString("dd/MM/yyyy hh:mm")" id="Todate">
+                                    <span class="input-group-addon input-group-addon-custom">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        @*Phụ trợ quá theo ngày*@
+                        <div class="form-group">
+                            <div class="col-sm-6 divmaughi">
+                                <p class="control-label">
+                                    <label id="Phutroiquagiotheongay">Phụ trội quá giờ trả theo ngày</label>
+                                </p>
+                            </div>
+                            <div class="col-sm-2">
+                                <i class="fa fa-plus-square" id="addptqgtn"></i>
+                            </div>
+                        </div>
+                        <div class="phutroigiotheongay">
+                            @*<div class="itemptgtn">
+                                    <div class="form-group ">
+                                        <div class="giatheogio col-sm-5" style="display: flex;">
+                                            <div class='col-sm-12 mp'>
+                                                <p class="control-label col-sm-4 mp">Quá:</p>
+                                                <div class="input-group col-sm-8 mp">
+                                                    <input class="form-control amount-number-mask" required="1" name="txtGioquatheongay" id="txtGioquatheongay" placeholder="0" min="0">
+                                                    <span class="input-group-addon">H</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-7" style="display: flex; padding-left: 0px; padding-right: 0px;">
+                                            <div class='col-sm-12 mp'>
+                                                <div class="col-sm-10 mp">
+                                                    <div class="input-group">
+                                                        <input class="form-control amount-double-mask" required="1" name="txtGiaquatheongay" id="txtGiaquatheongay" placeholder="0" min="0">
+                                                        <span class="input-group-addon">VNĐ</span>
+                                                    </div>
+                                                </div>
+                                                <div class="input-group col-sm-2">
+                                                    <i class="fa fa-remove" id="removeptqgtn"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>*@
+                        </div>
+                        <div class="form-group">
+                            <p class="text-red control-label">Quá quy định trên sẽ tính thành 1 ngày</p>
+                        </div>
+
+                        @*Phụ trợ quá theo đêm*@
+                        <div class="form-group">
+                            <div class="col-sm-6 divmaughi" id="Phutroiquagiatheodem">
+                                <p class="control-label">Phụ trội quá giờ trả theo đêm</p>
+                            </div>
+                            <div class="col-sm-2">
+                                <i class="fa fa-plus-square" id="addlatenight"></i>
+                            </div>
+                        </div>
+                        <div class="phutroigiotheodem">
+                            @*<div class="itemptgtnnight">
+                                    <div class="form-group">
+                                        <div class="giatheogio col-sm-5" style="display: flex;">
+                                            <div class='col-sm-12 mp'>
+                                                <p class="control-label col-sm-4 mp">Quá:</p>
+                                                <div class="input-group col-sm-8 mp">
+                                                    <input class="form-control amount-number-mask" required="1" id="txtGioquatheodem" name="txtGioquatheodem" placeholder="0" min="0">
+                                                    <span class="input-group-addon">H</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-7" style="display: flex; padding-left: 0px; padding-right: 0px;">
+                                            <div class='col-sm-12 mp'>
+                                                <div class=" col-sm-10 mp">
+                                                    <div class="input-group">
+                                                        <input class="form-control amount-double-mask" required="1" id="txtGiaquatheodem" name="txtGiaquatheodem" placeholder="0" min="0">
+                                                        <span class="input-group-addon">VNĐ</span>
+                                                    </div>
+                                                </div>
+                                                <div class="input-group col-sm-2">
+                                                    <i class="fa fa-plus-square"></i>
+                                                        <i class="fa fa-remove"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>*@
+                        </div>
+                        <div class="form-group">
+                            <p class="text-red control-label">Quá quy định trên sẽ tính thành 1 ngày</p>
+                        </div>
+                    </div>
+
+                    <!-- /.form-group -->
+                </div>
+                <!-- /.col -->
+                <div class="col-md-4">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-sm-5" id="">
+                                <p id="" class="control-label">Ngày áp dụng</p>
+                            </div>
+                            <div class="col-sm-7">
+                                <input type="checkbox" checked name="T2" />T2
+                                <input type="checkbox" checked name="T3" />T3
+                                <input type="checkbox" checked name="T4" />T4
+                                <input type="checkbox" checked name="T5" />T5
+                                <input type="checkbox" checked name="T6" />T6
+                                <input type="checkbox" checked name="T7" />T7
+                                <input type="checkbox" checked name="CN" />CN
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-12">
+                        @*Phụ trợ nhận phòng sơm theo ngày*@
+                        <div class="form-group">
+                            <div class="col-sm-6 divmaughi" id="Phutroiquagiatheongay">
+                                <p class="control-label">Phụ trội nhận phòng sớm theo ngày</p>
+                            </div>
+                            <div class="col-sm-2">
+                                <i class="fa fa-plus-square" id="addEarlyDay"></i>
+                            </div>
+                        </div>
+                        <div class="EarlyDay">
+                            @*<div class="EarlyDayItem">
+                                    <div class="form-group">
+                                        <div class="giatheogio col-sm-5" style="display: flex;">
+                                            <div class='col-sm-12 mp'>
+                                                <p class="control-label col-sm-4 mp">Sớm:</p>
+                                                <div class="input-group col-sm-8 mp">
+                                                    <input class="form-control amount-number-mask" required="1" id="txtGiosomtheongay" name="txtGiosomtheongay" placeholder="0" min="0">
+                                                    <span class="input-group-addon">H</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-7" style="display: flex; padding-left: 0px; padding-right: 0px;">
+                                            <div class='col-sm-12 mp'>
+                                                <div class="col-sm-10 mp">
+                                                    <div class="input-group ">
+                                                        <input class="form-control amount-double-mask" required="1" id="txtGiasomtheongay" name="txtGiasomtheongay" placeholder="0" min="0">
+                                                        <span class="input-group-addon">VNĐ</span>
+                                                    </div>
+                                                </div>
+                                                <div class="input-group col-sm-2">
+                                                    <i class="fa fa-plus-square"></i>
+                                                        <i class="fa fa-remove"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>*@
+                        </div>
+                        <div class="form-group">
+                            <p class="text-red control-label">Quá quy định trên sẽ tính thành 1 ngày</p>
+                        </div>
+
+                        @*Phụ trợ nhận phòng sớm theo đêm*@
+                        <div class="form-group">
+                            <div class="col-sm-6 divmaughi" id="Phutroiquagiatheodem">
+                                <p class="control-label">Phụ trội nhận phòng sớm theo đêm</p>
+                            </div>
+                            <div class="col-sm-2">
+                                <i class="fa fa-plus-square" id="addEarlyNight"></i>
+                            </div>
+                        </div>
+                        <div class="EarlyNight">
+                            @*<div class="EarlyNightItem">
+                                    <div class="form-group">
+                                        <div class="giatheogio col-sm-5" style="display: flex;">
+                                            <div class='col-sm-12 mp'>
+                                                <p class="control-label col-sm-4 mp">Sớm:</p>
+                                                <div class="input-group col-sm-8 mp">
+                                                    <input class="form-control amount-number-mask" required="1" id="txtGiosomquadem" name="txtGiosomquadem" placeholder="0" min="0">
+                                                    <span class="input-group-addon">H</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-7" style="display: flex; padding-left: 0px; padding-right: 0px;">
+                                            <div class='col-sm-12 mp'>
+                                                <div class=" col-sm-10 mp">
+                                                    <div class="input-group">
+                                                        <input class="form-control amount-double-mask" required="1" id="txtGiasomquadem" name="txtGiasomquadem" placeholder="0" min="0">
+                                                        <span class="input-group-addon">VNĐ</span>
+                                                    </div>
+                                                </div>
+                                                <div class="input-group col-sm-2">
+                                                    <i class="fa fa-plus-square"></i>
+                                                        <i class="fa fa-remove"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>*@
+                        </div>
+                        <div class="form-group">
+                            <p class="text-red control-label">Quá quy định trên sẽ tính thành 1 ngày</p>
+
+                        </div>
+
+                        @*Phụ trợ quá số lượng người lớn*@
+                        <div class="form-group">
+                            <div class="col-sm-6 divmaughi" id="Phutroiquagiatheodem">
+                                <p class="control-label">Phụ trội quá số lượng người lớn</p>
+                            </div>
+                            <div class="col-sm-2">
+                                <i class="fa fa-plus-square" id="AddLimitPerson"></i>
+                            </div>
+                        </div>
+                        <div class="LimitPerson">
+                            @*<div class="LimitPersonItem">
+                                                <div class="form-group">
+                                                    <div class=" col-sm-5" style="display: flex;">
+                                                        <div class="col-sm-12 mp">
+                                                            <p class="control-label col-sm-4 mp">Quá:</p>
+                                                            <div class="input-group col-sm-8 mp">
+                                                                <input class="form-control amount-number-mask" required="1" id="txtsonguoi" name="txtsonguoi" placeholder="0" min="0">
+                                                                <span class="input-group-addon">N</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-7" style="display: flex; padding-left: 0px; padding-right: 0px;">
+                                                        <div class="col-sm-12 mp">
+                                                            <div class="col-sm-10 mp">
+                                                                <div class="input-group">
+                                                                    <input class="form-control amount-double-mask" required="1" id="txtGiasonguoi" name="txtGiasonguoi" placeholder="0" min="0">
+                                                                    <span class="input-group-addon">VNĐ</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="input-group col-sm-2">
+                                                                <i class="fa fa-plus-square"></i>
+                                <i class="fa fa-remove"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>*@
+                        </div>
+                        <div class="form-group">
+                            @*<p class="text-red control-label">Quá quy định trên sẽ tính thành 1 ngày</p>*@
+                        </div>
+                        <!-- /.form-group -->
+                        @*Phụ trợ quá số lượng trẻ em*@
+                        <div class="form-group">
+                            <div class="col-sm-6 divmaughi" id="">
+                                <p class="control-label">Phụ trội trẻ em</p>
+                            </div>
+                            <div class="col-sm-2">
+                                <i class="fa fa-plus-square" id="AddLimitPerson_Child"></i>
+                            </div>
+                        </div>
+                        <div class="LimitPerson_Child">
+                            @*<div class="LimitPersonItem_Child">
+                    <div class="form-group">
+                        <div class=" col-sm-5" style="display: flex;">
+                            <div class="col-sm-12 mp">
+                                <p class="control-label col-sm-4 mp">Quá:</p>
+                                <div class="input-group col-sm-8 mp">
+                                    <input class="form-control amount-number-mask" required="1" id="txt_NumberChild" name="txt_NumberChild" placeholder="0" min="0">
+                                    <span class="input-group-addon">N</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-7" style="display: flex; padding-left: 0px; padding-right: 0px;">
+                            <div class="col-sm-12 mp">
+                                <div class="col-sm-10 mp">
+                                    <div class="input-group">
+                                        <input class="form-control amount-double-mask" required="1" id="txt_Child" name="txt_Child" placeholder="0" min="0">
+                                        <span class="input-group-addon">VNĐ</span>
+                                    </div>
+                                </div>
+                                <div class="input-group col-sm-2">
+                                    <i class="fa fa-plus-square"></i>
+    <i class="fa fa-remove"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+                        </div>
+                        <div class="form-group">
+                            @*<p class="text-red control-label">Quá quy định trên sẽ tính thành 1 ngày</p>*@
+                        </div>
+                        <!-- /.form-group -->
+                    </div>
+
+
+                </div>
+                <!-- /.row -->
+
+            </div>
+            <div class="form-group">
+                @*<div class="col-sm-4">
+                        <div class=" col-sm-10 divmauxanh" id="dsphongcunghang">
+                            <p class="control-label">Danh sách phòng cùng hạng</p>
+                        </div>
+                        <div class="col-sm-2">
+                            <i id="btnShowDSPhong" class="fa fa-plus-square"></i>
+                        </div>
+                    </div>*@
+                <div class="col-sm-12">
+                    <div>
+                        <!-- Small boxes (Stat box) -->
+
+                        <div class="row">
+                            <div class="RowEndSelect">
+                                @*<div class="col-lg-1 col-xs-1">
+
+                                        <div class="small-box bg-gray">
+                                            <div class="inner" style="text-align: center;">
+                                                <h5> 101 </h5>
+                                                <input type="hidden" id="" name="" />
+                                            </div>
+                                        </div>
+                                    </div>*@
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+<script>
+    countitemptgtn = 0;
+</script>

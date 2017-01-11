@@ -1,0 +1,16 @@
+﻿@using Oze.Models;
+@using Oze.AppCode.DAL;
+@using Oze.AppCode.BLL;
+@{
+  
+    var sCode = (new Oze.Services.ReservationService()).GetNextBookingCode();
+}
+
+<select class="form-control select2 bgresrom" id="dllRoomTypeID">
+    <option value="0" selected>--Chọn phòng--</option>
+    @foreach (var roomType in (new Oze.Services.CommService().GetAllRoomType()))
+    {
+        <option value="@roomType.Id">@roomType.Name</option>
+    }
+</select>
+

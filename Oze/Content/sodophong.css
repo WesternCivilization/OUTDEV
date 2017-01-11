@@ -1,0 +1,128 @@
+﻿@charset "utf-8";
+/* CSS Document */
+/* BASIC RESET 
+@import "reset.css";
+@import "skeleton.css";
+@import "font-awesome.css";
+@import "superfish.css";
+    */
+
+@import url(//fonts.googleapis.com/css?family=Open+Sans:400);
+@import url(//fonts.googleapis.com/css?family=Open+Sans:600);
+@import url(//fonts.googleapis.com/css?family=Open+Sans:300);
+ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,body,html,p,blockquote,fieldset,input{margin:0; padding:0;}
+html{
+	height:100%;
+}
+html body{
+	font: 14px/24px open sans;
+	color:#000;
+	background:#fff;
+	height:100%;
+	margin:0;
+	padding:0;
+}
+
+a {
+    color: inherit;
+    outline: medium none;
+    text-decoration: none;
+    transition: all 0.5s ease 0s;
+}
+a{
+	text-decoration:none;
+	color:#000;
+}
+a:hover{
+	color:#8FD4FD;
+}
+.clear {
+    clear: both;
+    float: none !important;
+}
+.icon img{
+	border:none;
+}
+#sodo_outer{
+	background-color: #fff;
+    margin-top:25px;
+    padding-bottom: 30px;
+	height:100%;
+}
+.phong{
+	width:246px;
+    max-width:95%;
+	height:126px;
+	background-color:#ef7c2b;
+	color:#fff;
+	float:left;
+	margin-left:22px;
+	margin-right:9px;
+    border: 1px solid #808080;
+    margin-top:20px;
+	
+}
+.trangthai{
+	float:left;
+	color:#fff;
+	width:73px;
+	text-align:center;
+	border-right:1px solid #f48a43;
+	height:100%;
+}
+.sophong{	
+	font-size:25px;
+	font-weight: bold;
+	margin-bottom:6px;
+	margin-top:12px;
+	
+}
+.hangphong{
+	text-transform:uppercase;
+    font-size:10px !important;
+}
+
+.tinhtrang{
+	margin-top:-5px;
+}
+.thongtin{
+	float:left;
+	margin-top:12px;
+	width: 160px;/*250px*/
+}
+.thongtinkhach{
+	margin-left:5px;
+}
+.sodoan{
+	float:left;
+	font-size:15px;
+}
+.truongdoan{
+	float:left;
+	margin-left:1px;
+}
+.hotenkhach{
+	float:left;
+	margin-left:5px;
+	font-size:11px;
+}
+.gio{
+	margin-left:10px;
+	margin-top: 29px;
+	background: url("/images/clock.png") no-repeat;
+}
+.gio span{
+	margin-left:0px;
+	font-size:15px;
+	
+}
+.ngay{
+	margin-left:10px;/*100px*/
+	margin-top: 9px;
+	background: url("/images/calendar.png") no-repeat;
+}
+.ngay span{
+	margin-left:25px;
+	font-size:13px;
+	
+}

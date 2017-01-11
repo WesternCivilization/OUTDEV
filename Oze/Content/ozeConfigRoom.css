@@ -1,0 +1,156 @@
+﻿#tablistroom section {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    padding-top: 0px !important;
+}
+
+#tablistroom .row {
+    margin-left: -25px !important;
+}
+
+#tablistroom .col-lg-2 {
+    width: 14% !important;
+}
+
+#tablistroom .small-box {
+    margin-bottom: 0px;
+    border: 1px solid #d0d0d0;
+    background: #f7f7f7;
+}
+
+.small-box h3 {
+    text-align: center;
+    margin: 5px 0 0px 0;
+    padding-top: 10px;
+}
+
+.box-footer {
+    height: 5px;
+    background-color: #d2d6de !important;
+    border-top: none;
+}
+
+.iconbootom {
+    text-align: center;
+    padding-top: 7px;
+    padding-bottom: 10px;
+}
+
+    .iconbootom i {
+        font-size: 18px;
+        padding: 0px 5px 0px 5px;
+    }
+
+.small-box:hover {
+    border: 1px solid #f27c2e !important;
+}
+
+    .small-box:hover h3 {
+        color: black;
+    }
+
+.content-wrapper {
+    background: #ffffff;
+}
+
+.form-horizontal .nav-tabs .active {
+    background-color: #d2d6de !important;
+    border-bottom: 2px solid #f27c2e !important;
+    width: 15%;
+}
+
+.form-horizontal .active a {
+    background-color: #d2d6de !important;
+    font-size: 15px;
+    font-family: Arial;
+    font-weight: bold;
+}
+
+.fa-plus {
+    padding-right: 15px;
+    padding-top: 4px;
+    float: left;
+}
+
+#liAddNew {
+    width: 85%;
+    padding-top: 7px;
+}
+
+#btnaddnew {
+    float: right;
+    text-align: center;
+    width: 130px;
+    font-size: 15px;
+    font-family: Arial;
+}
+
+#btnAddRoom {
+    display: none;
+    text-align: center;
+    /* float: right; */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#btnEditRoom {
+    display: none;
+    text-align: center;
+    /* float: right; */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#mdModify .modal-content {
+    width: 400px;
+}
+
+#kq {
+    color: red;
+    margin-top: 5px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    text-align: center;
+    display: none;
+}
+
+#alertDelRoom {
+    text-align: center;
+    padding-bottom: 0px;
+}
+
+#btnDeleteRoom {
+    width: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    display: block;
+}
+
+#divbtnsub {
+    padding-bottom: 0px;
+}
+
+.modal-header {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#lblTitle {
+    font-size: 20px;
+    text-align: center;
+}
+.fa-pencil{
+    font-size: 14px;
+    color: #f27c2e;
+    border-bottom: 1px solid;
+}
+
+.fa-times{
+    font-size: 18px;
+    color: #ff0000;
+    text-align: center;
+}
+.modal-footer{
+    border-top:none;
+}

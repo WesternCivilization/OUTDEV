@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Quản lý ozeshop</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    @Styles.Render("~/Content/css")
+
+    @Scripts.Render("~/bundles/modernizr")
+
+
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/Themes/dist/css/AdminLTE.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="~/Themes/dist/css/skins/_all-skins.min.css">
+    <link href="~/Themes/dist/css/skins/skin-yellow.css" rel="stylesheet" />
+    @*<link rel="stylesheet" href="/Content/bootstrap-datetimepicker.css" />*@
+    <link href="~/Content/datetimepicker/bootstrap-datetimepicker.css" rel="stylesheet" />
+
+    @Styles.Render("~/Content/oze")
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/datatable")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/oze")
+
+
+</head>
+<body class="hold-transition skin-yellow sidebar-mini">
+
+    <div class="wrapper">
+        @* Header *@
+
+        @Html.Partial("_Header")
+        @* Body *@
+        <!-- Left side column. contains the logo and sidebar -->
+        @Html.Partial("_Sidebar")
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <!-- Main content -->
+            <section class="content">
+                <div class="notify-custom">
+                    <div class="notify-popup"></div>
+                </div>
+                @RenderBody()
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        @* Footer *@
+        @Html.Partial("_Footer")
+    </div>
+    <!-- ./wrapper -->
+    @*<script src="~/Themes/plugins/jQuery/jquery-2.2.3.min.js"></script>*@
+
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <!-- FastClick -->
+    <script src="~/Themes/plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+    <script src="~/Scripts/bootstrap-typeahead/bootstrap-AutocompleteCustom.js"></script>
+    <script src="~/Themes/dist/js/app.js"></script>
+    <script src="~/Scripts/datetimepicker/moment.js"></script>
+<script src="~/Scripts/datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Scripts/datetimepicker/moment-with-locales.min.js"></script>
+    <script src="~/Scripts/inputmask/min/jquery.inputmask.bundle.min.js"></script>
+    <script src="~/Scripts/notify/notify.min.js"></script>
+    <script src="~/Themes/plugins/iCheck/icheck.min.js"></script>
+    <script src="~/Scripts/oze.utils.js"></script>
+    <script src="~/Scripts/oze.keepsession.js"></script>
+
+   
+<script src="~/Scripts/jquery.customValidate.js"></script>
+    <script src="~/Scripts/bootbox.min.js"></script>
+    <script src="~/Scripts/Servicebase.js"></script>
+    <link href="~/Content/datetimepicker/bootstrap-datetimepicker.css" rel="stylesheet" />
+ @RenderSection("scripts", required: false)
+    @RenderSection("Script", false)
+    <link href="~/Content/bootstrap-dialog.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/bootstrap-dialog.min.js"></script>
+     
+</body>
+</html>

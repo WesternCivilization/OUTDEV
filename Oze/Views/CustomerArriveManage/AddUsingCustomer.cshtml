@@ -1,0 +1,134 @@
+﻿@model Oze.Models.CustomerArriveManage.CustomeCheckInModel
+<div class="col-md-12">
+    <form id="formDetail" name="formDetail" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8" tion="javascript:void();">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <label class="col-md-2 control-label required">Họ và tên (<font color="red">*</font>)</label>
+            <div class="col-md-4">
+                <input type="text" class="form-control" required="1" autocomplete="false" id="Name" name="Name" value="@Model.Name" />
+            </div>
+            <label class="col-md-2 control-label required"> </label>
+            <div class="col-md-4">
+            </div> 
+
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label required">Ngày sinh (<font color="red">*</font>)</label>
+            <div class="col-md-4">
+                <div class="input-group input-group-sm birthday" id="birthday">
+                    <input type="text" placeholder="Từ ngày" class="form-control" value="@Model.DOB" id="DOB" name="DOB" />
+                    <span class="input-group-addon input-group-addon-custom">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+                @*<span class="input-group-addon">MZN</span>*@
+
+            </div>
+            <label class="col-md-2 control-label required">Giới tính</label>
+            <div class="col-md-4">
+
+                <select name="Sex" id="Sex" class="form-control">
+                    <option value="">--Chọn giới tính--</option>
+                    <option @(Model.Sex == 0 ? "selected" : "") value="0">Nam</option>
+                    <option @(Model.Sex == 1 ? "selected" : "") value="1">Nữ</option>
+                </select>
+            </div>
+
+        </div>
+        <div class="form-group ">
+
+            <label class="col-md-2 control-label required">Số CMT/Passport </label>
+            <div class="col-md-4">
+
+                <input type="text" class="form-control" required="1" name="IdentifyNumber" value="@Model.IdentifyNumber" />
+                @*<span class="input-group-addon">MZN</span>*@
+
+            </div>
+            <label class="col-md-2 control-label required">Quốc tịch (<font color="red">*</font>)</label>
+            <div class="col-md-4">
+
+                <select name="CountryId" id="CountryId"  class="form-control">
+                    <option value="">--Chọn quốc tịch--</option>
+                    @for (var i = 0; i < @Model.ListCountry.Count; i++)
+                    {
+                        <option @((Model.CountryId == Model.ListCountry[i].id || @Model.ListCountry[i].Name.ToLower() == "vietnam") ? "selected" : "") value="@Model.ListCountry[i].id">@Model.ListCountry[i].Name</option>
+                    }
+                </select>
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label required">Phone</label>
+            <div class="col-md-4">
+                <input type="hidden" class="form-control" required="1" name="CustomerId" value="@Model.CustomerId" />
+                <input type="hidden" class="form-control" required="1" name="CustomerIdOld" value="@Model.CustomerIdOld" />
+                <input type="hidden" class="form-control" required="1" name="SysHotelID" value="@Model.SysHotelID" />
+                <input type="hidden" class="form-control" required="1" name="CheckInID" value="@Model.CheckInID" />
+                <input type="hidden" class="form-control" required="1" name="Roomid" value="@Model.Roomid" />
+                <input type="text" class="form-control"  phone="1" name="Phone" value="@Model.Phone" />
+                
+
+            </div>
+            <label class="col-md-2 control-label required">Công ty </label>
+            <div class="col-md-4">
+
+                <input type="text" class="form-control" name="Company" value="@Model.Company" />
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label required">Email</label>
+            <div class="col-md-4">
+
+                <input type="text" class="form-control"  email="1" name="Email" value="@Model.Email" />
+                @*<span class="input-group-addon">MZN</span>*@
+
+            </div>
+            <label class="col-md-2 control-label required">Đoàn </label>
+            <div class="col-md-4">
+                <select name="TeamMergeSTT" id="TeamSTT" class="form-control">
+                    <option value="0">--Chọn đoàn--</option>
+                    <option @(Model.TeamSTT == 1 ? "selected" : "") value="1">1</option>
+                    <option @(Model.TeamSTT == 2 ? "selected" : "") value="2">2</option>
+                    <option @(Model.TeamSTT == 3 ? "selected" : "") value="3">3</option>
+                    <option @(Model.TeamSTT == 4 ? "selected" : "") value="4">4</option>
+                    <option @(Model.TeamSTT == 5 ? "selected" : "") value="5">5</option>
+                    <option @(Model.TeamSTT == 6 ? "selected" : "") value="6">6</option>
+                    <option @(Model.TeamSTT == 7 ? "selected" : "") value="7">7</option>
+                    <option @(Model.TeamSTT == 8 ? "selected" : "") value="8">8</option>
+                    <option @(Model.TeamSTT == 9 ? "selected" : "") value="9">9</option>
+                    <option @(Model.TeamSTT == 10 ? "selected" : "") value="10">10</option>
+                </select>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label required">Địa chỉ </label>
+            <div class="col-md-4">
+
+                <input type="text" class="form-control" name="Address"   value="@Model.Address" />
+
+
+            </div>
+            <label class="col-md-2 control-label required">Ghép đoàn </label>
+            <div class="col-md-4">
+                <select name="TeamMergeSTT" id="TeamMergeSTT" class="form-control">
+                    <option value="0">--Chọn đoàn ghép--</option>
+                    <option @(Model.TeamMergeSTT == 1 ? "selected" : "") value="1">1</option>
+                    <option @(Model.TeamMergeSTT == 2 ? "selected" : "") value="2">2</option>
+                    <option @(Model.TeamMergeSTT == 3 ? "selected" : "") value="3">3</option>
+                    <option @(Model.TeamMergeSTT == 4 ? "selected" : "") value="4">4</option>
+                    <option @(Model.TeamMergeSTT == 5 ? "selected" : "") value="5">5</option>
+                    <option @(Model.TeamMergeSTT == 6 ? "selected" : "") value="6">6</option>
+                    <option @(Model.TeamMergeSTT == 7 ? "selected" : "") value="7">7</option>
+                    <option @(Model.TeamMergeSTT == 8 ? "selected" : "") value="8">8</option>
+                    <option @(Model.TeamMergeSTT == 9 ? "selected" : "") value="9">9</option>
+                    <option @(Model.TeamMergeSTT == 10 ? "selected" : "") value="10">10</option>
+                </select>
+
+
+            </div>
+        </div>
+    </form>
+</div>

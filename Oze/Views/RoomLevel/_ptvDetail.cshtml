@@ -1,0 +1,25 @@
+﻿@model oze.data.tbl_Room_Type
+
+@{
+    var check = Model != null;
+}
+<section>
+    <div class="form-group row">
+        <label for="lblnameks" class="col-sm-3 control-label">Mã</label>
+        <div class="col-sm-9">
+            @(check ? Model.Code : "")
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="lblnameks" class="col-sm-3 control-label">Tên</label>
+        <div class="col-sm-9">
+            @(check ? Model.Name : "")
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="lblnameks" class="col-sm-3 control-label">Viết tắt</label>
+        <div class="col-sm-9">
+            @(check ? Model.Note : "")
+        </div>
+    </div>
+</section>

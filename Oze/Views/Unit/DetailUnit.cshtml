@@ -1,0 +1,32 @@
+﻿<section>                
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label">Mã</label>
+            <div class="col-sm-9">
+                @Model.Id
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label">Tên</label>
+            <div class="col-sm-9">
+                @Model.Name1
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label">Trọng số</label>
+            <div class="col-sm-9">
+                @Model.Value
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label">Trạng thái</label>
+            <div class="col-sm-9">
+                @(Model.Status==1?"Sử dụng":"Không Sử dụng")
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label">Mô tả</label>
+            <div class="col-sm-9">
+                @Model.Description
+            </div>
+        </div>        
+</section>

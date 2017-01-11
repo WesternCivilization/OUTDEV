@@ -1,0 +1,45 @@
+﻿@model  Oze.Models.CustomerArriveManage.PaymentCheckOutModel
+@{ @*var day = Math.Round(((Model.Leave_Date.GetValueOrDefault() < DateTime.Now ? DateTime.Now : Model.Leave_Date.GetValueOrDefault())
+                  - Model.Arrive_Date.GetValueOrDefault()).TotalDays, 0);
+        var totalprice = day * Model.Price.GetValueOrDefault(1);
+        var typeday = "Ngày thường";*@
+double totalPay = 0;
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+<link rel="stylesheet" href="~/Themes/plugins/datatables/dataTables.bootstrap.css">
+<link rel="stylesheet" href="~/Content/Oze.css">
+<link rel="stylesheet" href="~/Content/hungpvCustom.css">
+<!--<link rel="stylesheet" href="https://datatables.net/media/css/site.css?_=b05357026107a2e3ca397f642d976192" />-->
+<div class="tab-title">
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a aria-controls="" role="tab" data-toggle="tab">Dữ liệu khách đang ở muốn thanh toán không đúng</a></li>
+    </ul>
+</div>
+<div class="row">
+    <center><h1>Không tồn tại khách trả phòng hoặc khách hàng đã thanh toán</h1></center>
+    </div>
+<!-- Modal For CRUID -->
+<!--script-->
+<script src="~/Themes/plugins/datatables/jquery.dataTables.js"></script>
+<script src="~/Themes/plugins/datatables/dataTables.bootstrap.js"></script>
+<script src="~/Themes/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/oze.common.js"></script>
+<script src="~/Scripts/oze/oze.RoomCheckOut.js"></script>
+
+<script type="text/javascript">
+    var $table;
+    var addDays = function () {
+        var dat = new Date();
+        dat.setDate(dat.getDate() + parseInt(-30));
+        return new Date(dat);
+    }
+    $(document).ready(function () {
+        $("#txtSearch").keypress(function (e) {
+            if (e.which == 13) {
+                searchGrid();
+            }
+        });
+    });
+</script>

@@ -1,0 +1,571 @@
+﻿@{
+    ViewBag.Title = "GiaHangphong";
+    @*Layout = "~/Views/Shared/_Root.cshtml";*@
+}
+
+
+
+<style>
+    .nav-tabs .active {
+        background-color: #d2d6de !important;
+        border-bottom: 1px solid #f27c2e !important;
+    }
+
+    .nav-tabs a {
+        font-size: 15px;
+        font-family: Arial;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .active a {
+        background-color: #d2d6de !important;
+        font-size: 15px;
+        font-family: Arial;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .nav-tabs li a {
+        background-color: transparent;
+    }
+
+        .nav-tabs li a:hover {
+            background-color: transparent;
+            font-size: 16px;
+            font-family: Arial;
+            font-weight: bold;
+            color: #3c8dbc;
+            border: none;
+        }
+
+    .nav-tabs .active a:hover {
+        font-size: 15px;
+    }
+
+    .content {
+        padding-left: 5px;
+    }
+
+
+
+    /* Base for label styling */
+    [type="checkbox"]:not(:checked),
+    [type="checkbox"]:checked {
+        position: absolute;
+        left: -9999px;
+    }
+
+        [type="checkbox"]:not(:checked) + label,
+        [type="checkbox"]:checked + label {
+            position: relative;
+            padding-left: 25px;
+            cursor: pointer;
+        }
+
+            /* checkbox aspect */
+            [type="checkbox"]:not(:checked) + label:before,
+            [type="checkbox"]:checked + label:before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 2px;
+                width: 17px;
+                height: 17px;
+                border: 1px solid #aaa;
+                background: #f8f8f8;
+                border-radius: 3px;
+                box-shadow: inset 0 1px 3px rgba(0,0,0,.3);
+            }
+            /* checked mark aspect */
+            [type="checkbox"]:not(:checked) + label:after,
+            [type="checkbox"]:checked + label:after {
+                content: '✔';
+                position: absolute;
+                top: 3px;
+                left: 2px;
+                font-size: 18px;
+                line-height: 0.8;
+                color: #09ad7e;
+                transition: all .2s;
+            }
+            /* checked mark aspect changes */
+            [type="checkbox"]:not(:checked) + label:after {
+                opacity: 0;
+                transform: scale(0);
+            }
+
+            [type="checkbox"]:checked + label:after {
+                opacity: 1;
+                transform: scale(1);
+            }
+    /* disabled checkbox */
+    [type="checkbox"]:disabled:not(:checked) + label:before,
+    [type="checkbox"]:disabled:checked + label:before {
+        box-shadow: none;
+        border-color: #bbb;
+        background-color: #ddd;
+    }
+
+    [type="checkbox"]:disabled:checked + label:before {
+        color: #999;
+    }
+
+    [type="checkbox"]:disabled + label {
+        color: #aaa;
+    }
+    /* accessibility */
+    [type="checkbox"]:checked:focus + label:before,
+    [type="checkbox"]:not(:checked):focus + label:before {
+        border: 1px dotted blue;
+    }
+
+    /* hover style just for information */
+    label:hover:before {
+        border: 1px solid #4778d9 !important;
+    }
+
+    .col-sm-4 {
+        padding-left: 0px;
+        padding-right: 0px !important;
+    }
+
+    .col-sm-7 {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    .form-group {
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    .col-sm-4 p {
+        vertical-align: middle;
+        line-height: normal;
+        padding-top: 3px;
+        margin: 0 0 0px;
+    }
+
+    .col-sm-2 .fa {
+        padding: 10px 5px 5px 10px;
+        cursor: pointer;
+    }
+
+    #numberdon {
+        padding-right: 0px;
+    }
+
+    #numberdoi {
+        padding-right: 0px;
+    }
+
+    .giatheogio p {
+        display: inline;
+    }
+
+    .giatheogio input[type=text] {
+        display: inline;
+        width: 50px;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .giatheogio input[type=number] {
+        display: inline;
+        width: 50px;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .giatheogio {
+        display: inline;
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    .divmaughi {
+        background-color: #ddd;
+        padding-left: 5px;
+        height: 36px;
+        padding-top: 7px;
+        font-size: 15px;
+    }
+
+    .divmauxanh {
+        background-color: #0e4458;
+        padding-left: 5px;
+        height: 36px;
+        padding-top: 7px;
+        color: white;
+        /* font-size: 15px; */
+        width: 32%;
+    }
+
+    .input-group {
+        float: left !important;
+    }
+
+    .text-red {
+        color: red !important;
+        font-size: 13px;
+    }
+    .bold {
+        font-weight: bold;
+    }
+    .li-roomgiahang-addnew {
+        padding-top: 7px;
+        float: right !important;
+    }
+    .ml10 {
+        margin-left: 10px;
+    }
+
+    /*accordion*/
+    .accordion {
+        background-color: #eee;
+        color: #444;
+        cursor: pointer;
+        width: 100%;
+        text-align: left;
+        border: none;
+        outline: none;
+        transition: 0.4s;
+        padding: 6px;
+    }
+
+    /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+    button.accordion.active, button.accordion:hover {
+        background-color: #ddd;
+    }
+
+    /* Style the accordion panel. Note: hidden by default */
+    div.panel {
+        padding: 0 18px;
+        background-color: white;
+        display: none;
+    }
+
+    /* The "show" class is added to the accordion panel when the user clicks on one of the buttons. This will show the panel content */
+    div.panel.show {
+        display: block;
+    }
+    .accordion:after {
+        content: '˅'; /* Unicode character for "plus" sign (+) */
+        font-size: 13px;
+        color: #777;
+        float: right;
+        margin-left: 5px;
+    }
+
+    .accordion.active:after {
+        content: "˃"; /* Unicode character for "minus" sign (-) */
+    }
+
+    .br2 {
+        border-right: 2px solid #d2d6de;
+    }
+</style>
+
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "frmRoomGiahang", @name = "frmRoomGiahang" }))
+    {
+        <div class="form-horizontal">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="/Room/GiaHangphong">Giá và hạng phòng</a>
+                </li>
+                <li id="liAddNew" class="li-roomgiahang-addnew">
+                    <button type="button" id="btnaddnew" class="btn btn-block btn-oze btn-oze-add btn-flat"><i class="fa fa-plus" aria-hidden="true"></i>Thêm phòng</button>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main content -->
+        <section class="content">
+            <!-- SELECT2 EXAMPLE -->
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    <p class="text-red accordion">1. Phòng tiêu chuẩn 1 giường đơn</p>
+                    <div class="panel box box-default col-md-12 ">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="br2 col-md-5">
+                                    <div class="col-md-3">
+                                        <p class="bold">Chi tiết giá:</p>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <!-- Theo phòng -->
+                                        <div class="col-md-12">
+                                            <p class="bold text-red">Theo phòng:</p>
+
+                                            <div class="col-md-6">
+                                                +Giá ngày:
+                                            </div>
+                                            <p id="lblGiangay" class="col-md-6">
+                                                200 000 VNĐ
+                                            </p>
+                                            <div class="col-md-6">
+                                                +Giá qua đêm:
+                                            </div>
+                                            <p id="lblGiatheodem" class="col-md-6">
+                                                200 000 VNĐ
+                                            </p>
+                                            <p class="col-md-6">
+                                                +Giá theo giờ:
+                                            </p>
+                                            <div class="col-md-8 ml10">
+                                                <p id="lblGio">-Giá 1 giờ: <span id="lblGia">200 000 VNĐ</span> </p>
+                                                <p id="lblGio">-Giá 1 giờ: <span id="lblGia">200 000 VNĐ</span> </p>
+                                                <p id="lblGio">-Giá 1 giờ: <span id="lblGia">200 000 VNĐ</span> </p>
+                                            </div>
+                                        </div>
+                                        <!-- Theo người -->
+                                        <div class="col-md-12">
+                                            <p class="bold text-red">Theo người:</p>
+
+                                            <div class="col-md-6">
+                                                +Giá ngày:
+                                            </div>
+                                            <p id="lblGiangay" class="col-md-6">
+                                                200 000 VNĐ
+                                            </p>
+                                            <div class="col-md-8 ml10">
+                                                <p id="lblNguoi">-1 người: <span id="lblGia">200 000 VNĐ</span> </p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                +Giá qua đêm:
+                                            </div>
+                                            <p id="lblGiatheodem" class="col-md-6">
+                                                200 000 VNĐ
+                                            </p>
+                                            <div class="col-md-8 ml10">
+                                                <p id="lblNguoi">-1 người: <span id="lblGia">200 000 VNĐ</span> </p>
+                                            </div>
+
+                                            <p class="col-md-6">
+                                                +Giá theo giờ:
+                                            </p>
+                                            <div class="col-md-12 ml10">
+                                                <p id="lblGio" class="accordion">-Giá 1h:</p>
+                                                <div class="panel col-md-12 ml10">
+                                                    <p id="lblGio">.Giá 1h - 1 người: <span id="lblGia">200 000 VNĐ</span> </p>
+                                                    <p id="lblGio">.Giá 1h - 2 người: <span id="lblGia">200 000 VNĐ</span> </p>
+                                                    <p id="lblGio">.Giá 1h - 3 người: <span id="lblGia">200 000 VNĐ</span> </p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 ml10">
+                                                <p id="lblGio" class="accordion">-Giá 2h:</p>
+                                                <div class="panel col-md-12 ml10">
+                                                    <p id="lblGio">.Giá 1h - 1 người: <span id="lblGia">200 000 VNĐ</span> </p>
+                                                    <p id="lblGio">.Giá 1h - 2 người: <span id="lblGia">200 000 VNĐ</span> </p>
+                                                    <p id="lblGio">.Giá 1h - 3 người: <span id="lblGia">200 000 VNĐ</span> </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="col-md-4">
+                                        <p class="bold">Số lượng người:</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p><span class="bold">01</span> Người lớn </p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="bold">Loại giường:</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p class="col-md-6"><span class="bold">0</span> Giường đôi </p>
+                                        <p class="col-md-6"><span class="bold">01</span> Giường đơn </p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="bold">Quy định phụ trội:</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="col-md-12">
+                                            <p class="bold text-red">Phụ trội quá giờ trả phòng theo ngày:</p>
+                                            <p class="ml10">+ Giờ 1 miễn phí</p>
+                                            <p class="bold ml10">+ Quá quy định trên sẽ tính thành 1 ngày</p>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <p class="bold text-red">Phụ trội quá giờ trả phòng theo ngày:</p>
+                                            <p class="ml10">+ Giờ 1 miễn phí</p>
+                                            <p class="bold ml10">+ Quá quy định trên sẽ tính thành 1 ngày</p>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <p class="bold text-red">Phụ trội quá giờ trả phòng theo ngày:</p>
+                                            <p class="ml10">+ Giờ 1 miễn phí</p>
+                                            <p class="bold ml10">+ Quá quy định trên sẽ tính thành 1 ngày</p>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <p class="bold text-red">Phụ trội quá giờ trả phòng theo ngày:</p>
+                                            <p class="ml10">+ Giờ 1 miễn phí</p>
+                                            <p class="bold ml10">+ Quá quy định trên sẽ tính thành 1 ngày</p>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <p class="bold text-red">Phụ trội quá giờ trả phòng theo ngày:</p>
+                                            <p class="ml10">+ Giờ 1 miễn phí</p>
+                                            <p class="bold ml10">+ Quá quy định trên sẽ tính thành 1 ngày</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- /.row -->
+                            </div>
+                            <p class="text-red" style="font-style: italic;">Ghi chú(*): Giá ở trên đã bao gồm VAT</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 form-group">
+                    <p class="accordion">2. Phòng tiêu chuẩn 1 giường đơn</p>
+                    <div class="panel box box-default col-md-12 ">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="br2 col-md-5">
+                                    <div class="col-md-3">
+                                        <p class="bold">Chi tiết giá:</p>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <!-- Theo phòng -->
+                                        <div class="col-md-12">
+                                            <p class="bold text-red">Theo phòng:</p>
+
+                                            <div class="col-md-6">
+                                                +Giá ngày:
+                                            </div>
+                                            <p id="lblGiangay" class="col-md-6">
+                                                200 000 VNĐ
+                                            </p>
+                                            <div class="col-md-6">
+                                                +Giá qua đêm:
+                                            </div>
+                                            <p id="lblGiatheodem" class="col-md-6">
+                                                200 000 VNĐ
+                                            </p>
+                                            <p class="col-md-6">
+                                                +Giá theo giờ:
+                                            </p>
+                                            <div class="col-md-8 ml10">
+                                                <p id="lblGio">-Giá 1 giờ: <span id="lblGia">200 000 VNĐ</span> </p>
+                                                <p id="lblGio">-Giá 1 giờ: <span id="lblGia">200 000 VNĐ</span> </p>
+                                                <p id="lblGio">-Giá 1 giờ: <span id="lblGia">200 000 VNĐ</span> </p>
+                                            </div>
+                                        </div>
+                                        <!-- Theo người -->
+                                        <div class="col-md-12">
+                                            <p class="bold text-red">Theo người:</p>
+
+                                            <div class="col-md-6">
+                                                +Giá ngày:
+                                            </div>
+                                            <p id="lblGiangay" class="col-md-6">
+                                                200 000 VNĐ
+                                            </p>
+                                            <div class="col-md-8 ml10">
+                                                <p id="lblNguoi">-1 người: <span id="lblGia">200 000 VNĐ</span> </p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                +Giá qua đêm:
+                                            </div>
+                                            <p id="lblGiatheodem" class="col-md-6">
+                                                200 000 VNĐ
+                                            </p>
+                                            <div class="col-md-8 ml10">
+                                                <p id="lblNguoi">-1 người: <span id="lblGia">200 000 VNĐ</span> </p>
+                                            </div>
+
+                                            <p class="col-md-6">
+                                                +Giá theo giờ:
+                                            </p>
+                                            <div class="col-md-12 ml10">
+                                                <p id="lblGio" class="accordion">-Giá 1h:</p>
+                                                <div class="panel col-md-12 ml10">
+                                                    <p id="lblGio">.Giá 1h - 1 người: <span id="lblGia">200 000 VNĐ</span> </p>
+                                                    <p id="lblGio">.Giá 1h - 2 người: <span id="lblGia">200 000 VNĐ</span> </p>
+                                                    <p id="lblGio">.Giá 1h - 3 người: <span id="lblGia">200 000 VNĐ</span> </p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 ml10">
+                                                <p id="lblGio" class="accordion">-Giá 2h:</p>
+                                                <div class="panel col-md-12 ml10">
+                                                    <p id="lblGio">.Giá 1h - 1 người: <span id="lblGia">200 000 VNĐ</span> </p>
+                                                    <p id="lblGio">.Giá 1h - 2 người: <span id="lblGia">200 000 VNĐ</span> </p>
+                                                    <p id="lblGio">.Giá 1h - 3 người: <span id="lblGia">200 000 VNĐ</span> </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="col-md-4">
+                                        <p class="bold">Số lượng người:</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p><span class="bold">01</span> Người lớn </p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="bold">Loại giường:</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p class="col-md-6"><span class="bold">0</span> Giường đôi </p>
+                                        <p class="col-md-6"><span class="bold">01</span> Giường đơn </p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="bold">Quy định phụ trội:</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="col-md-12">
+                                            <p class="bold text-red">Phụ trội quá giờ trả phòng theo ngày:</p>
+                                            <p class="ml10">+ Giờ 1 miễn phí</p>
+                                            <p class="bold ml10">+ Quá quy định trên sẽ tính thành 1 ngày</p>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <p class="bold text-red">Phụ trội quá giờ trả phòng theo ngày:</p>
+                                            <p class="ml10">+ Giờ 1 miễn phí</p>
+                                            <p class="bold ml10">+ Quá quy định trên sẽ tính thành 1 ngày</p>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <p class="bold text-red">Phụ trội quá giờ trả phòng theo ngày:</p>
+                                            <p class="ml10">+ Giờ 1 miễn phí</p>
+                                            <p class="bold ml10">+ Quá quy định trên sẽ tính thành 1 ngày</p>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <p class="bold text-red">Phụ trội quá giờ trả phòng theo ngày:</p>
+                                            <p class="ml10">+ Giờ 1 miễn phí</p>
+                                            <p class="bold ml10">+ Quá quy định trên sẽ tính thành 1 ngày</p>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <p class="bold text-red">Phụ trội quá giờ trả phòng theo ngày:</p>
+                                            <p class="ml10">+ Giờ 1 miễn phí</p>
+                                            <p class="bold ml10">+ Quá quy định trên sẽ tính thành 1 ngày</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- /.row -->
+                            </div>
+                            <p class="text-red" style="font-style: italic;">Ghi chú(*): Giá ở trên đã bao gồm VAT</p>
+                        </div>
+                    </div>
+                </div>
+        </section>
+        
+    }<!-- /.content -->
+    <!-- DataTables -->
+<script>
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+        acc[i].onclick = function () {
+            this.classList.toggle("active");
+            this.nextElementSibling.classList.toggle("show");
+        }
+    }
+</script>
+    <script src="~/Themes/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="~/Themes/plugins/datatables/dataTables.bootstrap.js"></script>
+    <script src="~/Themes/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>

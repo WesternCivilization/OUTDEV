@@ -1,0 +1,60 @@
+﻿@using Oze.Models;
+@using Oze.AppCode.DAL;
+@model oze.data.tbl_Supplier
+
+   
+    <div>
+        <form id="dummySupplier" action="javascript:void();">
+            @Html.AntiForgeryToken()
+            <div class="form-group row">
+                <label for="lblnameks" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="lblnameks" class="col-sm-3 control-label">Mã</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" required="1"  maxlength="30" id="Code" name="Code" value="@Model.Code" readonly="readonly">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="lblnameks" class="col-sm-3 control-label">Tên</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="Name" required="1" maxlength="50" name="Name" value="@Model.Email">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="lblnameks" class="col-sm-3 control-label">Email</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="Email" email="1" name="Email" required="1" value="@Model.Email" data-rule-email="true">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="lblnameks" class="col-sm-3 control-label">Tên liên hệ</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="Contact_Person_Name" required="1" name="Contact_Person_Name" value="@Model.Contact_Person_Name">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="lblnameks" class="col-sm-3 control-label">Email liên hệ</label>
+                <div class="col-sm-9">
+                    <input type="email" class="form-control" id="Contact_Person_Email" email="1" required="1" name="Contact_Person_Email" value="@Model.Contact_Person_Email">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="lblnameks" class="col-sm-3 control-label">SĐT liên hệ</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="Contact_Person_Phone" name="Contact_Person_Phone" value="@Model.Contact_Person_Phone">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="lblnameks" class="col-sm-3 control-label">Địa chỉ</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="Address" name="Address" value="@Model.Address" required="1">
+                </div>
+            </div>
+        </form>
+    </div>
+<!--<script src="~/Scripts/oze/SysUser/oze_Supplier.js"></script>-->

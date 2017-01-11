@@ -1,0 +1,16 @@
+﻿<div class="row">
+@foreach (var room in (new Oze.Services.RoomService()).getAll(null))
+ {
+    <div class="col-lg-2 col-xs-1 col-sm-12 col-xs-12">
+        <!-- small box -->
+        <div class="small-box bg-gray">
+            <div class="inner">
+                <h3>@room.Name</h3>
+            </div>
+            <div class="box-footer"><a href="#" class="small-box-footer" onclick="editDialog(@room.Id)"><i class="fa fa-pencil"></i></a>
+<a href="#" class="small-box-footer" onclick="deleteDialog(@room.Id)"><i class="fa fa-times"></i></a></div>
+        </div>
+      
+    </div>
+}
+</div>

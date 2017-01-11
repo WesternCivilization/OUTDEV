@@ -1,0 +1,218 @@
+﻿@model oze.data.Vw_InforCustomer_Room
+<div class="modal-body-add clearfix">
+    <div class="col-xs-6">
+        <h3><p style="color: #f39c12"> <span class="fa fa-bars"></span>   Thông tin khách hàng:</p></h3>
+        <form id="formInforDetailCustomer" name="formInforDetail" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Họ và tên </label>
+                <div class="col-xs-7">
+
+                    <input type="text" class="form-control" required="1" name="Name" value="@Model.CustomerName" />
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Số CMT/Passport </label>
+                <div class="col-xs-7">
+                    <input type="text" class="form-control" name="TransAmount" value="@Model.IdentifyNumber" />
+                    @*<span class="input-group-addon">MZN</span>*@
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Ngày sinh</label>
+                <div class="col-xs-7">
+                    <div class="input-group input-group-sm birthday" id="birthday">
+                        <input type="text" placeholder="Từ ngày" class="form-control" value="@Model.DOB.GetValueOrDefault().ToString("dd/MM/yyyy ")" id="DOB" name="DOB" />
+                        <span class="input-group-addon input-group-addon-custom">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">SĐT </label>
+                <div class="col-xs-7">
+                    <input type="hidden" class="form-control" required="1" name="Id" value="@Model.Id" />
+                    <input type="text" class="form-control" required="1" phone="1" name="Phone" value="@Model.Phone" />
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Email </label>
+                <div class="col-xs-7">
+                    <input type="text" class="form-control" required="1" email="1" name="Email" value="@Model.Email" />
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Địa chỉ </label>
+                <div class="col-xs-7">
+                    <input type="text" class="form-control" name="Address" value="@(Model.Address)" />
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Giới tính </label>
+                <div class="col-xs-7">
+
+                    <select name="Sex" id="Sex" required="1" class="form-control">
+                        @*<option value="">--Chọn giới tính--</option>*@
+                        <option @(Model.Sex == 1 ? "selected" : "") value="1">Nam</option>
+                        <option @(Model.Sex == 0 ? "selected" : "") value="0">Nữ</option>
+                    </select>
+
+
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Quốc tịch </label>
+                <div class="col-xs-7">
+                    <select name="CountryId" id="CountryId" required="1" class="form-control">
+                        <option value="@Model.CountryId" selected>Vietnam</option>
+                        @*@for (var i = 0; i < @Model.ListCountry.Count; i++)
+                            {
+                                <option @(Model.CountryId == Model.ListCountry[i].id ? "selected" : "") value="@Model.ListCountry[i].id">@Model.ListCountry[i].Name</option>
+                            }*@
+
+                    ></select>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Công ty </label>
+                <div class="col-xs-7">
+                    <input type="text" class="form-control" name="Company" value="@Model.Company" />
+                </div>
+
+            </div>
+
+
+        </form>
+    </div>
+    <div class="col-xs-6" style="background: aliceblue; border-radius: 24px;">
+<h3><p style="color: #f39c12"> <span class="fa fa-bars"></span>   Thông tin đặt phòng:</p></h3>
+        <form id="formInforDetailRoom" name="formInforDetail" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Số phòng </label>
+                <div class="col-xs-7">
+                    <input type="text" class="form-control" name="RoomName" value="@Model.RoomName" />
+                    </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Hạng phòng </label>
+                <div class="col-xs-7">
+
+                    <input type="text" class="form-control" name="LevelName" value="@Model.LevelName" />
+
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Mã đặt phòng </label>
+                <div class="col-xs-7">
+
+                    <input type="text" class="form-control" name="BookingCode" value="@Model.BookingCode" />
+
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Khung giá phòng </label>
+                <div class="col-xs-7">
+
+                    <input type="text" class="form-control" name="Price" value="@Model.Price" />
+
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Giá phòng </label>
+                <div class="col-xs-7">
+                    <input type="text" class="form-control" name="Price" value="@(Model.KhungGio==0?"Theo Giờ":(Model.KhungGio==1?"Theo ngày":(Model.KhungGio==1?"Theo đêm":"")))" />
+
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Thời gian đến </label>
+                <div class="col-xs-7">
+                    <div class="input-group input-group-sm birthday" id="birthday">
+                        <input type="text" placeholder="Từ ngày" class="form-control" value="@(Model.Arrive_Date.GetValueOrDefault()==DateTime.MinValue?"":Model.Arrive_Date.GetValueOrDefault().ToString("dd/MM/yyyy"))" id="Arrive_Date" name="Arrive_Date" />
+                        <span class="input-group-addon input-group-addon-custom">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Thời gian đi </label>
+                <div class="col-xs-7">
+                    <div class="input-group input-group-sm birthday" id="birthday">
+                        <input type="text" placeholder="Từ ngày" class="form-control" value="@(Model.Leave_Date.GetValueOrDefault()==DateTime.MinValue?"":Model.Leave_Date.GetValueOrDefault().ToString("dd/MM/yyyy"))" id="Leave_Date" name="Leave_Date" />
+                        <span class="input-group-addon input-group-addon-custom">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Người lớn </label>
+                <div class="col-xs-7">
+
+                    <input type="text" class="form-control" name="Number_People" value="@Model.Number_People" />
+
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Trẻ em </label>
+                <div class="col-xs-7">
+
+                    <input type="text" class="form-control" name="Number_Children" value="@Model.Number_Children" />
+
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Phương thức thanh toán </label>
+                <div class="col-xs-7">
+
+                    <select name="CountryId" id="CountryId" required="1" class="form-control">
+                        <option selected>  @(Model.Payment_TypeID == 1 ? "Tiền mặt" : "Chuyển khoản")</option>
+                    </select>
+
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Trả trước </label>
+                <div class="col-xs-7">
+
+                    <input type="text" class="form-control" name="Deposit" value="@Model.Deposit" />
+
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Giảm trừ </label>
+                <div class="col-xs-7">
+
+                    <input type="text" class="form-control" name="Discount" value="@Model.Discount" />
+
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+</div>

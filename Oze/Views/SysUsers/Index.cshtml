@@ -1,0 +1,321 @@
+﻿@{
+    ViewBag.Title = "Thêm mới sysUser";
+    Layout = "~/Views/Shared/_Root.cshtml";
+}
+@model Oze.Models.SysUserModel
+
+<style>
+    th{
+        text-align:center;
+    }
+    #divCreateUser{
+        display:none;
+    }
+    #divEditUser {
+        display: none;
+    }
+    .group-bt-modal {
+        display: flex;
+        float: right;
+        white-space: nowrap;
+    }
+        .group-bt-modal button {
+            margin-top: 0px !important;
+        }
+    #btnCreateUser {
+        display: none;
+    }
+    #btnSave {
+        display: none;
+    }
+    .alert{
+        text-align:left;
+    }
+    #thongbao {
+        float: left;
+        width: 100%;
+        padding-bottom: 0px;
+        margin-bottom: 0px;
+        text-align: -webkit-left;
+        height: 0px;
+    }
+    #listGroup{
+        padding-top:10px;
+        padding-top:15px;
+        display:none;
+    }
+    #listGroup input[type="checkbox"]{
+        margin-right:8px;
+        margin-top:4px;
+    }
+    #showlistQuyen{
+        display:none;
+    }
+    .col-sm-9 label {
+        color: red;
+        font-size:11px;
+    }
+</style>
+<script>
+        var m_Title = '@ViewBag.Title';
+</script>
+<!-- DataTables -->
+<link rel="stylesheet" href="~/Themes/plugins/datatables/dataTables.bootstrap.css">
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "frmSysUser", @name = "frmSysUser" }))
+{
+    <div class="form-horizontal">
+        <h3>Danh sách User Hệ Thống</h3> 
+        <div class="modal" id="mdModify" tabindex="-1" role="dialog" aria-labelledby="lblTitle">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="lblTitle"></h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="modal-body-content">
+                            <div class="form-group">
+                                <label for="lblnameks" class="col-sm-3 control-label">Tên đăng nhập</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="txttendangnhap" name="txttendangnhap" placeholder="">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="lblnameks" class="col-sm-3 control-label">Mật khẩu</label>
+                                <div class="col-sm-9">
+                                    <input type="password" class="form-control" id="txtpass" name="txtpass" placeholder="Vui lòng nhập mật Khẩu">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="lblnameks" class="col-sm-3 control-label">Nhập lại mật khẩu</label>
+                                <div class="col-sm-9">
+                                    <input type="password" class="form-control" id="txtrepass" name="txtrepass" placeholder="xác nhận lại mật khẩu">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="lblnameks" class="col-sm-3 control-label">Bộ phận</label>
+                                <div class="col-sm-9">
+                                    @if (ViewData.ContainsKey("BoPhan"))
+                                    {
+                                        @Html.DropDownList("cbxBoPhan", ViewData["UsertHotel"] as List<SelectListItem>, new { @id = "cbxBoPhan", @name = "cbxBoPhan", @class = "form-control" })
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="showQuyen">
+                                <label for="lblnameks" class="col-sm-3 control-label">Quyền</label>
+                                <div class="col-sm-9">
+                                    <button type="button" class="btn btn-block btn-warning btnChangeEdit" id="btnShowQuyen" >Chi tiết</button>
+                                </div>
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-9" id="listGroup"></div>
+                            </div>
+                            <hr />
+                            <div class="form-group">
+                                <label for="lblnameks" class="col-sm-3 control-label">Họ và tên</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="txthoten" name="txthoten" placeholder="VD: Nguyễn A">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="lblnameks" class="col-sm-3 control-label">Số CMT</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="txtcmt" name="txtcmt" placeholder="VD: 123456789">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="lblnameks" class="col-sm-3 control-label">Ngày cấp CMT</label>
+                                <div class="col-sm-9">
+                                    <input type="date" class="form-control" id="txtngaycapcmt" name="txtngaycapcmt" placeholder="VD:22/12/2011">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="lblnameks" class="col-sm-3 control-label">Ngày sinh</label>
+                                <div class="col-sm-9">
+                                    <input type="date" class="form-control" id="txtngaysinh" name="txtngaysinh" placeholder="VD:22/12/2011">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="lblnameks" class="col-sm-3 control-label">Địa chỉ</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="txtAddress" name="txtAddress" placeholder="VD: 123 ABC">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="lblnameks" class="col-sm-3 control-label">Số điện thoại</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="txtphone" name="txtphone" placeholder="VD: 0987654321">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="lblnameks" class="col-sm-3 control-label">Email</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="txtEmail" name="txtEmail" placeholder="">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="lblnameks" class="col-sm-3 control-label">Ngày vào làm</label>
+                                <div class="col-sm-9">
+                                    <input type="date" class="form-control" id="txtngayvaolam" name="txtngayvaolam" placeholder="">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-offset-3">
+                                <div class="checkbox col-sm-5 ">
+                                    <label>
+                                        <input id="cboactive" name="cboactive" type="checkbox" > Kích hoạt
+                                    </label>
+                                </div>
+                                <div class="checkbox col-sm-5">
+                                    <label>
+                                        <input id="cboactive" name="cboactive" type="checkbox" checked="checked"> Bỏ kích hoạt
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div id="divCreateUser" class="form-group">
+                                <label for="lblnameks" class="col-sm-2 control-label">Người tạo:</label>
+                                <div class="col-sm-4">
+                                    @Html.TextBoxFor(u => u.NameCreateby, new { @class = "form-control", @id = "txtUserCreat", @name = "txtUserCreat", @placeholder = "Người tạo", @disabled = "disabled" })
+                                </div>
+                                <label for="lblnameks" class="col-sm-2 control-label">T/gian tạo:</label>
+                                <div class="col-sm-4">
+                                    @Html.TextBoxFor(u => u.CreateDate, new { @class = "form-control", @id = "txtCreatDate", @name = "txtCreatDate", @placeholder = "", @disabled = "disabled" })
+                                </div>
+                            </div>
+
+                            <div id="divEditUser" class="form-group">
+                                <label for="lblnameks" class="col-sm-2 control-label">Người sửa:</label>
+                                <div class="col-sm-4">
+                                    @Html.TextBoxFor(u => u.NameModifyby, new { @class = "form-control", @id = "txtUserEdit", @name = "txtUserEdit", @placeholder = "Người sửa", @disabled = "disabled" })
+                                </div>
+                                <label for="lblnameks" class="col-sm-2 control-label">T/gian sửa:</label>
+                                <div class="col-sm-4">
+                                    @Html.TextBoxFor(u => u.ModifyDate, new { @class = "form-control", @id = "txtEditDate", @name = "txtEditDate", @placeholder = "", @disabled = "disabled" })
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                    <div id="thongbao" class="group-bt-modal"></div>
+                                    <div class="group-bt-modal col-lg-5 col-xs-5">
+                                        <button id="btnCreateUser" type="button" class="btn btn-block btn-warning btn-flat btn-save">Thêm mới</button>
+                                        <button id="btnSave" type="button" class="btn btn-block btn-warning btn-flat btn-save">Lưu</button>
+                                        <button id="btnCancel" type="button" class="btn btn-block btn-warning btn-flat" data-dismiss="modal">Quay lại</button>
+                                    </div>
+                                </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="box-body">
+
+    <div class="clearfix"></div>
+    <table class="table table-bordered table-striped .table-hover" id="GridGroup">
+
+        <thead>
+            <tr>
+                <th>Tên User</th>
+                <th>Tài khoản</th>
+                <th>CMT/HC(s)</th>
+                <th>Mobile</th>
+                <th>Khách sạn</th>
+                <th>Bộ phận</th>
+                <th>Trạng thái</th>
+                <th>Active</th>
+                <td class="edit-row-header">Edit</td>
+                <td class="delete-row-header">Delete</td>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var obj in (List<Oze.Models.SysUserModel>)ViewBag.ListSysUser)
+                {
+                    <tr>
+                        <td>@obj.FullName</td>
+                        <td>
+                            @obj.UserName
+                        </td>
+                        <td>@obj.IdentityNumber</td>
+                        <td>@obj.Mobile</td>
+                        <td>@obj.NameSysHotelID</td>
+                        <td></td>
+                        <td>
+                            @if (@obj.Status == 1)
+                            { <span>Đang làm viêc</span> }
+                            else if(@obj.Status == 2)
+                            {
+                                <span>Nghỉ phép</span>
+                            }
+                            else
+                            {
+                                <span>Rời công ty</span>
+                            }
+                        </td>
+                        <td>
+                            @if (@obj.IsActive == 1)
+                            { <span>Kích hoạt</span> }
+                            else
+                            {
+                                <span>Chưa kích hoạt</span>
+                            }
+                        </td>
+                        <td><button class="btn btn-block btn-warning btnChangeEdit" onclick="GetValueInforEdit(@obj.ID)">Chỉnh sửa</button></td>
+                        <td><button class="btn btn-block btn-warning btnChangeEdit" onclick="GetValueInforDelete(@obj.ID)">Xóa</button></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<div>
+    @Html.ActionLink("Back to List", "../")
+</div>
+
+<div class="modal fade" id="modalthongbao" role="dialog">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thông Báo</h4>
+            </div>
+            <div class="modal-body">
+                <h2 id="messthongbao" style="color:red"> </h2>
+            </div>
+            <div id="footerShowModal" class="modal-footer">
+                <button type="button" id="btnclose" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script src="~/Scripts/oze/SysUser/oze_SysUser.js"></script>
+<!-- DataTables -->
+<script src="~/Themes/plugins/datatables/jquery.dataTables.js"></script>
+<script src="~/Themes/plugins/datatables/dataTables.bootstrap.js"></script>
+<script src="~/Themes/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+@*<script src="~/Scripts/oze/oze.group.js"></script>*@

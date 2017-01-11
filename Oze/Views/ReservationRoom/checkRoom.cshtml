@@ -1,0 +1,34 @@
+﻿@model List<oze.data.tbl_Room>
+<div class="form-group text-center">
+    <label>Từ @(ViewBag.dtFrom) đến @(ViewBag.dtTo) </label>
+</div>
+<div class="row Rome_steam">
+    @if (Model.Any())
+    {
+        bool isOK=true;        
+        foreach (var t in Model)
+        {
+            <div class="col-lg-2 col-xs-2" onclick="javascript: chooseRoomFromCheckRoom(@t.Id);">
+                <!-- small box -->
+                <div class="small-box">
+                    <div class="inner" style="text-align: center;">
+                        <h5>@t.Name </h5>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="form-group text-center">
+            <label>Chưa có dữ liệu</label>
+        </div>
+    }
+</div>
+<script>
+function chooseRoomFromCheckRoom(roomid)
+{
+    var g1 = new ReservationRoom();
+    g1.chooseRoom(roomid);
+}
+</script>

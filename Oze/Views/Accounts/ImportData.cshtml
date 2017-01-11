@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "ImportData";
+    Layout = "~/Views/Shared/_Root.cshtml";
+}
+
+@using (Html.BeginForm("ImportData", "Accounts", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <!-- Default box -->
+      <div class="box">
+        <div class="box-header with-border">
+          <h3 class="box-title">Import Data From Excel To SQL</h3>
+
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+              <i class="fa fa-minus"></i></button>
+          </div>
+        </div>
+        <div class="box-body">
+            @if (Session["Message"] != null)
+            {
+                if (Session["Message"].ToString() == "Import Success.")
+                {
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <i class="icon fa fa-check"></i> @Session["Message"].ToString()
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <i class="icon fa fa-ban"></i> @Session["Message"].ToString()
+                    </div>
+                }
+            }
+            <div class="form-group">
+                <input type="file" id="FileUpload1" name="FileUpload1">
+            </div>
+        </div>
+          <div class="box-footer">
+              <button type="submit" name="command" value="Import" class="btn btn-primary">Submit</button>
+          </div>
+              <!-- /.box-body -->
+          </div>
+
+      <!-- /.box -->   
+}

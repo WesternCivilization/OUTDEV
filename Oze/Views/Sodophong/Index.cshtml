@@ -1,0 +1,407 @@
+﻿@{ 
+    Layout = "~/Views/Shared/_Root.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="/Content/sodophong.css">
+<link rel="stylesheet" href="~/Content/hungpvCustom.css">
+<style type="text/css">
+    /* phòng trống */
+    .btn
+    {
+        width:170px !important;
+        text-align:left !important;
+    }
+    .room-0 
+    {
+        background-color:white !important;
+        color:red !important;
+    }
+    .trangthai-0 
+    {
+        color: red !important;
+    }
+     .room-0 .textroom {
+        color: red !important;
+    }
+    .room-0 .textcustomer {
+        color: black !important;
+    }  
+    /* phòng đặt trước */
+    .room-4 {
+        background-color: red !important;
+    }
+    /* phòng đang ở */
+    .room-1 {
+        background-color: #ef7c2b !important;
+    }
+    /*chưa dùng*/
+    .room-2 {
+        background-color: #ef7c2b !important;
+    }
+    /* phòng bẩn */
+    .room-10 {
+        /*background-color: silver !important;*/
+    }
+    /* phòng hỏng */
+    .room-11 {
+        background-color: silver !important;
+    }
+    .room-12 {
+        background-color: silver !important;
+    }
+    .tab-title {
+        border-bottom: 1px solid #ddd;
+        padding-bottom:10px !important;
+    }
+    .btn-menu {
+        margin-right: 15px;
+        margin-top: 15px;
+    }
+    .modal-open1 .modal {
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+</style>
+<div class="tab-title">
+    <ul class="nav nav-tabs" role="tablist" style="border-bottom:none">
+        <li id="liStatus">
+            <select class="form-control" id="search_status" name="search_status" onchange="javascript:searchDiv();">
+                <option value="0" selected>Tất cả</option>
+                <option value="1">Phòng trống</option>
+                <option value="2">Phòng đang có khách</option>
+                <option value="4">Phòng đặt trước</option>
+
+            </select>
+        </li>
+        <li id="liAddNew" style="float:right">
+            <input type="text" id="search_text" name="search_text" placeholder="Nhập để tìm kiếm" />
+        </li>
+    </ul>
+</div>
+<!-- Main content -->
+<section class="content">
+    <div id="containerSodophong" class="container" style="margin-left:-50px">
+        
+    </div>
+
+    <!-- Small boxes (Stat box)
+    <div class="row">
+        @*{
+         foreach (var obj in (new Oze.Services.RoomService()).getAllSoDoPhong(""))
+        {
+                <div class="col-lg-3 col-xs-6" onclick="javascript:showMenuSoDoPhong(@obj.id);">
+                    <!-- small box -->
+                    <div class="small-box bg-aqua room-@(obj.Status??0)" >
+                        <div class="inner">
+                            <h5 class="textroom">@obj.Name <p class="textcustomer">Lê Thanh Lâm @obj.customerName</p></h5>
+                            @if (obj.Status >= 10)
+                            {
+                                <div class="icon">
+                                    <i class="ion ion-bag"></i>
+                                </div>
+                            }
+                        </div>
+                        <div class="inner" style="width:80%">
+
+                        </div>
+                        <a href="#" class="small-box-footer" style="text-align:right">More info <i class="fa fa-arrow-circle-right"></i></a>
+                      </div>
+                </div>
+            }
+        } *@
+    </div>
+    -->
+    <div id="menu_sodophong_tmp" style="display:none"><a class="btn btn-primary waves-effect waves-light btn-menu" href="javascript:datphong({id})"><i class="glyphicon glyphicon-check"></i>Đặt phòng</a><a class="btn btn-primary waves-effect waves-light btn-menu" href="javascript:dsdatphong({id})"><i class="glyphicon glyphicon-earphone"></i>DS Đặt phòng</a>
+        <a class="btn btn-primary waves-effect waves-light btn-menu" href="javascript:changeRoomStatus1({id},10)"><i class="glyphicon glyphicon-cloud"></i>Báo phòng bẩn</a> <a class="btn btn-primary waves-effect waves-light btn-menu" href="javascript:changeRoomStatus({id},0)"><i class="glyphicon glyphicon-cog"></i>Báo phòng đã sửa ok</a><a class="btn btn-primary waves-effect waves-light btn-menu" href="javascript:changeRoomStatus({id},11)"><i class="glyphicon glyphicon-cog"></i>Báo phòng hỏng</a><a class="btn btn-primary waves-effect waves-light btn-menu" href="javascript:changeRoomStatus({id},12)"><i class="glyphicon glyphicon-ban-circle"></i>Báo phòng đang sửa</a>
+        <a class="btn btn-primary waves-effect waves-light btn-menu" href="javascript:changeRoomStatus1({id},9)"><i class="glyphicon glyphicon-ban-circle"></i>Phòng đã sạch</a>
+    </div>
+    <div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-labelledby="xModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><label id="TittleBox">Thông tin khách hàng</label></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-body-content">
+                        <p>Loading...</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnUndoRoom" class="btn btn-primary" type="button"><i class="fa fa-check"></i> Lưu</button>
+                    <button id="btnChangeRoom" class="btn btn-primary" type="button"><i class="fa fa-check"></i> Lưu</button>
+                    <button id="btnUpdateDetail" class="btn btn-primary" type="button"><i class="fa fa-check"></i> Lưu</button>
+                    <button type="button" class="btn btn-df" data-dismiss="modal"><i class="fa fa-reply"></i>Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+<script src="~/Scripts/oze.common.js"></script>
+<script src="/Scripts/oze/oze.ReservationRoom1.js"></script>
+
+<!-- /.content -->
+<script type="text/javascript">
+    var g_Reservation = new ReservationRoom();
+    $(document).ready(function ()
+    {
+        $("#containerSodophong").load("/Sodophong/sodophong");
+        $("#search_text").keydown(function (e) {
+            searchDiv();
+        });
+    });
+    function searchDiv() {
+        var arr = $("div[stype='phong']");
+        $.each(arr, function (index, obj)
+        {
+            //$("#search_status").val()=0: tất cả, 1: trống,2: đang ở,4: đặt trước
+            var nameCustomer = $(obj).attr("snamec");
+            if (!nameCustomer) nameCustomer = "";
+            if ($(obj).attr("sname").indexOf($("#search_text").val()) != -1 || nameCustomer.indexOf($("#search_text").val()) != -1)
+            {
+                if ($("#search_status").val() == 0) $(obj).css("display", "block");//tất cả
+                else
+                {
+                    if ($("#search_status").val() == 1)//trống
+                    {
+                        if ($(obj).attr("sstatus") == 0)//chỉ hiện những div đang ở
+                        {
+                            $(obj).css("display", "block");
+                        }
+                        else $(obj).css("display", "none");
+                    }
+                    if ($("#search_status").val() == 2)//đang ở
+                    {
+                        if ($(obj).attr("sstatus") == 1)//chỉ hiện những div đang ở
+                        {
+                            $(obj).css("display", "block");
+                        }
+                        else $(obj).css("display", "none");
+                    }
+                    
+                    if ($("#search_status").val() == 4)//Đặt trước
+                    {
+                        if ($(obj).attr("sstatus") == 4)//chỉ hiện những div đặt trước
+                        {
+                            $(obj).css("display", "block");
+                        }
+                        else $(obj).css("display", "none");
+                    }
+                }
+
+            }
+            else {
+                $(obj).css("display", "none");
+            }
+        });
+    }
+    var dialogMenu;
+    function showMenuSoDoPhong(id, status, status1)
+    {
+        //getHtmlForMenuSoDoPhong(id)
+        
+        dialogMenu=BootstrapDialog.show({
+            type: BootstrapDialog.TYPE_DEFAULT,
+            title: 'Lựa chọn thao tác',
+            message: getHtmlForMenuSoDoPhong(id, status, status1)
+        });
+        
+    };
+    function getHtmlForMenuSoDoPhong(id,status,status1)
+    {
+        var html = '';
+        //nếu là phòng trông
+        if (status == 0) {
+            html =
+           '<a class="btn btn-primary waves-effect waves-light btn-menu" href="javascript:datphong(' + id + ')"><i class="glyphicon glyphicon-check"></i>Đặt phòng</a>' +
+           '<a class="btn btn-primary waves-effect waves-light btn-menu" href="javascript:dsdatphong(' + id + ')"><i class="glyphicon glyphicon-earphone"></i>DS Đặt phòng</a>' ;
+        }
+        if (status == 1)//nếu là đang ở
+        {
+            html =
+            '<a class="btn btn-primary waves-effect waves-light btn-menu" href="javascript:chitiet(' + id + ',' + status + ')"><i class="glyphicon glyphicon-check"></i>Chi tiết</a>' +
+
+            '<a class="btn btn-primary waves-effect waves-light btn-menu" href="javascript:traphong(' + id + ')"><i class="glyphicon glyphicon-check"></i>Trả phòng</a>' +
+            '<a class="btn btn-primary waves-effect waves-light btn-menu" href="javascript:dsdatphong(' + id + ')"><i class="glyphicon glyphicon-earphone"></i>DS Đặt phòng</a>' +
+            '<a class="btn btn-primary waves-effect waves-light btn-menu" href="javascript:doiphong(' + id + ')"><i class="glyphicon glyphicon-earphone"></i>Đổi phòng</a>' +
+            '<a class="btn btn-primary waves-effect waves-light btn-menu" href="javascript:undocheckin(' + id + ')"><i class="glyphicon glyphicon-earphone"></i>Hủy nhận phòng</a>';
+
+
+        }
+        if (status == 4)//nếu là booking
+        {
+            html =
+            '<a class="btn btn-primary waves-effect waves-light btn-menu" href="javascript:chitiet(' + id + ',' + status + ')"><i class="glyphicon glyphicon-check"></i>Chi tiết</a>' +
+            '<a class="btn btn-primary waves-effect waves-light btn-menu" href="javascript:datphong(' + id + ')"><i class="glyphicon glyphicon-check"></i>Đặt phòng</a>' +
+            '<a class="btn btn-primary waves-effect waves-light btn-menu" href="javascript:nhanphong(' + id + ')"><i class="glyphicon glyphicon-check"></i>Nhận phòng</a>' +
+            '<a class="btn btn-primary waves-effect waves-light btn-menu" href="javascript:dsdatphong(' + id + ')"><i class="glyphicon glyphicon-earphone"></i>DS Đặt phòng</a>';
+
+        }
+        //các trạng thái còn lại
+       
+        html=html+
+           ((status1!=10)?'<a class="btn btn-primary waves-effect waves-light btn-menu" href="javascript:changeRoomStatus1(' + id + ',10)"><i class="glyphicon glyphicon-cloud"></i>Báo phòng bẩn</a>':'')+
+           ((status1==10)?'<a class="btn btn-primary waves-effect waves-light btn-menu" href="javascript:changeRoomStatus1(' + id + ',0)"><i class="glyphicon glyphicon-ban-circle"></i>Đã dọn phòng</a>':'');
+     
+        html = html +
+         ((status1 != 11) ? '<a class="btn btn-primary waves-effect waves-light btn-menu" href="javascript:changeRoomStatus1(' + id + ',11)"><i class="glyphicon glyphicon-cloud"></i>Báo phòng hòng</a>' : '') +
+         ((status1 == 11) ? '<a class="btn btn-primary waves-effect waves-light btn-menu" href="javascript:changeRoomStatus1(' + id + ',0)"><i class="glyphicon glyphicon-ban-circle"></i>Đã sửa phòng</a>' : '');
+
+        return html;
+        /*
+        var html = $("#menu_sodophong_tmp").html();
+        html = html.replace(/<br>/gi, "");
+        html = html.replace(/<br\>/gi, "");
+
+       //alert(html);
+        html = html.replace(/{id}/gi, id);       
+        return html;
+        */
+    }
+    function datphong(id)
+    {
+        dialogMenu.close();
+        window.location.href = "/ReservationRoom/DatPhong?roomid="+id;
+    }
+    function nhanphong(id)
+    {
+        showDialogLoading();
+        $.post("/Common/GetReservationIDByRoomID", { roomid: id }, function (data) {
+            hideDialogLoading();
+            window.location.href = "/ReservationRoom/DatPhongDetail?id=" + data.result.Id;
+        });
+        dialogMenu.close();
+    }
+    function traphong(id) {
+       
+        showDialogLoading();
+        $.post("/Common/GetCheckInIDByRoomID", { roomid: id }, function (data)
+        {
+            hideDialogLoading();
+            window.location.href = "/RoomCheckOut/Index?CheckinID=" + data.result.CheckInID;
+        });
+        dialogMenu.close();
+    }
+    function undocheckin(id) {
+
+        showDialogLoading();
+        $.post("/Common/GetCheckInIDByRoomID", { roomid: id }, function (data) {
+            hideDialogLoading();
+            (new ReservationRoom()).cancelCheckin(data.result.CheckInID)
+        });
+    }
+    function doiphong(id) {
+        dialogMenu.close();
+        showDialogLoading();
+        $.post("/Common/GetCheckInIDByRoomID", { roomid: id }, function (data) {
+            hideDialogLoading();
+            doiphongByCustomerID(data.result.customerid);
+        });
+        
+    }
+    function chitiet(id, status)
+    {
+        if (status == 1) traphong(id);
+        if (status == 4) nhanphong(id);
+    }
+    function dsdatphong(id) {
+        dialogMenu.close();
+        window.location.href = "/ReservationRoom/DanhSachDatPhong/" + id;
+    }
+    function changeRoomStatus(id,status)
+    {
+        var pdata = { id: id, status: status };
+        showDialogLoading();
+
+        $.post("/Room1/UpdateStatusRoom", pdata, function (data)
+        {
+            hideDialogLoading();
+            //closeDlgLoadingData();
+            if (data.result > 0) {
+                bootbox.alert("Thao tác thành công", function () { dialogMenu.close(); $("#containerSodophong").load("/Sodophong/sodophong"); });
+            }
+            else {
+                alert("Có lỗi khi cập nhật trạng thái phòng");
+            }
+        });
+    }
+    function changeRoomStatus1(id, status1) {
+        var pdata = { id: id, status: status1 };
+        showDialogLoading();
+
+        $.post("/Room1/UpdateStatusRoom1", pdata, function (data) {
+            hideDialogLoading();
+            //closeDlgLoadingData();
+            if (data.result > 0) {
+                bootbox.alert("Thao tác thành công", function () { dialogMenu.close(); $("#containerSodophong").load("/Sodophong/sodophong"); });
+            }
+            else {
+                alert("Có lỗi khi cập nhật trạng thái phòng");
+            }
+        });
+    }
+    function doiphongByCustomerID(id)
+    {
+        $("#modalDetails").off('show.bs.modal');
+        $("#modalDetails").on('show.bs.modal', function () {
+            //RuleValidateSubmitToAdd();
+            $("#modalDetails .modal-body-content").html('<p>loading..</p>');
+            $.post("/CustomerArriveManage/GetInfomationExChange", { id: id }, function (rs) {
+                $("#modalDetails .modal-body-content").html(rs);
+                $("#modalDetails #formInforDetailCustomer :input").attr("disabled", true);
+                $("#modalDetails #formInforDetailRoom :input").attr("disabled", true);
+                $("#TittleBox").html("Đổi phòng");
+                $('#RoomNewID').prop('disabled', false);
+                $('#Leave_Date').prop('disabled', false);
+                $('#Description').prop('disabled', false);
+                $('#divDescription').prop('display', 'block');
+                //$('#CheckRoomNewID').prop('display', 'block');
+                $('#btnCheckKiemTraPhong').prop('disabled', false);
+                $('#dllRoom').prop('disabled', false);
+                $('#dllRoomTypeID').prop('disabled', false);
+                //SetDate(".birthday");
+                //g_Utils.SetDateDefaultAdd();
+                $("#modalDetails").off('show.bs.modal');
+            });
+            $("#modalDetails button#btnUpdateDetail").css("disabled", "true");
+            $("#modalDetails button#btnUndoRoom").css("disabled", "true");
+            $("#modalDetails button#btnChangeRoom").css("disabled", "false");
+            $("#modalDetails button#btnUpdateDetail").css("display", "none");
+            $("#modalDetails button#btnUndoRoom").css("display", "none");
+            $("#modalDetails button#btnChangeRoom").css("display", "inline");
+            setupClick();
+        });
+        $("#modalDetails").modal("show");
+    }
+    function setupClick() {
+        // Trả phòng
+        $("#btnChangeRoom").click(function () {
+
+            if (!$("#formInforDetailRoom").valid()) return;
+
+
+            //var roomID = $("#formInforDetailRoom  :input[name='RoomNewID']").val();
+            var roomID = $("#formInforDetailRoom  :input[name='dllRoom']").val();
+            var CheckInID = $("#formInforDetailCustomer  :input[name='CheckInID']").val();
+            var tdate = $("#formInforDetailRoom  :input[name='Leave_Date']").val();
+            var Note = $("#formInforDetailRoom  :input[name='Description']").val();
+
+            showDialogLoading();
+
+
+            $.post("/CustomerArriveManage/ChangeRoom", { id: roomID, CheckInID: CheckInID, Note: Note, tdate: tdate }, function (rs) {
+                hideDialogLoading();
+                //closeDlgLoadingData();
+                if (rs.Status === "01") {
+                    bootbox.alert(rs.Message, function () {
+                        //searchGrid();
+                        $("#modalDetails").modal("hide");
+                    });
+                }
+                else {
+                    alert(rs.Message);
+                }
+            });
+        });
+    }
+</script>

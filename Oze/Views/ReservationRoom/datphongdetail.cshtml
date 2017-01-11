@@ -1,0 +1,302 @@
+﻿@using oze.data;
+@model oze.data.view_Customer_DatPhong_Detail
+@{
+    //ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Root.cshtml";
+}
+
+<style>
+    .form-control, .input-group-addon {
+        border: 0px;
+        border-bottom: 1px solid #a6a6a6;
+        outline: none;
+        border-color: #a6a6a6 !important;
+    }
+</style>
+
+<div class="box-header with-border">
+    <label id="lblTitleH" class="padding-right20">@Model.BookingCode </label>Tổng tiền: <label class="text-red" id="Total">@Model.Price</label><label class="text-red">&nbsp;VND</label>
+    Trạng thái: <label class="text-red" id="Total">@Model.StatusReservationTitle</label>   
+    <div class="pull-right">
+        @if (Model.RoomID == null && (Model.StatusReservation==1 || Model.StatusReservation==2) ) 
+        {
+            <button id="btnAssignRoom" type="button" class="btn btn-default">Gán phòng</button>
+        }
+        @if (Model.StatusReservation == 0 || Model.StatusReservation == 1 || Model.StatusReservation == 2)
+        {
+            <button type="button" class="btn btn-default" id="btnCancel">Hủy</button>
+            <button type="button" class="btn btn-info" id="btnResSaveByBooking">Nhận phòng</button>
+        }
+        @if (Model.StatusReservation == 3 && false)
+        {
+            <button type="button" class="btn btn-info" id="btnCancelCheckIn">Undo CheckIn</button>
+        }
+    </div>
+</div>
+
+<div class="row  padding-right25" id="divBooking">
+    <form id="formReservation" action="javascript:none">
+        <div class="col-md-6">
+            <!-- radio -->
+            <div class="form-group txt-center padding-top10" style="display:none">
+                <div id="rbResType">
+                    <span class="paddingrb">
+                        <input type="radio" name="r1" class="minimal-red" id="FlRoom" value="0" checked disabled>
+                        Đặt theo phòng
+                    </span>
+                </div>
+            </div>
+            <div class="box-header">
+                <h3 class="box-title">THÔNG TIN KHÁCH HÀNG</h3>
+            </div>
+            <div class="box-body">
+                <div class="form-group col-sm-12 row">
+                    <span class="form-group col-sm-6">Họ và tên:</span>
+                    <span class="form-group col-sm-6">@Model.CustomerName</span>
+
+                </div>
+                <!-- txtIdentify -->
+                <div class="form-group col-sm-12 row">
+                    <span class="form-group col-sm-6">CMND:</span>
+                    <span class="form-group col-sm-6">@Model.IdentifyNumber</span>
+                </div>
+                
+                <div class="form-group col-sm-10 row">
+                    <span class="form-group col-sm-6">Ngày sinh:</span>
+                    <span class="form-group col-sm-6">@(Model.DOB.Value.Year == 1900 ? "" : @Model.DOB.Value.ToString("dd/MM/yyyy"))</span>
+                </div>
+
+                <!-- txtMobile -->
+                <div class="form-group col-sm-12 row ">
+                    <span class="form-group col-sm-6">Điện thoại:</span>
+                    <span class="form-group col-sm-6">@Model.Mobile</span>
+                </div>
+                <!-- txtEmail -->
+                <div class="form-group col-sm-12 row">
+                    <span class="form-group col-sm-6">Email:</span>
+                    <span class="form-group col-sm-6">@Model.Email</span>
+                </div>
+                <!-- txtaddress -->
+                <div class="form-group col-sm-12 row">
+                    <span class="form-group col-sm-6">Địa chỉ:</span>
+                    <span class="form-group col-sm-6">@Model.Address</span>
+
+                </div>
+                <!-- rSex -->
+                <div class="form-group col-sm-12 row">
+                    <span class="form-group col-sm-6"> Giới tính:</span>
+                    <span class="form-group col-sm-6">@(Model.Sex == 1 ? "Nam" : "Nữ")</span>
+                </div>
+                <!-- cbQuocTich -->
+                <div class="form-group col-sm-12 row">
+                    <span class="form-group col-sm-6">Quốc tịch:</span>
+                    <span class="form-group col-sm-6">@Model.CountryName</span>
+                </div>
+                <!-- txtCompany -->
+                <div class="form-group col-sm-12 row">
+                    <span class="form-group col-sm-6">Công ty:</span>
+                    <span class="form-group col-sm-6">@Model.Company</span>
+                </div>
+                <!-- cbĐoàn -->
+                <div class="form-group col-sm-12 row">
+                    <span class="form-group col-sm-6">Đoàn:</span>
+                    <span class="form-group col-sm-6">@Model.TeamSTT</span>
+                </div>
+                <!-- /.form-group -->
+                <!-- cbGhep -->
+                <div class="form-group col-sm-12 row">
+                    <span class="form-group col-sm-6">Ghép đoàn:</span>
+                    <span class="form-group col-sm-6">@Model.TeamMergeSTT</span>
+                </div>
+                <div class="form-group col-sm-12 row">
+                    <label class="form-group col-sm-12">
+                        <input class="form-check-input" type="checkbox" id="chkLeader" name="chkLeader" value="1" disabled >Trưởng đoàn
+                    </label>
+                </div>
+                <div class="form-group col-sm-12 row">
+                    <label class="form-group col-sm-12">
+                        <input class="form-check-input" type="checkbox" id="chkPayer" name="chkPayer" value="1" disabled checked> Người thanh toán
+                    </label>
+                </div>
+                <!-- /.form-group -->
+               
+                <div class="form-group col-sm-12 row" id="dllBooker"></div>
+                <div class="form-group col-sm-12 row">
+                   <label>Khách ở cùng </label>
+                   @if (Model.StatusReservation == 3)
+                   {  <a href="javascript:(new ReservationRoom().editRoomMate(0));" style="float:right"><span class="glyphicon glyphicon-pencil"></span></a>}
+                </div>
+                
+                <div class="form-group col-sm-10 " id="dllFriend">
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <input type="hidden" name="hdCusID" id="hdCusID" value="put" />
+            <!-- /.box -->
+        </div>
+        <!-- /.col (left) -->
+        <div class="col-md-6 bgresrom">
+            <div class="box-header">
+                <h3 class="box-title">THÔNG TIN ĐẶT PHÒNG</h3>
+            </div>
+            <div class="box-body">
+
+                <div class="form-group">
+                    <span class="col-sm-5 control-label">Số phòng</span>
+                    <div class="col-sm-7 control-label">
+                        @Model.RoomName
+                    </div>
+                </div>
+                <div class="form-group">
+                    <span class="col-sm-5 control-label">Hạng phòng</span>
+                    <div class="col-sm-7 control-label">
+                        @Model.RoomTypeName
+                    </div>
+                </div>
+                <div class="form-group">
+                    <span class="col-sm-5 control-label">Mã đặt phòng</span>
+                    <div class="col-sm-7">
+                        @Model.BookingCode
+                    </div>
+                </div>
+                <div class="form-group">
+                    <span class="col-sm-5 control-label">Chính sách giá</span>
+                    <div class="col-sm-7 control-label">
+                        <span class="" id="lblPolicyPrice">
+                            @Model.TitlePrice
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <span class="col-sm-5 control-label">Khung giá phòng</span>
+                    <div class="col-sm-7 control-label">
+                        @(Model.KhungGio == 0 ? "Theo giờ" : "")
+                        @(Model.KhungGio == 1 ? "Theo ngày" : "")
+                        @(Model.KhungGio == 2 ? "Theo đêm" : "")
+                    </div>
+                </div>
+                <div class="form-group">
+                    <span class="col-sm-5 control-label" id="lbl_GiaPhong">Giá phòng</span>
+                    <div class="col-sm-7 control-label" style="padding:0px 15px;">
+                        @Model.Price <i class="fa">VND</i>
+                    </div>
+                </div>
+                <div class="form-group pop-form-group">
+                    <span class="col-sm-5 control-label">Ngày giờ đến</span>
+                    <div class="col-sm-7 control-label">
+                        @Model.Arrive_Date @Model.Arrive_Time
+                    </div>
+                </div>
+                <div class="form-group pop-form-group">
+                    <span class="col-sm-5 control-label">Ngày giờ đi</span>
+                    <div class="col-sm-7 control-label">
+                        @Model.Leave_Date @Model.Leave_Time
+                    </div>
+                </div>
+                <div class="form-group">
+                    <span class="col-sm-5 control-label">Người lớn</span>
+                    <div class="col-sm-7 control-label">
+                        @Model.Number_People
+                    </div>
+                </div>
+                <div class="form-group">
+                    <span class="col-sm-5 control-label">Trẻ em</span>
+                    <div class="col-sm-7 control-label">
+                        @Model.Number_Children
+                    </div>
+                </div>
+                <div class="form-group">
+                    <span class="col-sm-5 control-label">Phương thức thanh toán</span>
+                    <div class="col-sm-7 control-label">
+                        @(Model.Payment_Type_ID == 0 ? "Chuyển khoản" : "")
+                        @(Model.Payment_Type_ID == 1 ? "Tiền mặt" : "")
+                    </div>
+                </div>
+                <!-- /.form group -->
+                <div class="form-group">
+                    <span class="col-sm-5 control-label">Trả trước</span>
+                    <div class="col-sm-7 control-label" style="padding:0px 15px;">
+                        <span class="">
+                            @(Model.Deposit) <i class="fa">VND</i>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <span class="col-sm-5 control-label">Giảm trừ</span>
+                    <div class="col-sm-7 control-label" style="padding:0px 15px;">
+                        @(Model.Deduction)
+                        <i class="fa"></i>
+                    </div>
+                </div>
+                <!-- textarea -->
+                <div class="form-group">
+                    <span class="col-sm-12">Ghi chú</span>
+                    <div class="col-sm-7 control-label">
+                        @(Model.Note)
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" name="hdResID" id="hdResID" value="@Model.ID" />
+            <input type="hidden" name="checkinid" id="checkinid" value="@Model.ID" />
+
+            <!-- /.box -->
+        </div>
+    </form>
+</div>
+<!-- /.row -->
+<div class="box-footer">
+    <div class="pull-right">
+       
+    </div>
+</div>
+<!-- /.col (right) -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><i class="fa fa-user-plus"></i>Gán phòng</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body-content">
+                    <p>Loading...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSave" class="btn btn-default">Lưu</button> <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal For CRUID Temp -->
+<div id="myModalTemp" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thêm mới</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body-content">
+                    <p>Loading...<img src="/images/load.gif" /></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/oze.Common.js"></script>
+<script src="~/Scripts/oze/oze.ReservationRoom1.js"></script>
+<script type="text/javascript">
+    var g_Reservation;
+    
+    $(document).ready(function () {
+        toggleMenu("menu_letan");
+        g_Reservation = new ReservationRoom();
+        g_Reservation.init();
+    });
+</script>

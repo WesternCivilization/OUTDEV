@@ -1,0 +1,581 @@
+﻿@model  Oze.Models.CustomerArriveManage.PaymentCheckOutModel
+@{ @*var day = Math.Round(((Model.Leave_Date.GetValueOrDefault() < DateTime.Now ? DateTime.Now : Model.Leave_Date.GetValueOrDefault())
+                  - Model.Arrive_Date.GetValueOrDefault()).TotalDays, 0);
+        var totalprice = day * Model.Price.GetValueOrDefault(1);
+        var typeday = "Ngày thường";*@
+    double totalPay = 0;
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+@*<link rel="stylesheet" href="~/Themes/plugins/datatables/dataTables.bootstrap.css">*@
+@*<link rel="stylesheet" href="~/Content/Oze.css">*@
+<link rel="stylesheet" href="~/Content/hungpvCustom.css">
+<!--<link rel="stylesheet" href="https://datatables.net/media/css/site.css?_=b05357026107a2e3ca397f642d976192" />-->
+<div class="tab-title">
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a aria-controls="Quản lý NCC" role="tab" data-toggle="tab">Thông tin khách hàng đang ở</a></li>
+        <li style="float:right;">
+            <button id="btnDetailPrint" class="btn btn-info btn-sm" type="button">In hóa đơn</button>
+            <button id="btnPay" class="btn btn-info btn-sm" type="button">Thanh toán</button>
+            <button id="btnPayBill" class="btn btn-info btn-sm" type="button" style="display:none">Tách hóa đơn</button>
+            <button type="button" class="btn btn-info" id="btnCancelCheckIn" onclick="javascript:(new ReservationRoom()).cancelCheckin(2057)">Hủy nhận phòng</button>
+        </li>
+    </ul>
+</div>
+<div class="row">
+    <div class="col-xs-5">
+        <h3>
+            <p style="color: #f39c12">
+                <span class="fa fa-bars"></span>   Thông tin khách hàng:
+                <a href="javascript:showRoomMateList(@Model.InforCustomer.Id);" style="float:right;padding:5px;" title="Khách cùng phòng">
+                    <i class="fa fa-list-alt" style="font-size: 0.7em; color: #f39c12"></i>
+                </a>
+                <a href="javascript:AddUsingRoomDialog(@Model.InforCustomer.CheckInID);" style="float: right;padding:5px;" title="Thêm khách cùng ở">
+                    <i class="fa fa-user-plus" style="font-size: 0.7em; color: #f39c12"></i>
+                </a>
+                <a href="javascript:viewEditDialog(@Model.InforCustomer.Id);" style="float: right;padding:5px;" title="Chi tiết">
+                    <i class="fa fa-pencil-square-o" style="font-size: 0.7em; color: #f39c12"></i>
+                </a>
+            </p>
+        </h3>
+        <form id="formInforDetailCustomer" name="formInforDetailCustomer" class="form-horizontal MarginTop20" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+            <div class="form-group" style="display:none;">
+                <span class="col-sm-5 control-label">Cách tính tiền</span>
+                <div class="col-sm-7">
+                   <!--cach tinh tien-->
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">T/gian đi thực tế </label>
+                <div class="col-xs-7">
+                    <div class="input-group input-group-sm " id="birthday">
+                        <input type="text" placeholder="Tới ngày" autocomplete="false" disabled onfocus="" class="form-control date-add-picker_tdate_full_notdefault" value="@(Model.InforCustomer.Leave_Date.GetValueOrDefault()==DateTime.MinValue?" ":Model.InforCustomer.Leave_Date.GetValueOrDefault().ToString(" dd/MM/yyyy HH:mm"))" id="Leave_DateCheckOut" name="Leave_DateCheckOut" />
+                        @*<span class="input-group-addon input-group-addon-custom">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>*@
+                        <span class="input-group-addon input-group-addon-custom">
+                            <button type="button" id="btnSaveEdit" class="glyphicon glyphicon-pencil btn-info"></button>
+
+                            @*glyphicon glyphicon-ok*@
+                        </span>
+                        <span class="input-group-addon input-group-addon-custom">
+                            <button type="button" id="btnSaveCance" class="glyphicon glyphicon-remove btn-info"></button>
+
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Họ và tên </label>
+                <div class="col-xs-7">
+
+                    <input type="text" class="form-control" readonly="readonly" id="NameCheckout"  name="NameCheckout" value="@Model.InforCustomer.CustomerName" />
+                    <input type="hidden" class="form-control" disabled id="CustomerId" value="@Model.InforCustomer.Id" />
+                    <input type="hidden" class="form-control" disabled id="CheckInID" value="@Model.InforCustomer.CheckInID" />
+                    <input type="hidden" class="form-control" disabled id="Roomid" value="@Model.InforCustomer.roomid" />
+                    <input type="hidden" class="form-control" disabled id="SysHotelID" value="@Model.InforCustomer.SysHotelID" />
+                    <input type="hidden" class="form-control" disabled id="Leave_DateOld" value="@(Model.InforCustomer.Leave_Date.GetValueOrDefault() == DateTime.MinValue ? " " : Model.InforCustomer.Leave_Date.GetValueOrDefault().ToString(" dd/MM/yyyy HH:mm"))" />
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">SĐT </label>
+                <div class="col-xs-7">
+                    <input type="hidden" class="form-control" readonly="readonly" name="Id" value="@Model.InforCustomer.Id" />
+                    <input type="text" class="form-control" disabled phone="1" id="PhoneCheckout"  name="PhoneCheckout" value="@Model.InforCustomer.Phone" />
+                </div>
+
+            </div>
+            <div class="form-group" style="display:none">
+                <label class="col-xs-5 control-label required">Email </label>
+                <div class="col-xs-7">
+                    <input type="text" class="form-control" disabled email="1" id="EmailCheckout" name="EmailCheckout" value="@Model.InforCustomer.Email" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Số CMT/Passport </label>
+                <div class="col-xs-7">
+                    <input type="text" readonly="readonly" class="form-control" id="IdentifyNumberCheckout" name="IdentifyNumberCheckout" value="@Model.InforCustomer.IdentifyNumber" />
+                    @*<span class="input-group-addon">MZN</span>*@
+                </div>
+
+            </div>
+
+            @*<div class="form-group" style="display:none">
+                    <label class="col-xs-5 control-label required">Ngày sinh </label>
+                    <div class="col-xs-7">
+                        <div class="input-group input-group-sm birthday" id="birthday">
+                            <input type="text" disabled placeholder="Từ ngày" class="form-control" value="@Model.InforCustomer.DOB.GetValueOrDefault().ToString(" dd/MM/yyyy ")" id="DOB" name="DOB" />
+                            <span class="input-group-addon input-group-addon-custom">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>*@
+
+            @*<div class="form-group" style="display:none">
+                    <label class="col-xs-5 control-label required">Giới tính </label>
+                    <div class="col-xs-7">
+                        <select name="Sex" id="Sex" disabled class="form-control">
+
+                            <option value="0">Nam</option>
+                            <option value="1">Nữ</option>
+                        </select>
+
+                    </div>
+                </div>*@
+
+            @*<div class="form-group" style="display:none">
+                    <label class="col-xs-5 control-label required">Công ty </label>
+                    <div class="col-xs-7">
+                        <input type="text" class="form-control" disabled name="Company" value="@Model.InforCustomer.Company" />
+                    </div>
+                </div>
+                <div class="form-group" style="display:none">
+                    <label class="col-xs-5 control-label required">Tên khách sạn </label>
+                    <div class="col-xs-7">
+                        <input type="text" class="form-control" disabled name="Hotelname" value="@Model.InforCustomer.HotelName" />
+                    </div>
+
+                </div>*@
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Số phòng </label>
+                <div class="col-xs-7">
+                    <input type="text" class="form-control" disabled name="Roomname" value="@Model.InforCustomer.RoomName" />
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Hạng phòng </label>
+                <div class="col-xs-7">
+                    <input type="text" class="form-control" disabled name="RoomTypeName" value="@Model.InforCustomer.LevelName" />
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Mã đặt phòng </label>
+                <div class="col-xs-7">
+                    <input type="text" class="form-control" disabled name="BookingCode" value="@Model.InforCustomer.BookingCode" />
+                </div>
+
+            </div>
+
+            <div class="form-group" style="display:none">
+                <label class="col-xs-5 control-label required">Thời điểm </label>
+                <div class="col-xs-7">
+                    <input type="text" class="form-control" disabled name="TextLevel" value="" />
+                </div>
+
+            </div>
+            <div class="form-group" style="display:none">
+                <label class="col-xs-5 control-label required">Giá phòng </label>
+                <div class="col-xs-7">
+                    <input type="text" class="form-control" disabled name="Price" value="@Model.InforCustomer.Price" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Thời gian đến </label>
+                <div class="col-xs-7">
+                    <div class="input-group input-group-sm " id="birthday">
+                        <input type="text" disabled placeholder="Từ ngày" class="form-control" value="@(Model.InforCustomer.Arrive_Date.GetValueOrDefault() == DateTime.MinValue ? " " : Model.InforCustomer.Arrive_Date.GetValueOrDefault().ToString(" dd/MM/yyyy HH:mm"))" id="Arrive_Date" name="Arrive_Date" />
+                        <span class="input-group-addon input-group-addon-custom">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">T/gian đi dự kiến </label>
+                <div class="col-xs-7">
+                    <div class="input-group input-group-sm " id="birthday">
+                        <input type="text" disabled placeholder="Từ ngày" class="form-control" value="@(ViewBag.Leave_Date.ToString(" dd/MM/yyyy HH:mm"))" id="Arrive_DatePlan" name="Arrive_DatePlan" />
+                        <span class="input-group-addon input-group-addon-custom">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Người lớn </label>
+                <div class="col-xs-7">
+
+                    <input type="text" class="form-control" disabled name="Number_People" value="@Model.InforCustomer.Number_People" />
+
+                </div>
+
+            </div>
+
+            <div class="form-group" style='@(Model.InforCustomer.Number_Children == 0 ? "display:none" : "")'>
+                <label class="col-xs-5 control-label required">Trẻ em </label>
+                <div class="col-xs-7">
+                    <input type="text" class="form-control" disabled name="Number_Children" value="@Model.InforCustomer.Number_Children" />
+                </div>
+            </div>
+
+            <div class="form-group" style='@(Model.InforCustomer == null ? "display:none" : "")'>
+                <label class="col-xs-5 control-label required">Trả trước </label>
+                <div class="col-xs-7">
+                    <input type="text" disabled class="form-control amount-double-mask_0" name="Deposit" value="@Model.InforCustomer.Deposit" />
+                </div>
+            </div>
+            <div class="form-group" style='@(Model.InforCustomer==null? "display:none":"")'>
+                <label class="col-xs-5 control-label required">Giảm trừ </label>
+                <div class="col-xs-7">
+                    <input type="text" disabled class="form-control amount-double-mask_0" name="Discount" value="@Model.InforCustomer.Deduction" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label required">Ghi chú </label>
+                <div class="col-xs-7">
+
+                    <textarea type="text" disabled class="form-control" name="Description">@Model.InforCustomer.Note</textarea>
+                </div>
+            </div>
+            @*<div class="form-group">
+                    <label class="col-xs-5 control-label required">Địa chỉ </label>ok
+                    <div class="col-xs-7">
+                        <input type="text" class="form-control" name="Address" value="" />
+                    </div>
+
+                </div>*@
+
+
+
+
+        </form>
+    </div>
+    <div class="col-xs-7" style="background: aliceblue; border-radius: 24px;">
+        <h3><p style="color: #f39c12"> <span class="fa fa-bars"></span>   Thông tin thanh toán:</p></h3>
+        <form id="formInforDetailRoom" name="formInforDetailRoom" class="form-horizontal MarginTop20" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+            <div class="form-group">
+                <label class="col-xs-5 control-label ">
+                    <input type="checkbox" name="checkboxPrice" checked id="ckRoom" name="ckRoom" />1.Tiền phòng
+                </label>
+                <div class="col-xs-7">
+                    <select class="form-control select2" id="dllKhungGio" autocomplete="off" style=" height: 30px; padding: 0px; width: 150px; float: right;">
+                        <option value="-1" selected="">--Tự động--</option>
+                        @if (ViewBag.totalHours <= 7)
+                        {
+                            <option value="0">Theo giờ</option>}
+                        <option value="1">Theo ngày</option>
+                        <option value="2">Theo đêm</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div id="PriceEstimate" class="form-group">
+                @for (int i = 0; i < Model.GetListPriceEstimate.Count; i++)
+                {
+                    {
+                        totalPay = Model.GetListPriceEstimate[i].price + totalPay;
+                    }
+                    @*<label class="col-xs-12 control-label required"
+                               dtfrom="@Model.GetListPriceEstimate[i].dtFrom.ToString("yyyy/MM/dd HH:mm")"
+                               dtto="@Model.GetListPriceEstimate[i].dtTo.ToString("yyyy/MM/dd HH:mm")"
+                               price="@Model.GetListPriceEstimate[i].price"
+                               quantiy="@Model.GetListPriceEstimate[i].quantiy"
+                               pricepolicyname="@Model.GetListPriceEstimate[i].pricePolicyName"
+                               roomid="@Model.GetListPriceEstimate[i].roomid"
+                               roomname="@Model.GetListPriceEstimate[i].roomName"
+                               roomtypeid="@Model.GetListPriceEstimate[i].roomtypeid"
+                               roomtypename="@Model.GetListPriceEstimate[i].roomtypeName"
+                               typeprice="@Model.GetListPriceEstimate[i].typePrice"
+                               pricepolicyid="@Model.GetListPriceEstimate[i].pricePolicyId">
+                            @Model.GetListPriceEstimate[i].dtFrom.ToString("dd/MM/yyyy HH:mm")
+                            -
+                            @Model.GetListPriceEstimate[i].dtTo.ToString("dd/MM/yyyy HH:mm")
+                            -
+                            @Model.GetListPriceEstimate[i].quantiy Ngày = @Model.GetListPriceEstimate[i].price
+                            -
+                            @Model.GetListPriceEstimate[i].pricePolicyName
+                        </label>*@
+                    <label class="col-xs-12 control-label">
+                        @Model.GetListPriceEstimate[i].dtFrom.ToString("dd/MM/yyyy HH:mm")
+                        -
+                        @Model.GetListPriceEstimate[i].dtTo.ToString("dd/MM/yyyy HH:mm")
+                        -
+                        @Model.GetListPriceEstimate[i].quantiy @Model.GetListPriceEstimate[i].titlePrice = @Model.GetListPriceEstimate[i].price
+                        -
+                        <span style="color:red">@Model.GetListPriceEstimate[i].pricePolicyName</span>
+                    </label>
+                }
+
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-5 control-label "><input type="checkbox" id="ckService" name="ckService" checked />2.Tiền dịch vụ </label>
+                <div class="col-xs-7">
+
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <div class="">
+                    <div class="col-xs-8">
+                        <select id="slProductID" class="form-control">
+                            <option value="0">-- Chọn dịch vụ --</option>
+                            @for (int i = 0; i < @Model.GetProductList.Count; i++)
+                            {
+                                <option value="@Model.GetProductList[i].Id">@Model.GetProductList[i].Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-xs-3">
+                        <input type="number" min="1" class="form-control" style="text-align: right" name="QuantityProduct" id="QuantityProduct" />
+                    </div>
+                    <div class="col-xs-1" style="margin-top:5px;">
+                        @*<a href="#"><i class="fa fa-plus-square add-icon-hungpv " id="AddService"></i></a>*@
+                        <a href="#" id="AddService"><img src="/images/icon/icon-add.png"></a>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="listService">
+                @for (int i = 0; i < @Model.GetListCustomerServices.Count; i++)
+                {
+                    var itemService = "ItemService" + Model.GetListCustomerServices[i].cussvID;
+
+                    var IditemService = "IditemService" + Model.GetListCustomerServices[i].cussvID;
+                    {
+                        totalPay = totalPay + Model.GetListCustomerServices[i].TotalSale.GetValueOrDefault(0);
+                    }
+
+                    <div class="@itemService">
+                        <div class="form-group">
+
+                            <label class="col-xs-4 control-label " id="" item="@Model.GetListCustomerServices[i].productid">  @Model.GetListCustomerServices[i].Name  </label>
+                            <label class="col-xs-3 control-label " id="" item="@Model.GetListCustomerServices[i].productid">  @Model.GetListCustomerServices[i].datecreated.GetValueOrDefault().ToString("dd/MM/yyyy hh:mm")  </label>
+                            <label class="col-xs-2 control-label " id="" item="@Model.GetListCustomerServices[i].productid">   @Model.GetListCustomerServices[i].SalePrice x @Model.GetListCustomerServices[i].Quantity = </label>
+                            <label class="col-xs-2 control-label amount-double-mask" id="@IditemService" item="@Model.GetListCustomerServices[i].productid">  @Model.GetListCustomerServices[i].TotalSale </label>
+                            <div class="col-xs-1" style="margin-top:6px">
+                                <a href="#"><i class="fa fa-remove" onclick="removeptqgtn(@Model.GetListCustomerServices[i].cussvID)"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            </div>
+            <div class="form-group">
+                <label class="col-xs-5 control-label ">2.1.Tiền dịch vụ khác </label>
+                <div class="col-xs-7">
+
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <div class="">
+                    <div class="col-xs-8">
+                        <input type="text" class="form-control" name="ServerOther" id="ServerOther" value="" />
+                    </div>
+                    <div class="col-xs-3">
+                        <input type="text" class="form-control amount-double-mask" name="PriceOther" id="PriceOther" value="" />
+                    </div>
+                    <div class="col-xs-1" style="margin-top:5px">
+                        @*<a href="#"><i class="fa fa-plus-square add-icon-hungpv " id="AddServiceOrther"></i></a>*@
+                        <a href="#" id="AddServiceOrther"><img src="/images/icon/icon-add.png"></a>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="listServiceOrther">
+                @for (int i = 0; i < Model.GetListCustomerOtherServices.Count; i++)
+                {
+                    {
+                        totalPay = totalPay + Model.GetListCustomerOtherServices[i].TotalSale.GetValueOrDefault(0);
+                    }
+                    var itemServiceOrther = "itemServiceOrther" + Model.GetListCustomerOtherServices[i].cussvID;
+                    var IditemService = "IditemService" + Model.GetListCustomerOtherServices[i].cussvID;
+                    <div class="@itemServiceOrther">
+                        <div class="form-group">
+                            <label class="col-xs-4 control-label " id="" item="@Model.GetListCustomerOtherServices[i].productid">  @Model.GetListCustomerOtherServices[i].Name  </label>
+                            <label class="col-xs-4 control-label " id="" item="@Model.GetListCustomerOtherServices[i].productid">  @Model.GetListCustomerOtherServices[i].datecreated.GetValueOrDefault().ToString("dd/MM/yyyy hh:mm")  </label>
+                            <label class="col-xs-3 control-label amount-double-mask" id="@IditemService" item="@Model.GetListCustomerOtherServices[i].productid">  @Model.GetListCustomerOtherServices[i].TotalSale </label>
+                            <div class="col-xs-1" style="margin-top:6px">
+                                <a href="#"><i class="fa fa-remove" onclick="removeOtherService(@Model.GetListCustomerOtherServices[i].cussvID)"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+
+            <div class="form-group" style="display:none">
+
+                <div class="col-xs-6">
+
+                    <input type="checkbox" class="" checked="checked" id="ckRoom1" name="ckRoom1" /> Tiền phòng
+                </div>
+                <div class="col-xs-6">
+
+                    <input type="checkbox" checked="checked" class="" id="ckService1" name="ckService1" /> Dịch vụ
+                </div>
+            </div>
+            <hr>
+            <div class="form-group">
+                <div class="col-xs-4"></div>
+                <label class="col-xs-3 control-label required">Tổng tiền </label>
+                <div class="col-xs-5">
+
+                    <div class="input-group input-group-sm" id="Total">
+                        <input type="text" disabled placeholder="Tổng thanh toán" value="@totalPay" class="form-control amount-double-mask_0" id="txtTotalPrice" name="txtTotalPrice" />
+                        <span class="input-group-addon input-group-addon-custom">
+                            VNĐ
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="col-xs-4"></div>
+                <label class="col-xs-3 control-label required">Trả trước </label>
+                <div class="col-xs-5">
+
+                    <div class="input-group input-group-sm" id="Total">
+                        <input type="text" disabled placeholder="Trả trước" value="@Model.InforCustomer.Deposit.GetValueOrDefault(0)" class="form-control amount-double-mask_0" id="txtDeposit" name="txtDeposit" />
+                        <span class="input-group-addon input-group-addon-custom">
+                            VNĐ
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="col-xs-4"></div>
+                <label class="col-xs-3 control-label required">Giảm trừ </label>
+                <div class="col-xs-5">
+
+                    <div class="input-group input-group-sm" id="Total">
+                        <input type="text" disabled placeholder="Tổng thanh toán" value="@Model.InforCustomer.Deduction.GetValueOrDefault(0)" class="form-control amount-double-mask_0" id="txtDeduction" name="txtDeduction" />
+                        <span class="input-group-addon input-group-addon-custom">
+                            VNĐ
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="col-xs-4"></div>
+                <label class="col-xs-3 control-label required">Thanh toán </label>
+                <div class="col-xs-5">
+                    <div class="input-group input-group-sm" id="TotalPay">
+                        <input type="text" disabled placeholder="Thanh toán" value="@(totalPay - Model.InforCustomer.Deduction.GetValueOrDefault(0) - Model.InforCustomer.Deposit.GetValueOrDefault(0))" class="form-control amount-double-maskpay_0" id="txtTotalPay" name="txtTotalPay" />
+                        <span class="input-group-addon input-group-addon-custom">
+                            VNĐ
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <div class=" col-md-offset-1" style="padding-top:15px;">
+        @*<button id="btnPrint" class="btn btn-info btn-sm" type="button">In hóa đơn demo</button>
+            <button id="btnDetailPrint" class="btn btn-info btn-sm" type="button">In hóa đơn</button>
+            <button id="btnPay" class="btn btn-info btn-sm" type="button">Thanh toán</button>
+            <button id="btnPayBill" class="btn btn-info btn-sm" type="button">Tách hóa đơn</button>*@
+    </div>
+
+</div>
+<!-- Modal For CRUID -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thêm mới</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body-content">
+                    <p>Loading...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSave" class="btn btn-default">Save</button> <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-labelledby="xModal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button id="btnSendMail" type="button" style="float: right"><i class="fa fa-envelope"></i></button>
+                <button id="btnExport" type="submit" form="formExport" style="float: right"><i class="fa fa-file-pdf-o"></i></button>
+                <button id="btnPrint" type="button" style="float: right"><i class="fa fa-print"></i></button>
+                <h4 class="modal-title"><label id="TittleBox">Xuất hóa đơn</label></h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body-content">
+                    <p>Loading...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <form id="formExport" action="/RoomCheckOut/Export" method="post">
+                    <input type="hidden" class="form-control" disabled id="CheckInIDExport" value="@Model.InforCustomer.CheckInID" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalDetails1" tabindex="-1" role="dialog" aria-labelledby="xModal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><label id="TittleBox">Thông tin khách hàng</label></h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body-content">
+                    <p>Loading...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnUpdateDetail" class="btn btn-primary" type="button"><i class="fa fa-check"></i> Lưu</button>
+                <button type="button" class="btn btn-df" data-dismiss="modal"><i class="fa fa-reply"></i>Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--script-->
+<script src="~/Themes/plugins/datatables/jquery.dataTables.js"></script>
+<script src="~/Themes/plugins/datatables/dataTables.bootstrap.js"></script>
+<script src="~/Themes/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+@*<script src="~/Scripts/jquery.validate.js"></script>*@
+<script src="~/Scripts/oze.common.js"></script>
+<script src="~/Scripts/oze/oze.RoomCheckOut.js"></script>
+<script src="~/Scripts/oze/oze.ReservationRoom1.js"></script>
+
+
+
+<script type="text/javascript">
+    var $table;
+    var addDays = function () {
+        var dat = new Date();
+        dat.setDate(dat.getDate() + parseInt(-30));
+        return new Date(dat);
+    }
+    $(document).ready(function () {
+        toggleMenu("menu_letan");
+        $("#txtSearch").keypress(function (e) {
+            if (e.which == 13) {
+                searchGrid();
+            }
+        });
+    });
+</script>

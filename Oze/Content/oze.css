@@ -1,0 +1,732 @@
+﻿body {
+    font-family: 'Segoe UI', 'Roboto', Arial;
+    font-size: 14px;
+}
+.info_customer {
+}
+.info_status {
+    color:red;
+}
+.info_bookingcode {
+     color:blue;
+}
+.info_time {
+}
+.content-wrapper, .right-side {
+    background-color: #fff;
+}
+/*sidebar*/
+/*.skin-blue .wrapper, .skin-blue .main-sidebar, .skin-blue .left-side {
+        background-color: #ea9000;
+}
+ul.sidebar-menu li a span, ul.sidebar-menu li a i {
+    color: #fff;
+}
+.skin-blue .sidebar-menu>li:hover>a, .skin-blue .sidebar-menu>li.active>a {
+    color: #fff;
+    background: #1e282c;
+    border-left-color: #3c8dbc;
+}*/
+.sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > a > span:not(.pull-right),
+.sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > .treeview-menu {
+    width: 210px;
+}
+
+@media (min-width: 768px) {
+    .sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > a > span {
+        padding-bottom: 15px;
+    }
+}
+
+.sidebar .dropdown-toggle .info {
+    padding: 16px 20px;
+}
+
+.sidebar .dropdown-toggle .wpc75 {
+    width: 75%;
+}
+
+.profile {
+    padding: 10px 0px 12px 0px !important;
+}
+
+.nonehover {
+    color: #f39c12 !important;
+    background-color: #222d32 !important;
+    border-left-color: #222d32 !important;
+}
+/*end sidebar*/
+/*content*/
+section.content h2 {
+    text-align: center;
+}
+
+.custom-header-table {
+    padding: 0;
+    /*background: #ccc;
+    background: #f39c12;*/
+    padding: 5px 0;
+    margin: 5px 0;
+    overflow: hidden;
+}
+/*end content*/
+/*modal*/
+.modal-modify .modal-title {
+    text-align: left;
+    padding-left: 15px;
+    font-weight: bold;
+}
+
+.modal-modify .modal-body .modal-body-content, .modal-modify .group-bt-modal {
+    padding-right: 50px;
+}
+
+.modal-modify .group-bt-modal {
+    float: right;
+    white-space: nowrap;
+}
+
+    .modal-modify .group-bt-modal button {
+        width: 47%;
+        margin-top: 0;
+    }
+
+.group-bt-modal .btn-save {
+    float: left;
+    margin-right: 10px;
+}
+
+
+
+/*end modal*/
+/*table*/
+.add-row-table, .edit-row-table {
+    padding: 0 5px 0 0;
+    min-width: 120px;
+    float: left;
+}
+
+.btn-oze {
+    color: #000;
+    width: 120px;
+    background-color: #e1e1e1;
+}
+
+    .btn-oze > i {
+        padding-right: 5px;
+    }
+
+    .btn-oze.disabled, .btn-oze[disabled] {
+        cursor: unset;
+    }
+
+    .btn-oze:hover, .btn-oze:focus:not([disabled]) {
+        /*background: rgba(255, 255, 255, 0.4);*/
+        /*color: #fff;*/
+        /*border-color: rgba(255, 255, 255, 0.4);*/
+        -webkit-box-shadow: 0 2px 6px rgba(0,0,0,.2),0 2px 3px rgba(0,0,0,.05);
+        box-shadow: 0 2px 6px rgba(0,0,0,.2),0 2px 3px rgba(0,0,0,.05);
+    }
+
+.btn-oze-add {
+    background-color: #f27d2f;
+    font-size: 16px;
+    color: #fff;
+}
+
+    .btn-oze-add:hover, .btn-oze-add:hover:not([disable]) {
+        background: #f27d2f;
+        color: #fff;
+        border-color: #f27d2f;
+    }
+
+.edit-row, .delete-row {
+    padding: 3px 20px;
+    cursor: pointer;
+}
+
+    .edit-row:hover, .edit-row:hover:not([disable]), .delete-row:hover, .delete-row:hover:not([disable]) {
+        background: rgb(238, 238, 238);
+        border-color: rgba(255, 255, 255, 0.4);
+        -webkit-box-shadow: 0 2px 6px rgba(0,0,0,.2),0 2px 3px rgba(0,0,0,.05);
+        box-shadow: 0 2px 6px rgba(0,0,0,.2),0 2px 3px rgba(0,0,0,.05);
+        border-color: rgba(235, 235, 235, 0.31);
+        background-color: rgba(235, 235, 235, 0.45);
+        color: #00c0ef;
+    }
+
+.add-row-body, .delete-row-body, .edit-row-header, .delete-row-header {
+    text-align: center;
+}
+
+.table-bordered, .table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td {
+    border: 1px solid #d2d6de;
+}
+
+.table-striped > tbody > tr:nth-of-type(even):hover, .table-striped > tbody > tr:nth-of-type(odd):hover {
+    background: #e5e8ec;
+}
+
+.custom-header-table .dataTables_length, .custom-header-table .dataTables_filter {
+    /*color: #fff;*/
+}
+
+    .custom-header-table .dataTables_length label, .custom-header-table .dataTables_filter label {
+        margin-bottom: 0;
+    }
+
+.custom-header-table .group-header-right .dataTables_length {
+    float: right;
+}
+
+.custom-header-table .group-header-right .dataTables_filter {
+    float: left;
+}
+
+.group-header-right {
+    padding: 3px;
+}
+
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+    background-color: #f39c12;
+    border-color: #c17906;
+}
+
+.edit-row.disabled, .edit-row[disabled], .delete-row.disabled, .delete-row[disabled] {
+    color: #ccc;
+    pointer-events: none;
+}
+/*end table*/
+.form-group .form-control.input-validation-error {
+    border-color: #dd4b39;
+    box-shadow: none;
+}
+
+.form-group .text-danger.field-validation-error {
+    color: #dd4b39;
+}
+
+.form-group-chpw {
+    margin-bottom: 1px;
+    overflow: hidden;
+}
+
+.header-warning {
+    background: #db8b0b;
+}
+
+.form-group {
+    overflow: hidden;
+}
+
+.control-label {
+    padding-top: 10px;
+}
+
+.radio-group {
+    width: 50%;
+    float: right;
+    padding: 10px;
+}
+
+.field-validation-error {
+    color: #dd4b39;
+}
+
+/* custom notify 2016-11-15 15:04:59 NamLD*/
+.notifyjs-bootstrap-base {
+    border-radius: 0 !important;
+}
+
+/* /custom notify*/
+/**button*/
+.edit-delete-table {
+    overflow: hidden;
+    width: 140px;
+    margin: auto;
+}
+
+    .edit-delete-table > div,.edit-delete-table > a  {
+        width: 30px;
+        height: 20px;
+        float: left;
+        padding: 0 16px;
+        border-bottom: 1px solid transparent;
+    }
+
+        .edit-delete-table > .delete-table {
+            padding: 0 13px;
+            margin-left: 2px;
+        }
+
+        .edit-delete-table > .edit-table {
+            margin-right: 2px;
+        }
+
+    .edit-delete-table i.fa.fa-pencil {
+        font-size: 14px;
+        color: #f27c2e;
+        border-bottom: 1px solid;
+    }
+
+    .edit-delete-table i.fa.fa-times {
+        font-size: 18px;
+        color: #ff0000;
+        text-align: center;
+    }
+
+    .edit-delete-table > div:hover, .edit-delete-table > div:hover:not([disabled]),.edit-delete-table > a:hover, .edit-delete-table > a:hover:not([disabled]) {
+        background: #ddd;
+        box-shadow: 1px 2px 1px rgba(85, 83, 82, 0.59);
+        -webkit-box-shadow: 1px 2px 1px rgba(85, 83, 82, 0.59);
+        border-bottom-color: rgba(85, 83, 82, 0.59);
+        cursor: pointer;
+    }
+
+    .edit-delete-table > div[disabled], .edit-delete-table > div.disabled, edit-delete-table > div[disabled]:hover, .edit-delete-table > div.disabled:hover,
+    .edit-delete-table > a[disabled], .edit-delete-table > a.disabled, edit-delete-table > a[disabled]:hover, .edit-delete-table > a.disabled:hover {
+        box-shadow: none;
+        -webkit-box-shadow: none;
+        background: transparent;
+        border-bottom-color: transparent !important;
+        cursor: not-allowed;
+    }
+
+        .edit-delete-table > div[disabled] > i.fa.fa-pencil, .edit-delete-table > div.disabled > i.fa.fa-pencil {
+            color: #ccc;
+        }
+/**button success, delete*/
+.btn-oze-success, .btn-oze-delete {
+    right: 0;
+    margin: auto;
+    background: transparent;
+    border-color: #b6b6b6;
+    padding: 1px;
+    width: 140px;
+}
+
+    .btn-oze-success:hover {
+        border-color: #f27c2e;
+    }
+
+        .btn-oze-success:hover > .btn-border {
+            border-color: rgba(242, 124, 46, 0.52);
+        }
+
+            .btn-oze-success:hover > .btn-border > p {
+                color: #df6412;
+            }
+
+    .btn-oze-success > .btn-border, .btn-oze-delete > .btn-border {
+        border: 1px solid rgba(182, 182, 182, 0.52);
+        padding: 5px;
+    }
+
+    .btn-oze-delete:hover {
+        border-color: #fa0000;
+    }
+
+        .btn-oze-delete:hover > .btn-border {
+            border-color: #fa0000;
+        }
+
+            .btn-oze-delete:hover > .btn-border > p {
+                color: #f10000;
+            }
+
+    .btn-oze-delete > .btn-border, .btn-oze-success > .btn-border {
+        border: 1px thin rgba(182, 182, 182, 0.52);
+        padding: 5px;
+        background-color:#f27c2e;
+        color:#fff;
+    }
+
+.btn-border > p {
+    margin: 0;
+    font-size: 16px;
+}
+/**button close modal*/
+.modal-header .close {
+    margin-top: -11px;
+}
+button.close {
+    font-size: 45px;
+    opacity:1;
+}
+/** /button*/
+.form-group {
+    margin-bottom: 5px;
+}
+
+.dtr-modal-display {
+    border-radius: 0;
+}
+/**themes*/
+.skin-yellow .main-header .navbar {
+    background-color: #1a2226;
+}
+
+.skin-yellow .main-header .logo {
+    background-color: #171e22;
+}
+
+.sidebar-menu > .treeview > .treeview-menu > li {
+    border-bottom: 1px dotted rgba(204, 204, 204, 0.32);
+}
+
+    .sidebar-menu > .treeview > .treeview-menu > li:last-child {
+        border-bottom-color: transparent;
+    }
+
+.tab-title {
+    margin-bottom: 0px;
+    font-size: 16px;
+}
+
+    .tab-title > .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus,.tab-title > .nav-tabs > li.active > a, .tab-title > .nav-tabs > li:hover > a:hover {
+        background-color: #e8eaea;
+        border-radius: 0;
+        border-bottom: 2px solid #f18137;
+        color:#000;
+    }
+    .tab-title > .nav-tabs > li {
+        border-top:0;
+    }
+
+.group-filter {
+    padding-right: 0;
+}
+
+    .group-filter .fa-search {
+        margin-left: -33px;
+        padding: 7px 10px;
+        font-size: 15px;
+        position: absolute;
+        color: #acacac;
+    }
+
+.col-sm-6.group-filter .dataTables_filter .input-sm {
+    padding-right: 30px;
+}
+
+.sidebar-menu > li {
+    cursor: pointer;
+}
+
+.group-button {
+    padding-left: 0;
+}
+
+.form-control[type="search"]:focus {
+    border-color: #f27d2f;
+}
+
+    .form-control:focus ~ i.fa-search {
+        color: #f27d2f;
+    }
+h4.modal-title {
+    font-weight: bold;
+}
+.box.box-none-border {
+    border-top-color: transparent;
+    box-shadow: none;
+    width: 40%;
+    margin: auto;
+}
+.tab-pane input[type="button"].btn-oze-add, .tab-pane .btn-oze-add {
+    width: 130px;
+    float: right;
+    
+}
+#GroupMenu .box-body.box-create {
+        float: right;
+}
+.box-access-right {
+    margin:5px 0;
+    overflow:hidden;
+}
+.td-modify {
+    width:200px;
+}
+.box {
+    border-radius:0;
+}
+.box:not(.collapsed-box) > .box-header > .box-tools > .btn-box-tool > .fa-angle-right {
+    -webkit-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+.login-box-body{
+    font-family:'Roboto';
+}
+.btn-oze-login {
+    background-color: #f27c2e;
+    border-color: #00b1ac;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    font-family:'Roboto', Arial;
+    font-size:18px;
+    
+}
+.box-content {
+    border: 1px solid #ff5e00;
+    border-radius: 5px;
+}
+.box-content {
+    border: 1px solid #ff5e00;
+    border-radius: 5px;
+}
+.login-logo > .logo-icon{
+    background:url("/Images/Login/Link.png") center no-repeat;
+    /*background-position: 10px 25px;*/
+    width: 270px;
+    height: 70px;
+    display: block;
+    margin: auto;
+}
+.btn-oze-login:hover, .btn-oze-login:active, .btn-oze-login.hover,.btn-oze-login:focus, .btn-oze-login:active, .btn-oze-login.focus{
+        background-color: #008985;
+            border-color: #008985;
+}
+
+.login-page, .register-page {
+    /*background: url("/Images/Login/background_login.png") no-repeat center center fixed;*/
+}
+.sidebar-menu > .treeview > a > i {
+        font-size: 20px;
+    color: #f27c2e;
+    display: table-cell
+}
+.sidebar-menu > .treeview > a > span {
+    padding-left: 10px;
+    font-size: 15px;
+    display: table-cell;
+    vertical-align: middle;
+}
+.not-padding{
+    padding-left:0;
+    padding-right:0;
+}
+.not-padding-right{
+    padding-right:0;
+}
+.lbl-name {
+    margin-top:8px;
+}
+.group-top {
+    margin-bottom:10px;
+    overflow:hidden;
+}
+.cbx-content {
+    margin-top:6px;
+}
+.txt-border-bot {
+    border-width: 0 0 1px 0;
+}
+.group-control {
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+.pagination-table > .pagination{
+    float:right;
+}
+.pagination-table > .pagination > li.disabled > a {
+    background: rgba(204, 204, 204, 0.47);
+    color: #ccc;
+}
+.pagination-table > .pagination > li:first-child > a, .pagination-table > .pagination > li:last-child > a {
+    border-radius: 0;
+}
+/*modify*/
+.th-modify{
+    width:120px!important;
+}
+.modify-columns{
+    white-space:nowrap;
+ 
+}
+.modify-columns .icon-modify{
+    background: url(/Images/modify_small.png) center no-repeat;
+    display:block;
+    width: 30px;
+    height: 25px;
+    float:left;
+    cursor:pointer;
+}
+.modal-title .icon-modify{
+    background: url(/Images/modify.png) center no-repeat;
+    display:block;
+    width: 50px;
+    height: 30px;
+    float:left;
+    cursor:pointer;
+}
+.btn-modify-detail >.icon-modify.icon-detail {
+    background-position: -2px -4px;
+}
+.btn-modify-set > .icon-modify.icon-set {
+    background-position: -35px -4px;
+}
+.modal-title > .icon-modify.icon-set {
+    background-position: -48px -10px;
+}
+.btn-modify-change > .icon-modify.icon-change {
+    background-position: -67px -4px;
+}
+.btn-modify-delete > .icon-modify.icon-delete {
+    background-position: -98px -4px;
+}
+/*/modify*/
+
+.tab-title .tilte-booking {
+    padding: 4px 50px;
+    font-size: 16px;
+}
+.tilte-booking .title-hotel {
+    
+}
+
+.title-money {
+    color: #e90000;
+    font-weight: bold;
+}
+.btn-set-room {
+    position: absolute;
+    right: 15px;
+    top: 65px;
+}
+a#btnSetRoom {
+    width: 150px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.group-title > label{
+    font-size:27px;
+    font-weight:bold;
+    font-family: 'Roboto';
+}
+.customer-info, .booking-info {
+    padding: 50px 15px;
+    font-size: 16px;
+}
+.txt-middle > p {
+    display:inline-block;
+}
+.txt-middle .fa.fa-star {
+    display: inline-block;
+    position: absolute;
+    padding: 0 10px;
+    color: red;
+}
+.group-modify > .icon-add, .group-modify > .icon-edit {
+    background:url(/Images/pen_edit.png) center no-repeat;
+    display:inline-block;
+    width: 40px;
+    height:30px;
+    float:left;
+}
+.group-modify >.icon-edit {
+    background-position: 3px -3px;
+}
+.group-modify > .icon-add{
+     background-position: -30px -5px;
+}
+.txt-left > p, .txt-middle > p {
+    margin: 0;
+    padding: 5px;
+}
+.space-row {
+    padding: 5px 0;   
+}
+.group-title {
+    padding: 15px 15px 25px;
+}
+.txt-left > label, .txt-left > p {
+    display: inline-block;
+}
+.txt-note{
+    color:red;
+}
+.tab-detail {
+    margin-bottom:0;
+}
+.booking-info {
+    background: #ecf0f5;
+}
+.pop-form-group {
+    overflow:visible;
+}
+.txt-center{
+    text-align: center;
+}
+.padding-right20{
+    padding-right: 20px;
+}
+.padding-right25{
+    padding-right: 25px;
+}
+.padding-top10{
+    padding-top: 10px;
+}
+.bgresrom {
+    background-color: #eee !important;
+}
+
+.paddingrb {
+    padding: 10px 20px;
+}
+/*.modal-dialog{
+    width: 60%;
+}*/
+.not-padding-left{
+    padding-left:0px;
+}
+.modal-set-room .modal-title, 
+.modal-detail-booking .modal-title{
+    padding-left:10px;
+}
+.modal-detail-booking .modal-title > p,
+.modal-set-room .modal-title > p {
+    font-size: 25px;
+}
+.modal-title > i {
+    font-size: 25px;
+    color: #f27c2e;
+}
+.modal-set-room .customer-info,
+.modal-set-room .booking-info,
+.modal-detail-booking .customer-info,
+.modal-detail-booking .booking-info {
+    padding:0 15px;
+    background:transparent;
+}
+.modal .modal-footer{
+    border-top-color:transparent;
+}
+.modal .modal-header {
+    border-bottom-color:transparent;
+}
+.modal-set-room .modal-footer .btn-save,
+.modal-detail-booking .modal-footer .btn-save {
+    margin: auto;
+}
+.modal-set-room .modal-footer,
+.modal-detail-booking .modal-footer {
+    padding-bottom: 40px;
+}
+
+.modal label.error {
+    color: red;
+    font-weight: normal;
+}
+.modal select.error {
+    border-color:red;
+}
+}
+/*not active link (tag a) */
+.not-active {
+    pointer-events: none;
+    cursor: default;
+} 
+=======

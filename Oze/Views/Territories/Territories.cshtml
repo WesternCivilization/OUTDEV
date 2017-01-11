@@ -1,0 +1,180 @@
+﻿@using Oze.Models;
+@using Oze.AppCode.DAL;
+@model Oze.Models.TerritoriesModel
+
+@{
+    ViewBag.Title = "Địa Giới Việt Nam";
+    Layout = "~/Views/Shared/_Root.cshtml";
+
+    List<TerritoriesModel> listTerritories = new List<TerritoriesModel>();
+    listTerritories = ViewData["TerritoriesList"] as List<TerritoriesModel>;
+}
+<div class="tab-title">
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a aria-controls="@ViewBag.Title" role="tab" data-toggle="tab">@ViewBag.Title</a></li>
+    </ul>
+</div>
+
+<script>
+    var m_Title = '@ViewBag.Title';
+    var m_UrlList = {
+        UrlCreate: '@Url.Action("Create", "Territories")',
+        UrlUpdate: '@Url.Action("Update", "Territories")',
+        UrlDelete: '@Url.Action("Delete", "Territories")'
+    }
+</script>
+
+<link href="~/Themes/plugins/datatables/extensions/Responsive/css/responsive.bootstrap.css" rel="stylesheet" />
+<div class="box-body">
+    <table id="tbTerritories" class="table table-bordered nowrap table-hover" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Mã Tỉnh/Thành Phố</th>
+                <th>Tỉnh/Thành Phố</th>
+                <th>Mã Quận/Huyện</th>
+                <th>Quận/Huyện</th>
+                <th>Mã Phường/Xã</th>
+                <th>Phường/Xã</th>
+                @*<th>Thao tác</th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @{int i = 1;}
+            @foreach (var item in listTerritories)
+            {
+                <tr>
+                    <td>@i</td>
+                    <td>@item.ProvinceId</td>
+                    <td>@item.ProvinceName</td>
+                    <td>@item.DistrictId</td>
+                    <td>@item.DistrictName</td>
+                    <td>@item.WardsId</td>
+                    <td>@item.WardsName</td>
+                    @*<td>
+                        <div class="edit-delete-table">
+                            <div class="edit-table" data-toggle="modal" data-backdrop="static" data-target="#mdModify">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                            </div>
+                            <div class="delete-table" data-toggle="modal" data-backdrop="static" data-target="#mdDelete">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </td>*@
+                </tr>
+                i++;
+            }
+        </tbody>
+
+    </table>
+</div>
+
+<!-- Modal -->
+@using (Html.BeginForm())
+{
+    <div class="modal-modify">
+        <div class="modal fade" id="mdModify" tabindex="-1" role="dialog" aria-labelledby="lblTitle">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="lblTitle"></h4>
+                    </div>
+                    <div class="modal-body  clearfix">
+                        <div class="modal-body-content">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ProvinceId, new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(m => m.ProvinceId, new { @class = "form-control txt-content", @data = "ProvinceId" })
+                                    @Html.ValidationMessageFor(m => m.ProvinceId)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ProvinceName, new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(m => m.ProvinceName, new { @class = "form-control txt-content", @data = "ProvinceName" })
+                                    @Html.ValidationMessageFor(m => m.ProvinceName)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.DistrictId, new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(m => m.DistrictId, new { @class = "form-control txt-content", @data = "DistrictId" })
+                                    @Html.ValidationMessageFor(m => m.DistrictId)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.DistrictName, new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(m => m.DistrictName, new { @class = "form-control txt-content", @data = "DistrictName" })
+                                    @Html.ValidationMessageFor(m => m.DistrictName)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.WardsId, new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(m => m.WardsId, new { @class = "form-control txt-content", @data = "WardsId" })
+                                    @Html.ValidationMessageFor(m => m.WardsId)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.WardsName, new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(m => m.WardsName, new { @class = "form-control txt-content", @data = "WardsName" })
+                                    @Html.ValidationMessageFor(m => m.WardsName)
+                                </div>
+                            </div>                          
+                        </div>
+                    </div>
+                    <div class="modal-footer clearfix">
+                        <button id="btnSave" type="button" class="btn btn-block btn-oze-success btn-flat btn-save">
+                            <div class="btn-border"><p>Hoàn thành</p></div>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+    </div>
+}
+
+<!-- Modal xóa -->
+<div class="modal modal-delete fade" id="mdDelete" tabindex="-1" role="dialog" aria-labelledby="lblTitle">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="lblTitle">Xóa @ViewBag.Title</h4>
+            </div>
+            <div class="modal-body clearfix">
+                <div class="modal-body-content">
+                    <p></p>
+                </div>
+            </div>
+            <div class="modal-footer clearfix">
+                <button id="btnDelete" type="button" class="btn btn-block btn-oze-delete btn-flat">
+                    <div class="btn-border"><p>Xóa</p></div>
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<!--/ Modal xóa -->
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+}
+<script src="~/Scripts/oze/oze.territories.js"></script>
+
+
+
+

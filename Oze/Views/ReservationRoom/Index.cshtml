@@ -1,0 +1,484 @@
+﻿@using Oze.Models;
+@using Oze.AppCode.DAL;
+@using Oze.AppCode.BLL;
+@{
+    ViewBag.Title = "Index";
+    //Layout = "~/Views/Shared/_Root.cshtml";
+}
+
+<style>
+    .form-control, .input-group-addon {
+        border: 0px;
+        border-bottom: 1px solid #a6a6a6;
+        outline: none;
+        border-color: #a6a6a6 !important;
+    }
+</style>
+@{
+    var HotelCode = "";
+    if (Session[CConfig.SESSION_HOTELCODE] != null)
+    {
+        HotelCode = Session[CConfig.SESSION_HOTELCODE].ToString();
+    }
+    else
+    {
+        //Response.Redirect(new Uri(Request.Url, Url.Action("Login", "Accounts")).ToString());
+    }
+    
+}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "frmresroom", @name = "frmresroom" }))
+{
+    <div class="box-header with-border">
+        <label id="lblTitleH" class="padding-right20">Mã @TempData["ResCode"] / Phòng ??? </label> Tổng tiền: <label class="text-red" id="Total">0</label><label class="text-red">&nbsp;VND</label>
+        <div class="pull-right">
+            <button id="btnBook" type="submit" class="btn btn-default" disabled>Đặt trước</button>
+        </div>
+    </div>
+
+    <div class="row  padding-right25" id="divBooking">
+        <div class="col-md-6">
+            <!-- radio -->
+            <div class="form-group txt-center padding-top10">
+                <div id="rbResType">
+                    <span class="paddingrb">
+                        <input type="radio" name="r1" class="minimal-red" id="FlRoom" value="0" checked disabled>
+                        Đặt theo phòng
+                    </span>
+                    <span class="paddingrb">
+                        <input type="radio" name="r1" class="minimal-red" id="FlPerson" value="1" disabled>
+                        Đặt theo người
+                    </span>
+                </div>
+            </div>
+
+            <div class="box-header">
+                <h3 class="box-title">THÔNG TIN KHÁCH HÀNG</h3>
+            </div>
+            <div class="box-body">
+                <div class="form-group col-sm-8">
+                    <span>Họ và tên:</span>
+                </div>
+                <div class="form-group col-sm-4">
+                    <a href="#myModal" class="add-friend" id="addFriend">
+                        @*data-toggle="modal"*@
+                        <i class="fa fa-user-plus"></i>
+                    </a>
+                </div>
+                <!-- txtname -->
+                <div class="form-group col-sm-8">
+                    <input type="text" class="form-control" id="txtname" name="txtname" autocomplete="off">
+                    <!-- /.input group -->
+                </div>
+
+                <div class="form-group col-sm-4" id="cbLeader">
+                    <input type="checkbox" class="minimal" id="chkLeader" name="chkLeader" value="1">
+                    Trưởng đoàn
+                </div>
+                <!-- /.form group -->
+                <!-- txtIdentify -->
+                <div class="form-group col-sm-8 ">
+                    <input type="text" class="form-control" id="txtIdentify" name="txtIdentify" placeholder="Số chứng minh thư/GPLX" autocomplete="off">
+                    <!-- /.input group -->
+                </div>
+                <div class="form-group col-sm-4" style="padding-right: 0px !important;" id="cbPayer">
+                    <input type="checkbox" class="minimal" id="chkPayer" name="chkPayer" value="1">
+                    Người thanh toán
+                </div>
+
+                <!-- /.form group -->
+                <!-- txtDOB -->
+                @*<div class="form-group col-sm-8 ">*@
+                <div class="form-group col-sm-8 pop-form-group">
+                    <div class="input-group date" id="dpDOB">
+                        <input type="text" class="form-control" placeholder="Ngày tháng năm sinh" id="txtDOB" name="txtDOB" autocomplete="off">
+                        <span class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </span>
+                        @*<span class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </span>*@
+                    </div>
+                    <!-- /.input group -->
+                </div>
+
+                <!-- /.form group -->
+                <!-- txtMobile -->
+                <div class="form-group col-sm-8 ">
+                    <input type="text" class="form-control" id="txtMobile" name="txtMobile" placeholder="Số điện thoại" autocomplete="off">
+                    <!-- /.input group -->
+                </div>
+                <!-- /.form group -->
+                <!-- txtEmail -->
+                <div class="form-group col-sm-8 ">
+                    <input type="text" class="form-control" id="txtEmail" name="txtEmail" placeholder="Email" autocomplete="off">
+                    <!-- /.input group -->
+                </div>
+                <!-- /.form group -->
+                <!-- txtaddress -->
+                <div class="form-group col-sm-8 ">
+                    <input type="text" class="form-control" id="txtaddress" name="txtaddress" placeholder="Địa chỉ" autocomplete="off">
+                    <!-- /.input group -->
+                </div>
+                <!-- /.form group -->
+                <!-- rSex -->
+                <div class="form-group col-sm-8 ">
+                    <div id="rbSex">
+                        <span>
+                            Giới tính:
+                        </span>
+                        <span class="paddingrb">
+                            <input type="radio" name="r2" class="minimal-red" value="1" checked>
+                            Nam
+                        </span>
+                        <span class="paddingrb">
+                            <input type="radio" name="r2" class="minimal-red" value="0">
+                            Nữ
+                        </span>
+                    </div>
+                </div>
+                <!-- /.form group -->
+                <!-- cbQuocTich -->
+                <div class="form-group col-sm-8 ">
+                    <span>Quốc tịch</span>
+                    @Html.DropDownList("country", (SelectList)TempData["country"], new { @class = "form-control select2", @id = "dllQuocTich" })
+                    @*<select class="form-control select2" id="dllQuocTich">
+                            <option value="1" selected="selected">Alabama</option>
+                            <option value="2">Alaska</option>
+                            <option value="3">California</option>
+                            <option value="4">Delaware</option>
+                        </select>*@
+                </div>
+                <!-- /.form-group -->
+                <!-- txtCompany -->
+                <div class="form-group col-sm-8 ">
+                    <input type="text" class="form-control" id="txtCompany" name="txtCompany" placeholder="Công ty" autocomplete="off">
+                    <!-- /.input group -->
+                </div>
+                <!-- /.form group -->
+                <!-- cbĐoàn -->
+                <div class="form-group col-sm-8 ">
+                    <span>Đoàn</span>
+                    <select class="form-control select2" id="dllOrg">
+                        <option value="0" selected="selected">---Chọn đoàn---</option>
+                        <option value="1">D0001</option>
+                        <option value="2">D0002</option>
+                        <option value="3">D0003</option>
+                        <option value="4">D0004</option>
+                    </select>
+                </div>
+                <!-- /.form-group -->
+                <!-- cbGhep -->
+                <div class="form-group col-sm-8 ">
+                    <span>Ghép đoàn</span>
+                    <select class="form-control select2" id="dllOrgJoin">
+                        <option value="0" selected="selected">---Chọn đoàn ghép---</option>
+                        <option value="1">D0002</option>
+                        <option value="2">D0003</option>
+                        <option value="3">D0004</option>
+                        <option value="4">D0005</option>
+                        <option value="5">D0006</option>
+                        <option value="6">D0007</option>
+                    </select>
+                </div>
+                <!-- /.form-group -->
+                <div class="form-group col-sm-8 " id="dllBooker"></div>
+                <div class="form-group col-sm-8 ">
+                    <label>Khách ở cùng</label>
+                </div>
+                <div class="form-group col-sm-8 " id="dllFriend">
+                    @*<a href="#myModal" data-toggle="modal" class="edit-friend" data-id="41"><i class="fa fa-check-square-o"></i>&nbsp;&nbsp;Man Kim Diệu Linh</a><br />*@
+                </div>
+                <!-- /.form-group -->
+                <!-- /.box-body -->
+            </div>
+            <input type="hidden" name="hdCusID" id="hdCusID" value="put" />
+            <!-- /.box -->
+        </div>
+        <!-- /.col (left) -->
+        <div class="col-md-6 bgresrom">
+            <div class="form-group txt-center padding-top10">
+                <label>
+                    &nbsp;
+                </label>
+            </div>
+            <div class="box-header">
+                <h3 class="box-title">THÔNG TIN ĐẶT PHÒNG</h3>
+            </div>
+            <div class="box-body">
+                <div class="form-group ">
+                    <span class="col-sm-5 control-label">Số phòng</span>
+                    <div class="col-sm-7">
+                        @Html.DropDownList("Room", (SelectList)TempData["room"], "---Chọn phòng---", new { @class = "form-control select2 bgresrom", @id = "dllRoom" })
+                        @*<select class="form-control select2 bgresrom" id="dllRoom">
+                                <option selected="selected">R0002</option>
+                                <option>R0003</option>
+                                <option>R0004</option>
+                                <option>R0005</option>
+                                <option>R0006</option>
+                                <option>R0007</option>
+                            </select>*@
+                    </div>
+                </div>
+
+                <div class="form-group ">
+                    <span class="col-sm-5 control-label">Mã đặt phòng</span>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="txtResCode" value="@TempData["ResCode"]" disabled>
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <span class="col-sm-5 control-label">Giá thời điểm</span>
+                    <div class="col-sm-7">
+                        <select class="form-control select2 bgresrom" id="dllPriceDipLe">
+                            <option value="0" selected="selected">Ngày thường</option>
+                            <option value="1">Ngày lễ</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <span class="col-sm-5 control-label">Khung giá phòng</span>
+                    <div class="col-sm-7">
+                        <select class="form-control select2 bgresrom" id="dllPriceKhungGio">
+                            <option value="0" selected="selected">Giá giờ</option>
+                            <option value="1">Giá ngày</option>
+                            <option value="2">Giá đêm</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <span class="col-sm-5 control-label">Giá phòng</span>
+                    <div class="col-sm-7 input-group" style="padding:0px 15px;">
+                        <input type="text" class="form-control bgresrom" id="txtPrice" name="txtPrice">
+                        <span class="input-group-addon bgresrom">
+                            <i class="fa">VND</i>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group pop-form-group">
+                    <span class="col-sm-5 control-label">Ngày giờ đến</span>
+                    <div class="col-sm-7 input-group date" id="dpFromDate" style="padding:0px 15px;">
+                        <input type="text" class="form-control bgresrom" id="txtFromDate" name="txtFromDate" autocomplete="off">
+                        <span class="input-group-addon bgresrom">
+                            <i class="fa fa-calendar"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group pop-form-group">
+                    <span class="col-sm-5 control-label">Ngày giờ đi</span>
+                    <div class="col-sm-7 input-group date" id="dpToDate" style="padding:0px 15px;">
+                        <input type="text" class="form-control bgresrom" id="txtToDate" name="txtToDate" autocomplete="off">
+                        <span class="input-group-addon bgresrom">
+                            <i class="fa fa-calendar"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group ">
+                    <span class="col-sm-5 control-label">Người lớn</span>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control bgresrom" id="txtAdult" name="txtAdult" autocomplete="off">
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <span class="col-sm-5 control-label">Trẻ em</span>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control bgresrom" id="txtChildren" name="txtChildren" autocomplete="off">
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <span class="col-sm-5 control-label">Phương thức thanh toán</span>
+                    <div class="col-sm-7">
+                        <select class="form-control select2 bgresrom" id="dllPaymentType">
+                            <option value="0" selected="selected">Chuyển khoản</option>
+                            <option value="1">Tiền mặt</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- /.form group -->
+                <div class="form-group ">
+                    <span class="col-sm-5 control-label">Trả trước</span>
+                    <div class="col-sm-7 input-group" style="padding:0px 15px;">
+                        <input type="text" class="form-control bgresrom" id="txtDeposit" name="txtDeposit" autocomplete="off">
+                        <span class="input-group-addon bgresrom">
+                            <i class="fa">VND</i>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <span class="col-sm-5 control-label">Giảm trừ</span>
+                    <div class="col-sm-7 input-group" style="padding:0px 15px;">
+                        <input type="text" class="form-control bgresrom" id="txtDiscount" name="txtDiscount" autocomplete="off">
+                        <span class="input-group-addon bgresrom">
+                            <i class="fa">%</i>
+                        </span>
+                    </div>
+                </div>
+                <!-- textarea -->
+                <div class="form-group">
+                    <span class="col-sm-12">Ghi chú</span>
+                    <textarea class="form-control col-sm-12 bgresrom" rows="3" placeholder="Enter ..." id="txtNote" name="txtNote" autocomplete="off"></textarea>
+                </div>
+
+            </div>
+            <input type="hidden" name="hdResID" id="hdResID" value="put" />
+            <!-- /.box -->
+        </div>
+    </div>
+    <!-- /.row -->
+    <div class="box-footer">
+        <div class="pull-right">
+            <button type="button" class="btn btn-default" id="btnCancel" disabled>Hủy</button>
+            <button type="button" class="btn btn-info" id="btnResSave">Nhận phòng</button>
+        </div>
+    </div>
+        <!-- /.col (right) -->
+
+
+    <!-- Modal HTML -->
+    <div id="myModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content row" id="divFriend">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title"><i class="fa fa-user-plus"></i>Thêm khách ở cùng</h3>
+                </div>
+                <div class="modal-body" style="overflow:hidden;">
+                    <div class="col-md-7 not-padding-left">
+                        <div class="box-body not-padding-left">
+                            <div class="form-group col-sm-8 not-padding-left">
+                                <span>Họ và tên:</span>
+                            </div>
+                            <!-- txtname -->
+                            <div class="form-group col-sm-8 not-padding-left">
+                                <input type="text" class="form-control" id="txtnamef" name="txtnamef" autocomplete="off">
+                                <!-- /.input group -->
+                            </div>
+
+                            <div class="form-group col-sm-4" id="cbLeader">
+                                <input type="checkbox" class="minimal" id="chkLeaderf" name="chkLeaderf" value="1">
+                                Trưởng đoàn
+                            </div>
+                            <!-- /.form group -->
+                            <!-- txtIdentify -->
+                            <div class="form-group col-sm-8 not-padding-left">
+                                <input type="text" class="form-control" id="txtIdentifyf" name="txtIdentifyf" placeholder="Số chứng minh thư/GPLX" autocomplete="off">
+                                <!-- /.input group -->
+                            </div>
+                            <div class="form-group col-sm-4" style="padding-right: 0px !important;" id="cbPayer">
+                                <input type="checkbox" class="minimal" id="chkPayerf" name="chkPayerf" value="1">
+                                Người thanh toán
+                            </div>
+
+                            <!-- /.form group -->
+                            <!-- txtDOB -->
+                            @*<div class="form-group col-sm-8 ">*@
+                            <div class="form-group col-sm-8 not-padding-left pop-form-group">
+                                <div class="input-group date" id="dpDOBf">
+                                    <input type="text" class="form-control" placeholder="Ngày tháng năm sinh" id="txtDOBf" name="txtDOBf" autocomplete="off">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </div>
+                                <!-- /.input group -->
+                            </div>
+
+                            <!-- /.form group -->
+                            <!-- txtMobile -->
+                            <div class="form-group col-sm-8 not-padding-left ">
+                                <input type="text" class="form-control" id="txtMobilef" name="txtMobilef" placeholder="Số điện thoại" autocomplete="off">
+                                <!-- /.input group -->
+                            </div>
+                            <!-- /.form group -->
+                            <!-- txtEmail -->
+                            <div class="form-group col-sm-8 not-padding-left ">
+                                <input type="text" class="form-control" id="txtEmailf" name="txtEmailf" placeholder="Email" autocomplete="off">
+                                <!-- /.input group -->
+                            </div>
+                            <!-- /.form group -->
+                            <!-- txtaddress -->
+                            <div class="form-group col-sm-8 not-padding-left ">
+                                <input type="text" class="form-control" id="txtaddressf" name="txtaddressf" placeholder="Địa chỉ" autocomplete="off">
+                                <!-- /.input group -->
+                            </div>
+                            <!-- /.form group -->
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                    <!-- /.col (left) -->
+                    <div class="col-md-5 not-padding-left">
+                        <div class="box-body not-padding-right">
+                            <!-- rSex -->
+                            <div class="form-group col-sm-12 not-padding-right">
+                                <div id="rbSex">
+                                    <span>
+                                        Giới tính:
+                                    </span>
+                                    <span class="paddingrb">
+                                        <input type="radio" name="r2f" class="minimal-red" value="1" checked>
+                                        Nam
+                                    </span>
+                                    <span class="paddingrb">
+                                        <input type="radio" name="r2f" class="minimal-red" value="0">
+                                        Nữ
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- /.form group -->
+                            <!-- cbQuocTich -->
+                            <div class="form-group col-sm-12 not-padding-right">
+                                <span>Quốc tịch</span>
+                                @Html.DropDownList("country", TempData["country"] as SelectList, new { @class = "form-control select2", @id = "dllQuocTichf" })
+                            </div>
+                            <!-- /.form-group -->
+                            <!-- txtCompany -->
+                            <div class="form-group col-sm-12 not-padding-right">
+                                <input type="text" class="form-control" id="txtCompanyf" name="txtCompanyf" placeholder="Công ty" autocomplete="off">
+                                <!-- /.input group -->
+                            </div>
+                            <!-- /.form group -->
+                            <!-- cbĐoàn -->
+                            <div class="form-group col-sm-12 not-padding-right">
+                                <span>Đoàn</span>
+                                <select class="form-control select2" id="dllOrgf">
+                                    <option value="1" selected="selected">D0001</option>
+                                    <option value="2">D0002</option>
+                                    <option value="3">D0003</option>
+                                    <option value="4">D0004</option>
+                                </select>
+                            </div>
+                            <!-- /.form-group -->
+                            <!-- cbGhep -->
+                            <div class="form-group col-sm-12 not-padding-right">
+                                <span>Ghép đoàn</span>
+                                <select class="form-control select2" id="dllOrgJoinf">
+                                    <option value="1" selected="selected">D0002</option>
+                                    <option value="2">D0003</option>
+                                    <option value="3">D0004</option>
+                                    <option value="4">D0005</option>
+                                    <option value="5">D0006</option>
+                                    <option value="6">D0007</option>
+                                </select>
+                            </div>
+                            <!-- /.form-group -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnAdd">Lưu</button>
+                    @*<button type="button" class="btn btn-primary hidden" id="btnEdit">Lưu</button>*@
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script src="~/Scripts/oze.Common.js"></script>
+<script src="~/Scripts/oze/oze.ReservationRoom.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        toggleMenu("menu_letan");
+    });
+</script>

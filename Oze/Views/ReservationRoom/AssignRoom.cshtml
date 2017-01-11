@@ -1,0 +1,176 @@
+﻿@using oze.data;
+@model oze.data.view_Customer_DatPhong_Detail
+
+<style>
+    .form-control, .input-group-addon {
+        border: 0px;
+        border-bottom: 1px solid #a6a6a6;
+        outline: none;
+        border-color: #a6a6a6 !important;
+    }
+</style>
+
+
+<div class="row  padding-right25" id="divBooking">
+    <form id="formReservation" action="javascript:none">
+        <div class="col-md-6">
+            <!-- radio -->
+            <div class="box-header">
+                <h3 class="box-title">THÔNG TIN GÁN PHÒNG</h3>
+            </div>
+            <div class="box-body">
+                <div class="form-group col-sm-12 row">
+                    <span class="form-group col-sm-4">Hạng phòng:</span>
+                    <div class="form-group col-sm-8">
+                        <select class="form-control select2 bgresrom" id="dllRoomTypeID">
+                            <option value="0" >--Chọn hạng phòng--</option>
+                            @foreach (var room in (new Oze.Services.CommService().GetAllRoomType()))
+                            {
+                                var sSelect = "";
+                                if (@Model.RoomTypeID == room.Id) { sSelect = "selected"; }
+                                <option value="@room.Id" @sSelect>@room.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <!-- txtIdentify -->
+                <div class="form-group col-sm-12 row">
+                    <span class="form-group col-sm-4">Phòng:</span>
+                    <span class="form-group col-sm-8">
+                        <select class="form-control select2 bgresrom" id="dllRoom">
+                            <option value="0" selected>--Chọn phòng--</option>
+                            @foreach (var room in (new Oze.Services.RoomService().getAll(null)))
+                            {
+                                var sSelect = "";
+                                if (@Model.RoomID == room.Id) { sSelect = "selected"; }
+                                <option value="@room.Id" @sSelect>@room.Name</option>
+                            }
+                        </select>
+                    </span>
+                    <button class="btn-primary" id="btnCheckKiemTraPhong" name="btnCheckKiemTraPhong" style="float:right;margin-right:15px" onclick="javascript: checkRoomThis();">Kiểm tra phòng</button>
+                </div>
+               
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col (left) -->
+        <div class="col-md-6 bgresrom">
+            <div class="box-header">
+                <h3 class="box-title">THÔNG TIN PHÒNG</h3>
+            </div>
+            <div class="box-body">
+
+                
+                <div class="form-group  row">
+                    <span class="col-sm-5 control-label">Hạng phòng</span>
+                    <div class="col-sm-7 control-label">
+                        @Model.RoomTypeName
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <span class="col-sm-5 control-label">Số phòng</span>
+                    <div class="col-sm-7 control-label">
+                        @Model.RoomName
+                    </div>
+                </div>
+                <div class="form-group  row">
+                    <span class="col-sm-5 control-label">Mã đặt phòng</span>
+                    <div class="col-sm-7">
+                        @Model.BookingCode
+                    </div>
+                </div>
+                <div class="form-group  row">
+                    <span class="col-sm-5 control-label">Chính sách giá</span>
+                    <div class="col-sm-7 control-label">
+                        <span class="" id="lblPolicyPrice">
+                            @Model.TitlePrice
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group  row">
+                    <span class="col-sm-5 control-label">Khung giá phòng</span>
+                    <div class="col-sm-7 control-label">
+                        @(Model.KhungGio == 0 ? "Theo giờ" : "")
+                        @(Model.KhungGio == 1 ? "Theo ngày" : "")
+                        @(Model.KhungGio == 2 ? "Theo đêm" : "")
+                    </div>
+                </div>
+                <div class="form-group  row">
+                    <span class="col-sm-5 control-label" id="lbl_GiaPhong">Giá phòng</span>
+                    <div class="col-sm-7 control-label" style="padding:0px 15px;">
+                        @Model.Price <i class="fa">VND</i>
+                    </div>
+                </div>
+                <div class="form-group pop-form-group  row">
+                    <span class="col-sm-5 control-label">Ngày giờ đến</span>
+                    <div class="col-sm-7 control-label">
+                        @Model.Arrive_Date @Model.Arrive_Time
+                    </div>
+                </div>
+                <div class="form-group pop-form-group  row">
+                    <span class="col-sm-5 control-label">Ngày giờ đi</span>
+                    <div class="col-sm-7 control-label">
+                        @Model.Leave_Date @Model.Leave_Time
+                    </div>
+                </div>
+                <div class="form-group row ">
+                    <span class="col-sm-5 control-label">Người lớn</span>
+                    <div class="col-sm-7 control-label">
+                        @Model.Number_People
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <span class="col-sm-5 control-label">Trẻ em</span>
+                    <div class="col-sm-7 control-label">
+                        @Model.Number_Children
+                    </div>
+                </div>
+                <div class="form-group  row">
+                    <span class="col-sm-5 control-label">Phương thức thanh toán</span>
+                    <div class="col-sm-7 control-label">
+                        @(Model.Payment_Type_ID == 0 ? "Chuyển khoản" : "")
+                        @(Model.Payment_Type_ID == 1 ? "Tiền mặt" : "")
+                    </div>
+                </div>
+                <!-- /.form group -->
+                <div class="form-group  row">
+                    <span class="col-sm-5 control-label">Trả trước</span>
+                    <div class="col-sm-7 control-label" style="padding:0px 15px;">
+                        <span class="">
+                            @(Model.Deposit) <i class="fa">VND</i>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group  row">
+                    <span class="col-sm-5 control-label">Giảm trừ</span>
+                    <div class="col-sm-7 control-label" style="padding:0px 15px;">
+                        @(Model.Deduction)
+                        <i class="fa">%</i>
+                    </div>
+                </div>
+                <!-- textarea -->
+                <div class="form-group  row">
+                    <span class="col-sm-12">Ghi chú</span>
+                    <div class="col-sm-7 control-label">
+                        @(Model.Note)
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" name="hdResID" id="hdResID" value="@Model.ID" />
+            <input type="hidden" name="checkinid" id="checkinid" value="@Model.ID" />
+
+            <!-- /.box -->
+        </div>
+    </form>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#dllRoomTypeID").change(function () {
+            loadRoomByLevelRoom($(this).val(), 'dllRoomID');
+        });
+    });
+    function checkRoomThis() {
+        g_Reservation.checkRoom('@Model.Arrive_Date @Model.Arrive_Time', '@Model.Leave_Date @Model.Leave_Time',$("#dllRoomTypeID").val());
+    }
+</script>

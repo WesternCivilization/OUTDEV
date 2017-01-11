@@ -1,0 +1,33 @@
+﻿@model List<Oze.Models.CustomerManage.HistoryCustomer>
+    <div class="row">
+        <div class="col-md-12">
+            <table id="HistoryCustomer" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Họ tên khách hàng</th>
+                        <th>Mã phòng đặt</th>
+                        <th>Trạng thái</th>
+                        <th>Vào ngày</th>
+                        <th>Ra ngày</th>
+                    </tr>
+                </thead>
+                <tr>
+                    @{
+                        int stt = 0;
+                        foreach (Oze.Models.CustomerManage.HistoryCustomer t in @Model)
+                        {
+                            stt += stt+1;
+                            <td>@stt</td>
+                            <td>@t.tbl_CustomerName</td>
+                            <td>@t.BookingCode</td>
+                            <td>@t.tbl_Room_StatusName</td>
+                            <td>@t.Arrive_Date.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@t.Leave_Date.ToString("dd/MM/yyyy HH:mm")</td>
+                        }
+                    }
+                </tr>
+
+            </table>
+        </div>
+    </div>

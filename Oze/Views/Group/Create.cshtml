@@ -1,0 +1,349 @@
+﻿@using Oze.Models;
+@model Oze.Models.GroupDetailModel
+@{
+    ViewBag.Title = "Nhóm quyền";
+    Layout = "~/Views/Shared/_Root.cshtml";
+    var data = (List<GroupDetailModel>)ViewData["ListGroup"];
+    var GroupTypeListForGroup = (List<GroupTypeModels>)ViewData["ListGroupTypeForGroup"];
+}
+
+<!-- DataTables -->
+<link rel="stylesheet" href="~/Themes/plugins/datatables/dataTables.bootstrap.css">
+<!--Tab-->
+<div class="nav-tabs-custom tab-title">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#GroupManage" data-toggle="tab">@ViewBag.Title</a></li>
+        <li><a href="#GroupTypeTab" data-toggle="tab">Bộ phận</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="active tab-pane" id="GroupManage">
+            <script>
+                var seft = this;
+                OzeBase.apply(this);
+                var m_Title = '@ViewBag.Title';
+                var m_UrlList = {
+                    UrlCreatre: '@Url.Action("CreateGroup","Group")',
+                    UrlUpdate: '@Url.Action("UpdateGroup", "Group")',
+                    UrlDelte: '@Url.Action("DeleteGroup", "Group")'
+                }
+            </script>
+            <div class="box-body">
+                @if (ViewData.ContainsKey("ListGroupTypeForGroup"))
+
+                {
+                    List<string> arr_id_list = new List<string>();
+                    foreach (var itemGT in GroupTypeListForGroup)
+                    {
+                        string idGrid = "";
+                        idGrid = itemGT.Id + "GridGroup";
+                        arr_id_list.Add(idGrid);
+                        <div class="box box-warning collapsed-box">
+                            <div class="box-header with-border">
+                                <label>@itemGT.NameVN</label>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool pull-right-container" data-widget="collapse">
+                                        <i class="fa fa-angle-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="box-body">
+                                <table id="@idGrid" class="table table-striped table-bordered nowrap table-hover" cellpadding="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Tên nhóm</th>
+                                            <th>Tên nhóm</th>
+                                            <th>Loại nhóm</th>
+                                            <th>Loại nhóm</th>
+                                            <th>Khách sạn</th>
+                                            <th>Khách sạn</th>
+                                            <th>Mô tả</th>
+                                            <th>Trạng thái</th>
+                                            <th>Thao tác</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{int i = 1;}
+                                        @foreach (var item in data)
+                                        {
+                                            if (item.GroupType == itemGT.Id)
+                                            {
+                                                <tr>
+                                                    <td>@i</td>
+                                                    <td>@item.ID</td>
+                                                    <td>@item.GroupName</td>
+                                                    <td>@item.GroupType</td>
+                                                    <td>@item.GroupTypeName</td>
+                                                    <td>@item.SysHotelCode</td>
+                                                    <td>@item.SysHotelName</td>
+                                                    <td>@item.Description</td>
+                                                    @foreach (var value in @EnumHelper<Status>.GetValues(Status.Close))
+                                                    {
+                                                        var name = EnumHelper<Status>.GetDisplayValue(value);
+                                                        if (value == item.Status)
+                                                        {
+                                                            <td value="@value">@name</td>
+                                                            break;
+                                                        }
+                                                    }
+                                                    <td>
+                                                        <div class="edit-delete-table">
+                                                            <a href="@Url.Action("Edit", "Group", new { id = item.ID })" , class="edit-row">
+                                                                @*@Html.ActionLink("Edit", "Edit", new { id = item.ID }, new { @class = "edit-row"})*@
+                                                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                            </a>
+                                                            <div class="delete-table" data-toggle="modal" data-backdrop="static" data-target="#mdDelete">
+                                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                i++;
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                    @Html.Hidden("hdIDList", string.Join(",", arr_id_list.ToArray()))
+                }
+            </div>
+            <!--Modal-->
+            @using (Html.BeginForm())
+            {
+                <div class="modal modal-modify fade" id="mdModify" tabindex="-1" role="dialog" aria-labelledby="lblTitle">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="lblTitle"></h4>
+                            </div>
+                            <div class="modal-body clearfix">
+                                <div class="modal-body-content">
+                                    <div data-insert="hide" class="form-group hide">
+                                        @Html.LabelFor(m => m.ID, new { @class = "control-label col-md-3" })
+                                        <div class="col-md-9">
+                                            @Html.TextBoxFor(m => m.ID, new { @class = "form-control txt-content", @data = "ID", disabled = "disabled" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.GroupName, htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-md-9">
+                                            @Html.EditorFor(model => model.GroupName, new { htmlAttributes = new { @class = "form-control txt-content", @data = "GroupName" } })
+                                            @Html.ValidationMessageFor(model => model.GroupName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.GroupType, htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-md-9">
+                                            @if (ViewData.ContainsKey("ListGroupType"))
+                                            {
+                                                @Html.DropDownList("GroupType", (SelectList)ViewData["ListGroupType"], String.Empty, new { @class = "form-control dll-content", @data = "GroupType" })
+                                                @Html.ValidationMessageFor(model => model.GroupType, "", new { @class = "text-danger" })
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.SysHotelCode, htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-md-9">
+                                            @if (ViewData.ContainsKey("Hotel"))
+                                            {
+                                                @Html.DropDownList("SysHotelCode", (SelectList)ViewData["Hotel"], String.Empty, new { @class = "form-control dll-content", @data = "SysHotelCode" })
+                                                @Html.ValidationMessageFor(model => model.SysHotelCode, "", new { @class = "text-danger" })
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-md-9">
+                                            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control txt-content", @data = "Description" } })
+                                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-md-9">
+                                            @* can goi ham build style *@
+                                            @foreach (var item in @EnumHelper<Status>.GetValues(Status.Close))
+                                            {
+                                                var name = EnumHelper<Status>.GetDisplayValue(item);
+                                                <div class="radio-group">
+                                                    <label data="@item">
+                                                        <input data="@item" type="radio" name="r3" class="minimal-red radio-btn" value="@name" checked>
+                                                        @name
+                                                    </label>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer clearfix">
+                                <button id="btnSave" type="button" class="btn btn-block btn-oze-success btn-flat btn-save">
+                                    <div class="btn-border"><p>Hoàn thành</p></div>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+    <!-- /.modal -->
+            }
+
+            <!--modal delete-->
+            <div class="modal modal-delete fade" id="mdDelete" tabindex="-1" role="dialog" aria-labelledby="lblTitle">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header header-warning">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title" id="lblTitle">Xóa nhóm quyền</h4>
+                        </div>
+                        <div class="modal-body clearfix">
+                            <div class="modal-body-content">
+                                <p></p>
+                            </div>
+                        </div>
+                        <div class="modal-footer clearfix">
+                            <button id="btnDelete" type="button" class="btn btn-block btn-oze-delete btn-flat">
+                                <div class="btn-border"><p>Xóa</p></div>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!--/modal delete-->
+
+            <div>
+                @Html.ActionLink("Back to List", "../")
+            </div>
+        </div>
+        <div class="tab-pane" id="GroupTypeTab">
+            <!-- form start create GroupType-->
+            @*@using (Html.BeginForm("CreateGroupMenu", "Group", FormMethod.Post, new { @id = "frmCreateGroupMenu", @name = "frmCreateGroupMenu", @class = "form-horizontal" }))
+            {
+                @Html.HiddenFor(model => model.Id, new { id = "GroupID" })
+                <div class="box-body box-create col-md-5">
+                    <div class="form-group">
+                        <label class="control-label col-md-2" id="SysMenuID" for="SysMenuID">Chọn Menu</label>
+                        <div class="col-md-6">
+                            @if (TempData.ContainsKey("MenuList"))
+                            {
+                                @Html.DropDownList("Menu", (SelectList)TempData["MenuList"], String.Empty, new { @class = "form-control", id = "SysMenuID" })
+                            }
+                        </div>
+                        <div class="col-md-4">
+                            <a id="btnCreate" class="btn btn-block btn-oze btn-oze-add btn-flat"><i class="glyphicon glyphicon-plus"></i>Thêm mới</a>
+                        </div>
+                    </div>
+                </div>
+            }*@
+            <!--Show Message-->
+            <div class="modal fade" id="modalthongbao" role="dialog">
+                <div class="modal-dialog">
+
+                    Modal content
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Thông Báo</h4>
+                        </div>
+                        <div class="modal-body">
+                            <h2 id="messthongbao" style="color:red"> </h2>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!--End Show Message-->
+
+            @if (ViewData["ListGroupTypeALL"] != null)
+            {
+                var dataType = (List<GroupTypeModels>)ViewData["ListGroupTypeALL"];
+                <div class="box-body">
+                    <table class="table table-striped table-bordered nowrap table-hover" id="ListGroupType" cellpadding="0" width="100%">
+                        <thead>
+                            <tr>
+                                <td>STT</td>
+                                <td>ID</td>
+                                <td>Tên bộ phận</td>
+                                <td>Tiếng Anh</td>
+                                <td>Sắp sếp</td>
+                                <td>Thao tác</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ int i = 0;}
+                            @foreach (var item in dataType)
+                            {
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@item.Id</td>
+                                    <td>@item.NameVN</td>
+                                    <td>@item.NameEN</td>
+                                    <td>@item.Order</td>
+                                    <td>
+                                        <div class="edit-delete-table">
+                                            <div class="edit-table" data-toggle="modal" data-backdrop="static" data-target="#mdModify">
+                                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                            </div>
+                                            <div class="delete-table" data-toggle="modal" data-backdrop="static" data-target="#mdDelete">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Modal xóa -->
+                <div class="modal modal-delete fade" id="mdDelete" tabindex="-1" role="dialog" aria-labelledby="lblTitle">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title" id="lblTitle">Xóa bộ phận</h4>
+                            </div>
+                            <div class="modal-body clearfix">
+                                <div class="modal-body-content">
+                                    <p></p>
+                                </div>
+                            </div>
+                            <div class="modal-footer clearfix">
+                                <button id="btnDelete" type="button" class="btn btn-block btn-oze-delete btn-flat">
+                                    <div class="btn-border"><p>Xóa</p></div>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+                }
+        </div>
+    </div>
+</div>
+
+
+<!-- DataTables -->
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+}
+
+<script src="~/Scripts/oze/oze.group.js"></script>
+<script src="~/Scripts/oze/oze.GroupType.js"></script>

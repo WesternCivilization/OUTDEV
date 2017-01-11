@@ -1,0 +1,43 @@
+﻿body {
+    font-size: 10px;
+}
+
+.form-group {
+    margin-bottom: 5px;
+}
+
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+    padding: 5px;
+}
+
+.table-bordered > thead > tr > td, .table-bordered > thead > tr > th {
+    background: #eee;
+    text-align: center;
+    vertical-align: top;
+    font-weight: bold;
+}
+
+table {
+    page-break-inside: auto;
+    font-size: 9px;
+    margin-bottom: 10px !important;
+}
+
+tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+}
+
+.button-print {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 1;
+}
+
+@media print {
+    .noprint {
+        display: none !important;
+    }    
+}
+/*hungpvcs*/

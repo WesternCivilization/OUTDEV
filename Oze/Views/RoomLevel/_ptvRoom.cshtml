@@ -1,0 +1,24 @@
+﻿@model List<oze.data.tbl_Room>
+<div class="row Rome_steam">
+    @if (Model.Any())
+    {
+        foreach (var t in Model)
+        {
+            <div class="col-lg-1 col-xs-1">
+                <!-- small box -->
+                <div class="small-box bg-gray">
+                    <div class="inner" style="text-align: center;">
+                        <h5> @t.Name </h5>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="form-group text-center">
+            <label>Chưa có dữ liệu</label>
+        </div>
+    }
+
+</div>

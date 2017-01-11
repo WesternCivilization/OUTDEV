@@ -1,0 +1,212 @@
+﻿
+@{
+    ViewBag.Title = "UpdateUser";
+    Layout = "~/Views/Shared/_Root.cshtml";
+}
+@model Oze.Models.SysUserModel
+
+<!-- DataTables -->
+<link rel="stylesheet" href="~/Themes/plugins/datatables/dataTables.bootstrap.css">
+
+
+<div class="row">
+    <div class="col-md-10">
+        <!-- Horizontal Form -->
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">Thêm mới User</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            @using (Html.BeginForm("Index", "SysUsers", FormMethod.Post, new { @id = "frmCreateUser", @name = "frmCreateUser", @class = "form-horizontal" }))
+            {
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="lblnameks" class="col-sm-2 control-label">Chọn khách sạn</label>
+                        <div class="col-sm-10">
+                            @if (ViewData.ContainsKey("SelectHotel"))
+                            {
+                                @Html.DropDownListFor(n => n.SysHotelID, ViewData["SelectHotel"] as List<SelectListItem>, new { @id = "cboHotelname", @name = "cboHotelname", @class = "form-control" })
+
+                                @*@Html.DropDownList("cbxChonHotel", ViewData["SelectHotel"] as List<SelectListItem>, new { @id = "cboHotelname", @name = "cboHotelname", @class = "form-control" })*@
+                            }
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lblnameks" class="col-sm-2 control-label">Họ và tên</label>
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(u => u.FullName, new { @class = "form-control", @id = "txtname", @name = "txtname", @placeholder = "Họ và tên người dùng" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lblnameks" class="col-sm-2 control-label">Tài khoản</label>
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(u => u.UserName, new { @class = "form-control", @id = "txtusername", @name = "txtusername", @disabled= "disabled", @placeholder = "Tài khoản đăng nhập" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lblnameks" class="col-sm-2 control-label">Mật khẩu</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="txtpass" name="txtpass" placeholder="Vui lòng nhập mật Khẩu">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">Nhập lại Mật khẩu</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="txtrepass" name="txtrepass" placeholder="Vui lòng nhập lại mật Khẩu">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lblnameks" class="col-sm-2 control-label">Chọn User</label>
+                        <div class="col-sm-10">
+                            @if (ViewData.ContainsKey("UsertHotel"))
+                            {
+                                @Html.DropDownListFor(n => n.ParentID,  ViewData["UsertHotel"] as List<SelectListItem>, new { @id = "cbxChonUser", @name = "cbxChonUser", @class = "form-control" })
+
+                                @*@Html.DropDownList("cbxChonUser", ViewData["UsertHotel"] as List<SelectListItem>, new { @id = "cbxChonUser", @name = "cbxChonUser", @class = "form-control" })*@
+                            }
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lblnameks" class="col-sm-2 control-label">Số điện thoại</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" id="txtphone" name="txtphone" value="@Model.Mobile" placeholder="Số điện thoại">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lblnameks" class="col-sm-2 control-label">Email</label>
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(u => u.Email, new { @class = "form-control", @id = "txtEmail", @name = "txtEmail", @placeholder = "Email" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lblnameks" class="col-sm-2 control-label">CMT/HC</label>
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(u => u.IdentityNumber, new { @class = "form-control", @id = "txtcmt", @name = "txtcmt", @placeholder = "Số chứng minh thư hoặc hộ chiếu" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lblnameks" class="col-sm-2 control-label">Địa chỉ</label>
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(u => u.Address, new { @class = "form-control", @id = "txtAddress", @name = "txtusername", @placeholder = "Địa chỉ" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lblnameks" class="col-sm-2 control-label">Người tạo</label>
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(u => u.NameCreateby, new { @class = "form-control", @id = "txtUserCreat", @name = "txtUserCreat", @placeholder = "Người tạo", @disabled = "disabled" })
+                        </div>
+                        <label for="lblnameks" class="col-sm-2 control-label">Thời gian tạo:</label>
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(u => u.CreateDate, new { @class = "form-control", @id = "txtCreatDate", @name = "txtCreatDate", @placeholder = "", @disabled = "disabled" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lblnameks" class="col-sm-2 control-label">Người Chỉnh sửa:</label>
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(u => u.NameModifyby, new { @class = "form-control", @id = "txtUserEdit", @name = "txtUserEdit", @placeholder = "Người sửa", @disabled = "disabled" })
+                        </div>
+                        <label for="lblnameks" class="col-sm-2 control-label">Thời gian tạo:</label>
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(u => u.ModifyDate, new { @class = "form-control", @id = "txtEditDate", @name = "txtEditDate", @placeholder = "", @disabled = "disabled" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="checkbox">
+                                <label>
+                                    @{
+                                        string check = "";
+                                        if (Model.Status == 1)
+                                        {
+                                            check = "checked";
+                                        }
+                                    }
+                                    <input id="cboactive" name="cboactive" type="checkbox" @check> Kích hoạt
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <button type="button" id="btnUpdateUser" class="btn btn-info">Lưu thông tin tài khoản</button>
+                    <button type="reset" class="btn btn-default">Cancel</button>
+                </div>
+                <!-- /.box-footer -->
+            }
+        </div>
+        <!-- /.box -->
+        <!-- general form elements disabled -->
+        <!-- /.box -->
+    </div>
+</div>
+
+<!-- DataTables -->
+<script src="~/Themes/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="~/Themes/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script src="~/Themes/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="~/Scripts/oze/oze.Group.js"></script>
+<script src="~/Scripts/oze/oze.createMenuGroup.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+       // $('#cbxChonUser option[value=Model.ParentID]').attr('selected', 'selected');
+        //$('#cbxChonUser option[value=Model.SysHotelID]').attr('selected', 'selected');
+
+
+        $("#btnUpdateUser").click(function () {
+            var checkActive = 0;
+            if ($('#cboactive').is(":checked")) {
+                checkActive = 1;
+            }
+
+            
+            var id = "@Model.ID";
+            $.ajax({
+                url: "@Url.Action("Update_User", "SysUsers")",
+                type: "Post",
+                datatype: "json",
+                data: {
+                    'id': id,
+                    'txtname': $("#txtname").val(),
+                    'txtpass': $("#txtpass").val(),
+                    'txtphone': $("#txtphone").val(),
+                    'txtcmt': $("#txtcmt").val(),
+                    'txtAddress': $("#txtAddress").val(),
+                    'email': $("#txtEmail").val(),
+                    'cboHotelname': $('#cboHotelname').find('option:selected').val(),
+                    'cbxChonUser': $('#cbxChonUser').find('option:selected').val(),
+                    'cboactive': checkActive
+                },
+                success: function (response) {
+                    alert(response.mess);
+                    //$("#messthongbao").empty();
+                    //$("#messthongbao").text(response.mess);
+                    //$("#modalloading").modal('close');
+                    //$('#modalloading').modal('toggle');
+                    //$('#modalthongbao').modal('show');]
+                    setTimeout(function () {
+                        window.location.reload(1);
+                    }, 2000);
+                },
+                error: function (response) {
+                    $("#messthongbao").empty();
+                    $("#messthongbao").text("Erro : Thêm mới sản phẩm thất bại");
+                    $("#modalloading").modal('close');
+                    $('#modalthongbao').modal('show');
+                }
+            });
+
+        });
+    });
+
+
+</script>

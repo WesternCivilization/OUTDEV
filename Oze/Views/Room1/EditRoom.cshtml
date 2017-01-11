@@ -1,0 +1,34 @@
+﻿@using Oze.Models;
+@using Oze.AppCode.DAL;
+@model oze.data.tbl_Room
+
+<div>
+    <form id="dummyRoom" action="javascript:void();">
+        @Html.AntiForgeryToken()
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-1 control-label"></label>
+            <div class="col-sm-4">
+                <input type="hidden" id="ID" name="ID" value="@Model.Id" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label">Tên</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="Name" required="1" maxlength="50" name="Name" value="@Model.Name">
+            </div>
+        </div>    
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label">Hạng phòng</label>
+            <div class="col-sm-5">
+                <select class="form-control" id="RoomType_ID" name="RoomType_ID">
+                    <option @(Model.RoomType_ID == 0 ? "selected" : "")>===Hạng phòng==</option>
+                    @foreach (var roomType in (new Oze.Services.CommService()).GetAllRoomType())
+                    {
+                        <option value="@roomType.Id" @(Model.RoomType_ID == roomType.Id ? "selected" : "")>@roomType.Name</option>
+                    }
+                </select>
+            </div>
+        </div>            
+    </form>
+</div>
+<!--<script src="~/Scripts/oze/SysUser/oze_Supplier.js"></script>-->

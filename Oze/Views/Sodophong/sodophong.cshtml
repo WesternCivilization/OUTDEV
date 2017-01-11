@@ -1,0 +1,73 @@
+﻿
+    
+        @{
+    int index = 0;
+    foreach (var obj in (new Oze.Services.RoomService()).getAllSoDoPhong(""))
+    {
+        string sTimeSpan = "";
+        string sAlarm = "";
+
+        var isAlarm = false;
+        if ((obj.Status ?? 0) == 1)
+        {
+            TimeSpan tm = DateTime.Now.Subtract(obj.datePlanFrom.Value);
+            if (tm.Days > 0) { sTimeSpan = sTimeSpan + tm.Days.ToString() + "d "; }
+            if (tm.Hours > 0) { sTimeSpan = sTimeSpan + tm.Hours.ToString() + "h "; }
+            if (tm.Minutes > 0) { sTimeSpan = sTimeSpan + tm.Minutes.ToString() + "p"; }
+            isAlarm = DateTime.Now.CompareTo(obj.datePlanTo.Value) > 0;
+            if (isAlarm)
+            {
+                tm = DateTime.Now.Subtract(obj.datePlanTo.Value);
+                if (tm.Days > 0) { sAlarm = sAlarm + tm.Days.ToString() + "d "; }
+                if (tm.Hours > 0) { sAlarm = sAlarm + tm.Hours.ToString() + "h "; }
+                if (tm.Minutes > 0) { sAlarm = sAlarm + tm.Minutes.ToString() + "p "; }
+            }
+        }
+        index = index + 1;
+
+        <div stype="phong" snamec="@obj.customerName" sname="@obj.Name" sstatus="@(obj.Status ?? 0)" class="phong room-@((obj.Status1 == 11 || obj.Status1 == 12)? 11 :(obj.Status??0))" onclick="javascript:showMenuSoDoPhong(@obj.id,@(obj.Status??0),@(obj.Status1??0));">
+            <div class="trangthai trangthai-@((obj.Status1 == 11 || obj.Status1 == 12)? 11 :(obj.Status??0))">
+                <div class="sophong">@obj.Name</div>
+                <div class="hangphong">@obj.hangphong</div>
+                <div class="tinhtrang">
+                    @if (obj.Status1 == 10)
+                    {<a title="Phòng đang quét dọn" href=""><img alt="Phòng đang bẩn" src="/images/clean@((obj.Status??0)==0 ?"1":"").png"></a>}
+                    @if (isAlarm && obj.Status1 != 10)
+                    {<a title="Phòng đang quá giờ" href="">
+                        <img alt="Phòng đang quá giờ" src="/images/alarm.png"><br />
+                        <label style="color:white">@sAlarm</label>
+                    </a>
+                    }
+                </div>
+            </div>
+            <div class="thongtin" style="text-align: center;">
+                @if (obj.Status == 1 || obj.Status == 2 || obj.Status == 4)
+                {
+                    <div class="thongtinkhach">
+                        <div class="sodoan"><!--1--></div>
+                        <div class="truongdoan" style="visibility:hidden">
+                            <img alt="Phòng đang quét dọn" src="/images/star.png">
+                        </div>
+                        <div class="hotenkhach">@obj.customerName</div>
+                    </div>
+                    <div class="clear"></div>
+
+                    <div class="gio" style="visibility:visible">
+                        <span>@sTimeSpan</span>
+                    </div>
+                    <div class="clear"></div>
+
+                    <div class="ngay">
+                        <span>@(obj.datePlanFrom.HasValue ? obj.datePlanFrom.Value.ToString("dd/MM") : "")-@(obj.datePlanTo.HasValue ? obj.datePlanTo.Value.ToString("dd/MM/yyyy") : "")</span>
+                    </div>
+                }
+                @if (obj.Status1 == 11 || obj.Status1 == 12)
+                {
+                    <span style="display: inline-block; height: 100%; vertical-align: middle;"></span>
+                    <img style="display: inline-block; vertical-align: middle;" alt="Phòng đang sửa/hỏng" src="/images/lock.png">
+                }
+            </div>
+        </div>
+    }
+}
+   

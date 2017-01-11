@@ -1,0 +1,440 @@
+﻿@using Oze.Models;
+@using Newtonsoft
+@{
+    ViewBag.Title = "Thông tin chi tiết";
+    var BookingInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<DetailBooking>>((string)ViewData["BookingInfo"])[0];
+    var CustomerInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Customer_Booking>>((string)ViewData["CustomerInfo"]);
+    var SetRoom = Newtonsoft.Json.JsonConvert.DeserializeObject<List<DetailBooking>>((string)ViewData["SetRoom"]);
+    Customer_Booking dataLeader = new Customer_Booking();
+    string name = "";
+    string date = "";
+    string mobile = "";
+    string room = SetRoom.Count == 0 ? "" : "te";
+    if (CustomerInfo.Count > 0)
+    {
+        for (int i = 0; i < CustomerInfo.Count; i++)
+        {
+            if (CustomerInfo[i].CusType == "Leader")
+            {
+                name = CustomerInfo[i].Name;
+                date = CustomerInfo[i].DOB == null? "" : String.Format("{0:dd/MM/yyyy}", CustomerInfo[i].DOB);
+                mobile = CustomerInfo[i].Mobile;
+                break;
+            }
+        }
+    }
+}
+
+<div class="tab-title tab-detail">
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a aria-controls="@ViewBag.Title" role="tab" data-toggle="tab">@ViewBag.Title</a></li>
+        <li class="tilte-booking"><label class="title-hotel">Mã KS123/ Phòng @room</label></li>
+        <li class="tilte-booking"><p class="title-total">Tổng tiền: <label class="title-money">@BookingInfo.Deposit VNĐ</label></p></li>
+        <li class="tilte-booking"></li>
+    </ul>
+    <div class="btn-set-room">
+        <a id="btnSetRoom" class="btn btn-block btn-oze btn-oze-add btn-flat not-padding-right pull-right" data-toggle="modal" data-backdrop="static" data-target="#mdDetailBooking">Gán số phòng</a>
+    </div>
+</div>
+<div class="co-md-12 form-group">
+    <div class="col-md-6 customer-info">
+        <div class="group-title">
+            <label>THÔNG TIN KHÁCH HÀNG</label>
+        </div>
+        <div class="group-content">
+            <div class="group-top">
+                <div class="col-md-12 space-row">
+                    <div class="txt-left col-md-4 space-row space-row">
+                        <p>Họ và tên:</p>
+                    </div>
+                    <div class="txt-middle col-md-4">
+                        <p class="txtName">@name</p>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                    </div>
+                    <div class="txt-right col-md-4">
+                        <div class="group-modify">
+                            <a href="#" class="icon-edit" data-toggle="tooltip" data-container="body" data-placement="top" title="Thêm mới"></a>
+                            <a href="#" class="icon-add" data-toggle="tooltip" data-container="body" data-placement="top" title="Chỉnh sửa"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 space-row">
+                    <div class="txt-left col-md-4 space-row">
+                        <p>Ngày sinh:</p>
+                    </div>
+                    <div class="txt-middle col-md-4">
+                        <p class="txtBirth">@date</p>
+                    </div>
+                </div>
+                <div class="col-md-12 space-row">
+                    <div class="txt-left col-md-4 space-row">
+                        <p>Số điện thoại:</p>
+                    </div>
+                    <div class="txt-middle col-md-4">
+                        <p class="txtPhone">@mobile</p>
+                    </div>
+
+                </div>
+                <div class="col-md-12 space-row">
+                    <div class="txt-left col-md-4 space-row">
+                        <p>Đoàn:</p>
+                    </div>
+                    <div class="txt-middle col-md-4">
+                        <p class="txtDoan">-</p>
+                    </div>
+
+                </div>
+                <div class="col-md-12 space-row">
+                    <div class="txt-left col-md-12">
+                        <label class="cbx-content">
+                            <input type="checkbox" class="minimal-red" id="cbxPay" />
+                        </label>
+                        <p>Nguời thanh toán</p>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="group-bottom">
+                <div class="col-md-12 space-row">
+                    <label class="col-md-12">Khách ở cùng</label>
+                </div>
+                @foreach (var item in CustomerInfo)
+                {
+                    if (item.CusType == "Leader")
+                    {
+                        continue;
+                    }
+                    
+                    <div class="col-md-12 space-row">
+                        <div class="txt-left col-md-4 space-row">
+                            <p>Họ và tên:</p>
+                        </div>
+                        <div class="txt-middle col-md-4">
+                            <p class="txtKhachOCung">@item.Name</p>
+                        </div>
+                        <div class="txt-right col-md-4">
+                            <div class="group-modify">
+                                <a href="#" class="icon-edit" data-toggle="tooltip" data-container="body" data-placement="top" title="Chỉnh sửa"></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 space-row">
+                        <div class="txt-left col-md-12">
+                            <label class="cbx-content">
+                                <input type="checkbox" class="minimal-red" id="cbxPay2" />
+                            </label>
+                            <p>Nguời thanh toán</p>
+                        </div>
+
+                    </div>
+                }
+                
+                <div class="col-md-12 space-row">
+                    <div class="txt-left col-md-12">
+                        <i class="txt-note">Ghi chú:</i>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 booking-info">
+        <div class="group-title">
+            <label class="col-md-8 not-padding">THÔNG TIN ĐẶT PHÒNG</label>
+            <div class="group-modify">
+                <a href="#" class="icon-edit" data-toggle="tooltip" data-container="body" data-placement="top" title="Thêm mới"></a>
+            </div>
+        </div>
+        <div class="group-content">
+                <div class="col-md-12 space-row">
+                    <div class="txt-left col-md-4 space-row">
+                        <p>Tên khách sạn:</p>
+                    </div>
+                    <div class="txt-middle col-md-8">
+                        <p class="txtHotel">@BookingInfo.HotelName</p>
+                    </div>
+                </div>
+                <div class="col-md-12 space-row">
+                    <div class="txt-left col-md-4 space-row">
+                        <p>Số phòng:</p>
+                    </div>
+                    <div class="txt-middle col-md-8">
+                        <p class="txtRoom">@BookingInfo.RoomName</p>
+                    </div>
+                </div>
+                <div class="col-md-12 space-row">
+                    <div class="txt-left col-md-4 space-row">
+                        <p>Mã phòng:</p>
+                    </div>
+                    <div class="txt-middle col-md-8">
+                        <p class="txtRoom">@BookingInfo.New_Room_ID</p>
+                    </div>
+                </div>
+                <div class="col-md-12 space-row">
+                    <div class="txt-left col-md-4 space-row">
+                        <p>Giá thời điểm:</p>
+                    </div>
+                    <div class="txt-middle col-md-8">
+                        <p class="txtStartPrice">@BookingInfo.Holiday</p>
+                    </div>
+
+                </div>
+                <div class="col-md-12 space-row">
+                    <div class="txt-left col-md-4 space-row">
+                        <p>Khung giá phòng:</p>
+                    </div>
+                    <div class="txt-middle col-md-4">
+                        <p class="txtKhungGia">@BookingInfo.khunggio</p>
+                    </div>
+
+                </div>
+                <div class="col-md-12 space-row">
+                    <div class="txt-left col-md-4 space-row">
+                        <p>Giá phòng:</p>
+                    </div>
+                    <div class="txt-middle col-md-4">
+                        <p class="txtGiaPhong">@BookingInfo.Deposit</p>
+                    </div>
+
+                </div>
+                <div class="col-md-12 space-row">
+                    <div class="txt-left col-md-4 space-row">
+                        <p>Ngày giờ đến:</p>
+                    </div>
+                    <div class="txt-middle col-md-4">
+                        <p class="txtArriveDate">@BookingInfo.Arrive_Date</p>
+                    </div>
+
+                </div>
+                <div class="col-md-12 space-row">
+                    <div class="txt-left col-md-4 space-row">
+                        <p>Ngày giờ đi:</p>
+                    </div>
+                    <div class="txt-middle col-md-4">
+                        <p class="txtLeaveDate">@BookingInfo.Leave_Date</p>
+                    </div>
+
+                </div>
+                <div class="col-md-12 space-row">
+                    <div class="txt-left col-md-4 space-row">
+                        <p>Người lớn:</p>
+                    </div>
+                    <div class="txt-middle col-md-4">
+                        <p class="txtNguoiLon">@BookingInfo.Number_People</p>
+                    </div>
+
+                </div>
+                <div class="col-md-12 space-row">
+                    <div class="txt-left col-md-4 space-row">
+                        <p>Trẻ em:</p>
+                    </div>
+                    <div class="txt-middle col-md-4">
+                        <p class="txtTreEm">@BookingInfo.Number_Children</p>
+                    </div>
+
+                </div>
+                <div class="col-md-12 space-row">
+                    <div class="txt-left col-md-4 space-row">
+                        <p>Phương thức thanh toán:</p>
+                    </div>
+                    <div class="txt-middle col-md-4">
+                        <p class="txtMoney">@BookingInfo.PaymentTypeName</p>
+                    </div>
+
+                </div>
+                <div class="col-md-12 space-row">
+                    <div class="txt-left col-md-4 space-row">
+                        <p>Giảm trừ:</p>
+                    </div>
+                    <div class="txt-middle col-md-4">
+                        <p class="txtSaleOff">@BookingInfo.Deduction</p>
+                    </div>
+
+                </div>
+
+                <div class="col-md-12 space-row">
+                    <div class="txt-left col-md-4 space-row">
+                        <p>Trả trước:</p>
+                    </div>
+                    <div class="txt-middle col-md-4">
+                        <p class="txtTraTtruoc">@BookingInfo.Deposit VNĐ</p>
+                    </div>
+
+                </div>
+        </div>
+    </div>
+</div>
+<!--modal gan phong -->
+@using (Html.BeginForm())
+{
+    <div class="modal modal-set-room fade" id="mdSetRoom" tabindex="-1" role="dialog" aria-labelledby="lblTitle">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="lblTitle">
+                        <i class="icon-modify icon-set"></i>
+                        <p>Gán phòng</p>
+                    </h4>
+                </div>
+                <div class="modal-body  clearfix">
+                    <div class="modal-body-content">
+                        <div class="co-md-12 form-group">
+                            <div class="col-md-6 customer-info">
+                                <div class="col-md-12 space-row">
+                                    <div class="txt-left col-md-4 space-row">
+                                        <p>Hạng phòng:</p>
+                                    </div>
+                                    <div class="txt-middle col-md-8">
+                                        <select id="ddlRoomLevel" class="form-control">
+                                            <option value="0" selected>Chọn</option>
+                                            <option value="1">Tiêu chuẩn 1 giường đơn</option>
+                                            <option value="2">Tiêu chuẩn 1 giường đôi</option>
+                                            <option value="3">Tiêu chuẩn 2 giường đơn</option>
+                                            <option value="4">Tiêu chuẩn 2 giường đôi</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 space-row">
+                                    <div class="txt-left col-md-4 space-row">
+                                        <p>Số phòng:</p>
+                                    </div>
+                                    <div class="txt-middle col-md-8">
+                                        <select id="ddlRoom" class="form-control">
+                                            <option value="0" selected>Chọn</option>
+                                            <option value="1">101</option>
+                                            <option value="2">102</option>
+                                            <option value="3">103</option>
+                                            <option value="4">201</option>
+                                            <option value="5">202</option>
+                                            <option value="6">203</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 booking-info">
+                                <div class="group-content">
+                                    <div class="group-top">
+                                        <div class="col-md-12 space-row">
+                                            <div class="txt-left col-md-4 space-row">
+                                                <p>Mã phòng:</p>
+                                            </div>
+                                            <div class="txt-middle col-md-8">
+                                                <p class="txtRoom">KS123</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 space-row">
+                                            <div class="txt-left col-md-4 space-row">
+                                                <p>Giá thời điểm:</p>
+                                            </div>
+                                            <div class="txt-middle col-md-8">
+                                                <p class="txtStartPrice">Ngày thường</p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12 space-row">
+                                            <div class="txt-left col-md-4 space-row">
+                                                <p>Khung giá phòng:</p>
+                                            </div>
+                                            <div class="txt-middle col-md-8">
+                                                <p class="txtKhungGia">Giá giờ</p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12 space-row">
+                                            <div class="txt-left col-md-4 space-row">
+                                                <p>Giá phòng:</p>
+                                            </div>
+                                            <div class="txt-middle col-md-8">
+                                                <p class="txtGiaPhong">70 000 VNĐ</p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12 space-row">
+                                            <div class="txt-left col-md-4 space-row">
+                                                <p>Ngày giờ đến:</p>
+                                            </div>
+                                            <div class="txt-middle col-md-8">
+                                                <p class="txtArriveDate">05/11/2016 10:00</p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12 space-row">
+                                            <div class="txt-left col-md-4 space-row">
+                                                <p>Ngày giờ đi:</p>
+                                            </div>
+                                            <div class="txt-middle col-md-8">
+                                                <p class="txtLeaveDate">05/11/2016 12:00</p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12 space-row">
+                                            <div class="txt-left col-md-4 space-row">
+                                                <p>Người lớn:</p>
+                                            </div>
+                                            <div class="txt-middle col-md-8">
+                                                <p class="txtNguoiLon">02</p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12 space-row">
+                                            <div class="txt-left col-md-4 space-row">
+                                                <p>Trẻ em:</p>
+                                            </div>
+                                            <div class="txt-middle col-md-8">
+                                                <p class="txtTreEm">01</p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12 space-row">
+                                            <div class="txt-left col-md-4 space-row">
+                                                <p>Phương thức thanh toán:</p>
+                                            </div>
+                                            <div class="txt-middle col-md-8">
+                                                <p class="txtMoney">Tiền mặt</p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12 space-row">
+                                            <div class="txt-left col-md-4 space-row">
+                                                <p>Giảm trừ:</p>
+                                            </div>
+                                            <div class="txt-middle col-md-8">
+                                                <p class="txtSaleOff">Không có</p>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-12 space-row">
+                                            <div class="txt-left col-md-4 space-row">
+                                                <p>Trả trước:</p>
+                                            </div>
+                                            <div class="txt-middle col-md-8">
+                                                <p class="txtTraTtruoc">50 000 VNĐ</p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer clearfix">
+                    <button id="btnSave" type="button" class="btn btn-block btn-oze btn-oze-add btn-flat btn-save">
+                        <div class="btn-border"><p>Lưu</p></div>
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+        <!-- /.modal -->
+}
+<!--/modal gan phong -->
+<script src="~/Scripts/oze/oze.detailBooking.js"></script>

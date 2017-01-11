@@ -1,0 +1,91 @@
+﻿@model oze.data.Vw_HotelsConfig
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+<link rel="stylesheet" href="~/Themes/plugins/datatables/dataTables.bootstrap.css">
+<link rel="stylesheet" href="~/Content/Oze.css">
+<link rel="stylesheet" href="~/Content/hungpvCustom.css">
+<!--<link rel="stylesheet" href="https://datatables.net/media/css/site.css?_=b05357026107a2e3ca397f642d976192" />-->
+<div class="tab-title">
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a aria-controls="Quản lý NCC" role="tab" data-toggle="tab">Cấu hình</a></li>       
+        <li id="liAddNew" style="float:right">
+            <button id="btnSave" class="btn btn-info btn-sm" type="button">Lưu</button>
+        </li>
+    </ul>
+</div>
+<div class="row">
+    <form id="formData" class="form-horizontal MarginTop20">
+        <div class="col-md-6">
+            <div class="form-group form-group-sm">
+                <label class="col-md-6 control-label" style="text-align:left">Khách sạn </label>
+                <input name="SysHotelID" id="SysHotelID" value="@Model.SysHotelID" type="hidden"/>
+                <input name="Id" id="Id" value="@Model.Id" type="hidden" />
+                <div class="col-md-6">
+                    <input type="text" disabled value="@Model.Name" required placeholder="Name" class="form-control" id="Name" name="startCheckout">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+
+        </div>
+            
+            <div class="col-md-12">
+                <div class="form-group form-group-sm col-md-12">
+                    <label class="col-md-2 control-label" style="text-align:left">Giờ nhận phòng từ</label>
+                    <div class="col-md-1">
+                        <input type="text" value="@Model.startCheckin.GetValueOrDefault()" required placeholder="startCheckin" class="form-control amount-number-mask_min0" id="startCheckin" name="startCheckin">
+                    </div>
+                    <label class="col-md-1 control-label" style="text-align:left">Đến trước </label>
+                    <div class="col-md-1">
+                        <input type="text" value="@Model.startCheckout.GetValueOrDefault()" required placeholder="startCheckout" class="form-control amount-number-mask_min0" id="startCheckout" name="startCheckout">
+                    </div>
+                    <label class="col-md-2 control-label" style="text-align:left">giờ ngày hôm sau</label>
+                </div>                
+            </div>
+            <div class="col-md-12">
+                    <label class="col-md-2 control-label" style="text-align:left">Đêm nhận từ</label>
+                    <div class="col-md-1">
+                        <input type="text" value="@Model.startNight1.GetValueOrDefault()" required placeholder="startNight1" class="form-control amount-number-mask_min0" id="startNight1" name="startNight1">
+                    </div>
+                    <label class="col-md-2 control-label" style="text-align:left"> h hôm trước, đến trước </label>
+                    <div class="col-md-1">
+                        <input type="text" value="@Model.startNight2.GetValueOrDefault()" required placeholder="startNight2" class="form-control amount-number-mask_min0" id="startNight2" name="startNight2">
+                    </div>
+                    <label class="col-md-2 control-label" style="text-align:left">giờ ngày hôm sau.</label>
+                    <label class="col-md-2 control-label" style="text-align:left"> Và trả trước</label>
+                    <div class="col-md-1">
+                        <input type="text" value="@Model.startCheckoutNight.GetValueOrDefault()" required placeholder="startCheckoutNight" class="form-control amount-number-mask_min0" id="startCheckoutNight" name="startCheckoutNight">
+                    </div>
+                    <label class="col-md-2 control-label" style="text-align:left">giờ ngày hôm sau</label>
+            </div>
+            <div class="col-md-12">
+                <label class="col-md-1 control-label" style="text-align:left">Quá</label>
+                <div class="col-md-1">
+                    <input type="text" value="@Model.startRoundMain.GetValueOrDefault()" required placeholder="startNight2" class="form-control amount-number-mask_min0" id="startRoundMain" name="startRoundMain">
+                </div>
+                <label class="col-md-3 control-label" style="text-align:left">phút làm tròn thành tiếng</label>
+            
+                <label class="col-md-3 control-label" style="text-align:left">Quá số phút </label>
+                <div class="col-md-1">
+                    <input type="text" value="@Model.startRoundExatra.GetValueOrDefault()" required placeholder="startRoundExatra" class="form-control amount-number-mask_min0" id="startRoundExatra" name="startRoundExatra">
+                </div>
+                <label class="col-md-3 control-label" style="text-align:left">tính tròn phụ trội </label>
+            </div>
+
+</form>
+ 
+</div>
+
+
+<!--script-->
+<script src="~/Themes/plugins/datatables/jquery.dataTables.js"></script>
+<script src="~/Themes/plugins/datatables/dataTables.bootstrap.js"></script>
+<script src="~/Themes/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/oze.common.js"></script>
+<script src="~/Scripts/oze/oze.HotelsConfig.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        toggleMenu("menu_caidat");
+    });
+</script>

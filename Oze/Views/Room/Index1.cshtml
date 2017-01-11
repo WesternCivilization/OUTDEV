@@ -1,0 +1,119 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Root.cshtml";
+}
+@using Oze.Models;
+@model List<RoomModel>
+    
+    <link href="~/Content/ozeConfigRoom.css" rel="stylesheet" />
+
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "frmRoom", @name = "frmRoom" }))
+    {
+        <div class="form-horizontal">
+
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#">Danh sách phòng</a>
+                </li>
+                <li id="liAddNew">
+                    <button type="button" id="btnaddnew" class="btn btn-block btn-oze btn-oze-add btn-flat"><i class="fa fa-plus" aria-hidden="true"></i>Thêm mới</button>
+                </li>
+            </ul>
+
+            <div class="modal" id="mdModify" tabindex="-1" role="dialog" aria-labelledby="lblTitle">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title" id="lblTitle"></h4>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="modal-body-content">
+                                <div class="form-group">
+                                    <div class="col-sm-4" id="divlblName">
+                                        <b id="lblName">Tên phòng</b>
+                                    </div>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="txtRoomName" name="txtRoomName" placeholder="">
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <p id="alertDelRoom">Bạn có chắc muốn xóa phòng <label id="lblRoomNameDelete"></label> không ?</p>
+                                            <p id="kq">Thêm mới thành công</p>
+                                        </div>
+                                    </div>
+                                <div class="form-group" id="divbtnsub">
+                                    
+                                    <div class="modal-footer clearfix">
+                                        <button id="btnAddRoom" type="button" class="btn btn-block btn-oze-success btn-flat btn-save">
+                                            <div class="btn-border"><p>Hoàn thành</p></div>
+                                        </button>
+                                        <button id="btnEditRoom" type="button" class="btn btn-block btn-oze-success btn-flat btn-save">
+                                            <div class="btn-border"><p>Hoàn thành</p></div>
+                                        </button>
+                                        <button id="btnDeleteRoom" type="button" class="btn btn-block btn-oze-delete btn-flat">
+                                            <div class="btn-border"><p>Xóa</p></div>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <section class="content" id="tablistroom">
+        <div class="notify-custom">
+            <div class="notify-popup"></div>
+        </div>
+
+
+        <!-- Main content -->
+        <section class="content">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                @{
+                    for (int i = 0; i < @Model.Count; i++)
+                    {
+                        if (@Model[i].Active != 0)
+                        {
+                            <div class="col-lg-2 col-xs-1">
+                            <!-- small box -->
+                            <div class="small-box bg-gray">
+                                <div class="inner">
+                                    <h3> @Model[i].Name </h3>
+                                </div>
+                                <div class="box-footer"></div>
+                            </div>
+                            <div class="iconbootom">
+                                <a href="#" class="small-box-footer" onclick="EditRoom(@Model[i].ID,@Model[i].Name)"><i class="fa fa-pencil"></i></a>
+                                <a href="#" class="small-box-footer" onclick="DeleteRoom(@Model[i].ID,@Model[i].Name)"><i class="fa fa-times"></i></a>
+                            </div>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+        </section>
+        <!-- /.content -->
+    </section>
+
+
+    <div>
+        @Html.ActionLink("Back to List", "../")
+    </div>
+
+
+    @*<script src="~/Scripts/oze/SysUser/oze_SysUser.js"></script>*@
+    <!-- DataTables -->
+    <script src="~/Themes/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="~/Themes/plugins/datatables/dataTables.bootstrap.js"></script>
+    <script src="~/Themes/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/oze/oze.RoomConfig.js"></script>
+    @*<script src="~/Scripts/oze/oze.group.js"></script>*@

@@ -1,0 +1,131 @@
+﻿@using Oze.Models;
+@using Oze.AppCode.DAL;
+@model Oze.Models.SysUserModel
+@{
+    ViewBag.Title = "Thông tin cá nhân";
+    Layout = "~/Views/Shared/_Root.cshtml";
+}
+<!-- DataTables -->
+<link rel="stylesheet" href="~/Themes/plugins/datatables/dataTables.bootstrap.css">
+<script language="javascript">
+    var seft = this;
+    OzeBase.apply(this);
+    var m_Title = '@ViewBag.Title';
+    var m_UrlList = {
+        UrlUpdate: '@Url.Action("UserUpdate", "SysUsers")'
+    }
+
+    $(document).ready(function () {
+        //Add group quyen
+        var dataGroup = @Html.Raw(Json.Encode(ViewData["listGroup"]));
+        $("#listGroup").empty();
+        $('#listGroup').css('display', 'none');
+        if (dataGroup == null) {
+            $("#listGroup").append("<div class='col-sm-9'><b>User này chưa được gán quyền</b></div></div>");
+        } else {
+            $.each(dataGroup, function (i, item) {
+                $("#listGroup").append("<div class='col-sm-4'><input name='cboactive' type='checkbox' checked='checked' disabled /><b>" + dataGroup[i] + "</b></div>");
+            });
+        }
+        //toggle group quyen
+        $("#btnShowGroupQuyen").click(function () {
+            if ($('#listGroup').css('display') == 'none') {
+                $('#listGroup').css('display', 'block'); //to show
+            } else {
+                $('#listGroup').css('display', 'none'); //to hide
+            }
+        });
+    });
+</script>
+
+<div class="tab-title">
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a aria-controls="@ViewBag.Title" role="tab" data-toggle="tab">@ViewBag.Title</a></li>
+    </ul>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        <div class="modal-body-content">
+            <div class="form-group">
+                <label for="lblnameks" class="col-sm-3 control-label">Khách sạn</label>
+                <div class="col-sm-9">
+                    @if (TempData.ContainsKey("SelectHotel"))
+                    {
+                        var selectitem = Model.SysHotelID == null ? 0 : Model.SysHotelID;
+                        
+                        @Html.DropDownListFor(n => n.SysHotelID, new SelectList(TempData["SelectHotel"] as List<SelectListItem>,
+                                                "Value", // property to be set as Value of dropdown item
+                                                "Text",  // property to be used as text of dropdown item
+                                                 selectitem), // value that should be set selected of dropdown  
+                                                     new { @id = "cboHotelname", @name = "cboHotelname", @class = "form-control", disabled = "disabled" })
+                        
+                    }
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="lblnameks" class="col-sm-3 control-label">Họ và tên</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="txtname" name="txtname" value="@Model.FullName" disabled="disabled">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="lblnameks" class="col-sm-3 control-label">CMT/HC</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="txtcmt" name="txtcmt" value="@Model.IdentityNumber" disabled="disabled">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="lblnameks" class="col-sm-3 control-label">Tài khoản</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="txtusername" name="txtusername" value="@Model.UserName" disabled="disabled">
+                </div>
+            </div>
+                                     
+            <div class="form-group" id="showlistQuyen">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-9">
+                    <button type="button" class="btn btn-block btn-warning btnChangeEdit" id="btnShowGroupQuyen">Hiện thị quyền</button>
+                </div>
+                <div class="col-sm-3"></div>
+                <div class="col-sm-9" id="listGroup" style="padding:10px 0px;"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="lblnameks" class="col-sm-3 control-label">Số điện thoại</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="txtphone" name="txtphone" value="@Model.Mobile" required>
+                    @Html.ValidationMessageFor(m => m.Mobile)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="lblnameks" class="col-sm-3 control-label">Email</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="txtEmail" name="txtEmail" value="@Model.Email" required>
+                    @Html.ValidationMessageFor(m => m.Email)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="lblnameks" class="col-sm-3 control-label">Địa chỉ</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="txtAddress" name="txtAddress" value="@Model.Address" required>
+                    @Html.ValidationMessageFor(m => m.Address)
+                </div>
+            </div>
+            <div class="modal-footer clearfix">
+                <button id="btnSave" type="button" class="btn btn-block btn-oze-success btn-flat btn-save">
+                    <div class="btn-border"><p>Cập nhật</p></div>
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+<script src="~/Scripts/oze/SysUser/oze_UserDetail.js"></script>

@@ -1,0 +1,64 @@
+﻿<section>                
+        @*model oze.data.view_DetailProduct*@
+
+
+    <div>
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label"></label>
+            <div class="col-sm-9">
+                <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label">Mã</label>
+            <div class="col-sm-9">
+                @Model.Code
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label">Tên</label>
+            <div class="col-sm-9">
+                @Model.Name
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label">Đơn vị</label>
+            <div class="col-sm-9">
+                @Model.UnitName
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label">Nhà cung cấp</label>
+            <div class="col-sm-9">
+                    @Model.SupplierName
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label">Nhóm dịch vụ</label>
+            <div class="col-sm-9">
+                    @Model.ProductGroupName
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label">Định mức tối thiểu</label>
+            <div class="col-sm-9">
+                @Model.QuotaMinimize
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label">Giá nhập</label>
+            <div class="col-sm-9">
+                @Model.PriceOrder
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label">Giá bán</label>
+            <div class="col-sm-9">
+                @Model.SalePrice
+            </div>
+        </div>
+    </div>
+<!--<script src="~/Scripts/oze/SysUser/oze_Supplier.js"></script>-->
+</section>

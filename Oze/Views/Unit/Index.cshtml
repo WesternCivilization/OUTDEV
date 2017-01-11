@@ -1,0 +1,129 @@
+﻿    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+    <link rel="stylesheet" href="~/Themes/plugins/datatables/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="~/Content/Oze.css">
+    <!--<link rel="stylesheet" href="https://datatables.net/media/css/site.css?_=b05357026107a2e3ca397f642d976192" />-->
+
+    
+    
+    <div class="tab-title">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a aria-controls="Quản lý NCC" role="tab" data-toggle="tab">Quản lý Đơn vị sản phẩm</a></li>
+            <li id="liAddNew" style="float:right">
+                <button onclick='javascript: editDialog(0);' type="button" class="btn btn-block btn-oze btn-oze-add btn-flat" style="float: right;">
+                    <i class="fa fa-plus" aria-hidden="true"></i>Thêm mới
+                </button>
+            </li>
+        </ul>
+    </div>
+    <section>
+        <input id="txtSearch" type="text" placeholder="Search" /> <!-- Trigger the modal with a button -->
+    </section>
+    <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Tên</th>
+            <th>Trọng số</th>
+            <th>Sử dụng</th>
+            <th>Mô tả</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+</table>    
+
+<!-- Modal For CRUID -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thêm mới</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body-content">
+                    <p>Loading...<img src="/images/load.gif" /></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSave" class="btn btn-default" >Lưu</button> <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--script-->
+<script src="~/Themes/plugins/datatables/jquery.dataTables.js"></script>
+<script src="~/Themes/plugins/datatables/dataTables.bootstrap.js"></script>
+<script src="~/Themes/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/oze.common.js"></script>
+<script src="~/Scripts/oze/oze.Unit.js"></script>
+
+<script type="text/javascript">
+    var $table ;
+    $(document).ready(function () 
+    {
+        toggleMenu("menu_kho");
+        
+        showDialogLoading();
+        $table=$('#example').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "initComplete": function (settings, json)
+            {
+                hideDialogLoading();
+                //alert( 'DataTables has finished its initialisation.' );
+            },
+            /*bFilter: false, bInfo: false,*/
+            "dom": '<"top">rt<"bottom" lip><"clear">',
+            "ajax": {
+                "url": "/Unit/List",
+                "data": function (d)
+                {
+                    d.search = $("#txtSearch").val();
+                }
+            },
+            "columns":
+                [
+                { "data": "Id" ,"orderable": "false"},
+                { "data": "Name1", "orderable": "false" },
+                { "data": "Value", "orderable": "false" },
+                {
+                    "data": null, render: function (data, type, row)
+                    {
+                         if(row.Status==1) return "Sử dụng";
+                         return "Ko sử dụng";
+                    }
+                },
+                { "data": "Description", "orderable": "false" },
+                {
+                    "data": null, render: function (data, type, row)
+                    {
+                        /*
+                        return "<div style='width:10px;display:inline'><a  href='javascript:editDialog(" + row.Id + ")'><i class='fa fa-pencil'></i></a></div>"
+                                + "<div style='width:10px;display:inline'><a href='javascript:deleteDialog(" + row.Id + ")'><i class='fa fa-times'></i></a></div>"
+                                + "<div style='width:10px;display:inline'><a href='javascript:viewDialog(" + row.Id + ")'><i class='fa fa-info-circle'></i></a></div>";
+                        */
+                        var htmlMenu =
+                          '<div class="edit-delete-table">' +
+                              '<div class="edit-table" data-toggle="modal" data-backdrop="static"  onclick="javascript:editDialog(' + row.Id + ')">' +
+                                  '<img src="/images/icon/icon-edit.png" style=" border: none;" title="Chỉnh sửa">' +
+                              '</div>' +
+                              '<div class="delete-table" data-toggle="modal" data-backdrop="static" onclick="javascript:deleteDialog(' + row.Id + ')">' +
+                                  '<img src="/images/icon/icon-delete.png" style=" border: none;" title="Xóa">' +
+                              '</div>' +
+                              '<div class="delete-table" data-toggle="modal" data-backdrop="static" onclick="javascript:viewDialog(' + row.Id + ')">' +
+                                         '<img src="/images/icon/icon-view.png" style=" border: none;" title="Thông tin chi tiết">' +
+                           '</div>';
+                        return htmlMenu;
+                    }
+                } 
+                ]
+        });
+        $("#txtSearch").keypress(function (e) {
+            if (e.which == 13) {
+                searchGrid();
+            }
+        });
+    });        
+</script>

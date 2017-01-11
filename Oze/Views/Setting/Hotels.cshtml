@@ -1,0 +1,276 @@
+﻿@using Oze.Models;
+@using Oze.AppCode.DAL;
+@model Oze.Models.HotelListModel
+
+@{
+    ViewBag.Title = "Khách sạn";
+    List<HotelListModel> listHotel = new List<HotelListModel>();
+    listHotel = ViewData["hotelList"] as List<HotelListModel>;
+    CDatabaseNam db = new CDatabaseNam();
+}
+<div class="tab-title">
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a  aria-controls="@ViewBag.Title" role="tab" data-toggle="tab">@ViewBag.Title</a></li>
+    </ul>
+</div>
+
+<script>
+    var seft = this;
+    OzeBase.apply(this);
+    var test = '@Html.Raw(Json.Encode(ViewData["hotelList"]))';
+    var m_Title = '@ViewBag.Title';
+    var m_UrlList = {
+        UrlCreatre: '@Url.Action("CreateHotels","Setting")',
+        UrlUpdate: '@Url.Action("UpdateHotels", "Setting")',
+        UrlDelte: '@Url.Action("DeleteHotels", "Setting")'
+    }
+
+</script>
+
+<link href="~/Themes/plugins/datatables/extensions/Responsive/css/responsive.bootstrap.css" rel="stylesheet" />
+<div class="box-body">
+    <table id="tbHotels" class="table table-striped table-bordered nowrap table-hover" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Mã KS</th>
+                <th>Tên KS</th>
+                <th>Địa chỉ</th>
+                <th>Máy bàn</th>
+                <th>Di động</th>
+                <th>Email</th>
+                <th>Website</th>
+                <th>Logo</th>
+                <th>Số phòng</th>
+                <th>Mô tả</th>
+                <th>Tạo bởi</th>
+                <th>Ngày tạo</th>
+                <th>Sửa bởi</th>
+                <th>Ngày sửa</th>
+                <th>Trạng thái</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{int i = 1;}
+            @foreach (var item in listHotel)
+            {
+                string modifyDate = item.ModifyDate == null ? "" : item.ModifyDate.Value.ToString("dd/MM/yyyy HH:mm:ss");
+                <tr>
+                    <td></td>
+                    <td>@item.Code</td>
+                    <td>@item.Name</td>
+                    <td>@item.Address</td>
+                    <td>@item.Phone</td>
+                    <td>@item.Mobile</td>
+                    <td>@item.Email</td>
+                    <td>@item.Website</td>
+                    <td>@item.LogoUrl</td>
+                    <td>@item.RoomCount</td>
+                    <td>@item.Description</td>
+                    <td>@item.CreateByUser</td>
+                    <td>@item.CreateDate.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                    <td>@item.ModifyByUser</td>
+                    <td>@modifyDate</td>
+                    @foreach (var value in @EnumHelper<Status>.GetValues(Status.Close))
+                    {
+                        var name = EnumHelper<Status>.GetDisplayValue(value);
+                        if (value == item.Status)
+                        {
+                            <td value="@value">@name</td>
+                            break;
+                        }
+                        
+                    }
+                    
+                    <td>
+                        <div class="edit-delete-table">
+                            <div class="edit-table" data-toggle="modal" data-backdrop="static" data-target="#mdModify">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                            </div>
+                            <div class="delete-table"  data-toggle="modal" data-backdrop="static" data-target="#mdDelete">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                i++;
+            }
+        </tbody>
+
+    </table>
+</div>
+<!-- Modal -->
+@using (Html.BeginForm())
+{
+        <div class="modal modal-modify fade" id="mdModify" tabindex="-1" role="dialog" aria-labelledby="lblTitle">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="lblTitle"></h4>
+                    </div>
+                    <div class="modal-body  clearfix">
+                        <div class="modal-body-content">
+                            <div data-insert="hide" class="form-group hide">
+                                @Html.LabelFor(m => m.Code, new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(m => m.Code, new { @class = "form-control txt-content", @data = "Code", disabled = "disabled" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                @Html.LabelFor(m => m.Name, new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control txt-content", @data="Name" })
+                                    @Html.ValidationMessageFor(m => m.Name)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                @Html.LabelFor(m => m.Address, new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(m => m.Address, new { @class = "form-control txt-content", @data = "Address" })
+                                    @Html.ValidationMessageFor(m => m.Address)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                @Html.LabelFor(m => m.Phone, new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(m => m.Phone, new { @class = "form-control txt-content", @data = "Phone" })
+                                    @Html.ValidationMessageFor(m => m.Phone)
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                @Html.LabelFor(m => m.Mobile, new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control txt-content", @data = "Mobile" })
+                                    @Html.ValidationMessageFor(m => m.Mobile)
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                @Html.LabelFor(m => m.Email, new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control txt-content", @data = "Email" })
+                                    @Html.ValidationMessageFor(m => m.Email)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                @Html.LabelFor(m => m.Website, new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(m => m.Website, new { @class = "form-control txt-content", @data = "Website" })
+                                    @Html.ValidationMessageFor(m => m.Website)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                @Html.LabelFor(m => m.LogoUrl, new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(m => m.LogoUrl, new { @class = "form-control txt-content", @data = "LogoUrl" })
+                                    @Html.ValidationMessageFor(m => m.LogoUrl)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                @Html.LabelFor(m => m.RoomCount, new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(m => m.RoomCount, new { @class = "form-control txt-content", @data = "RoomCount" })
+                                    @Html.ValidationMessageFor(m => m.RoomCount)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                @Html.LabelFor(m => m.Description, new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(m => m.Description, new { @class = "form-control txt-content" , @data= "Description" })
+                                    @Html.ValidationMessageFor(m => m.Description)
+                                </div>
+                            </div>
+                            <div data-insert="hide" class="form-group hide">
+                                @Html.LabelFor(m => m.CreateByUser, new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(m => m.CreateByUser, new { @class = "form-control txt-content", @data = "CreateByUser", disabled = "disabled" })
+                                </div>
+                            </div>
+                            <div data-insert="hide" class="form-group hide">
+                                @Html.LabelFor(m => m.CreateDate, new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(m => m.CreateDate, new { @class = "form-control txt-content", @data = "CreateDate", disabled = "disabled" })
+                                </div>
+                            </div>
+                            <div data-insert="hide" class="form-group hide">
+                                @Html.LabelFor(m => m.ModifyByUser, new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(m => m.ModifyByUser, new { @class = "form-control txt-content", @data = "ModifyByUser", disabled = "disabled" })
+                                </div>
+                            </div>
+                            <div data-insert="hide" class="form-group hide">
+                                @Html.LabelFor(m => m.ModifyDate, new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(m => m.ModifyDate, new { @class = "form-control txt-content", @data = "ModifyDate", disabled = "disabled" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                @Html.LabelFor(m => m.Status, new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @* can goi ham build style *@
+                                    @foreach (var item in @EnumHelper<Status>.GetValues(Status.Close))
+                                    {
+                                        var name = EnumHelper<Status>.GetDisplayValue(item);
+                                        <div class="radio-group">
+                                            <label data="@item">
+                                                <input data="@item" type="radio" name="r3" class="minimal-red radio-btn" value="@name" checked>
+                                                @name
+                                            </label>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer clearfix">
+                        <button id="btnSave" type="button" class="btn btn-block btn-oze-success btn-flat btn-save">
+                            <div class="btn-border"><p>Hoàn thành</p></div>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+}
+
+<!-- Modal xóa -->
+<div class="modal modal-delete fade" id="mdDelete" tabindex="-1" role="dialog" aria-labelledby="lblTitle">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="lblTitle">Xóa khách sạn</h4>
+            </div>
+            <div class="modal-body clearfix">
+                <div class="modal-body-content">
+                    <p></p>
+                </div>
+            </div>
+            <div class="modal-footer clearfix">
+                <button id="btnDelete" type="button" class="btn btn-block btn-oze-delete btn-flat">
+                    <div class="btn-border"><p>Xóa</p></div>
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<!--/ Modal xóa -->
+<!-- / Modal -->
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+}
+<script src="~/Scripts/oze/oze.hotels.js"></script>
+
+

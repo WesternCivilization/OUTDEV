@@ -1,0 +1,562 @@
+﻿@model oze.data.Entity.Vw_RoomPriceLevel
+<div class="col-md-12">
+
+    <div class="box-body">
+        <form id="formDetail_f1" name="formDetail_f1" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8" tion="javascript:void();">
+            <input id="Id" value="@Model.id" name="Id" type="hidden" />
+            <div class="row">
+
+                <div class="col-md-4">
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-sm-5" id="">
+                                <p id="" class="control-label">Từ ngày</p>
+                            </div>
+                            <div class="col-sm-7">
+
+                                <div class="input-group input-group-sm date-add-picker_fdate_full" id="">
+                                    <input disabled type="text" placeholder="Từ ngày" class="form-control date-picker" value="@Model.dateFrom.GetValueOrDefault().ToString("dd/MM/yyyy hh:mm tt")" name="Formdate" id="Formdate">
+                                    <span class="input-group-addon input-group-addon-custom">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-sm-5" id="">
+                                <p id="" class="control-label">Tiêu đề</p>
+                            </div>
+                            <div class="col-sm-7">
+                                <input type="text" disabled required name="txtTitle" class="form-control" id="txtTitle" value="@Model.title" />
+
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-sm-5" id="divlblName">
+                                <p id="lblName" class="control-label">Khách sạn</p>
+                            </div>
+                            <div class="col-sm-7">
+                                <select name="ListHotel" disabled id="ListHotel" required class="form-control">
+                                    <option value="@Model.SysHotelID">@Model.HotelName</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-5" id="divlblName">
+                                <p id="lblName" class="control-label">Hạng phòng</p>
+                            </div>
+                            <div class="col-sm-7">
+
+                                @*<select disabled name="ListRoomType"  id="ListRoomType" required="1" class="form-control">
+                                        <option value="">--Chọn hạng phòng--</option>
+                                        @for (var i = 0; i < @Model.ListRoomType.Count; i++)
+                                        {
+                                            <option @(Model.RoomTypeID == Model.ListRoomType[i].Id ? "selected" : "") value="@Model.ListRoomType[i].Id">@Model.ListRoomType[i].Name</option>
+                                        }
+
+                                    </select>*@
+                                <input type="hidden" id="" value="@Model.RoomTypeID" name="hiddenRoomTypeID" />
+                                <input class="form-control" required="1" value="@Model.Room_TypeName" disabled id="txtRoomType" name="txtRoomType" placeholder="" min="">
+                            </div>
+                        </div>
+                        @*<div class="form-group">
+                            <div class="col-sm-5" id="divlblName">
+                            <p id="lblName" class="control-label">Hạng phòng</p>
+                            </div>
+                            <div class="col-sm-7">
+
+                            <input type="text" class="form-control" id="txtHangRoom" name="txtHangRoom" placeholder="">
+                            </div>
+                            </div>*@
+                        @*<div class="form-group">
+                            <div class="col-sm-5" id="divlblName">
+                            <p id="lblName">Loại giường:</p>
+                            </div>
+                            <div class="col-sm-4" style="padding-left:15px;">
+                            <input type="checkbox" id="cbodon" />
+                            <label for="cbodon">Đơn</label>
+                            </div>
+                            <div class="col-sm-3">
+                            <input type="checkbox" id="cbodoi" />
+                            <label for="cbodoi">Đôi</label>
+                            </div>
+                            </div>*@
+                        <div class="form-group" style="display:none">
+                            <div class="col-sm-5" id="divlblName">
+                                <p id="lblName" class="control-label">Loại giường:</p>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="col-sm-1">
+                                    <p class="control-label">Đơn</p>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input class="form-control amount-double-mask" value="@Model.Twin" name="twin"  id="numberdon" min="0" />
+                                </div>
+                                <div class="col-sm-1">
+                                    <p class="control-label">Đôi</p>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input class="form-control amount-double-mask" value="@Model._Single" name="single"  id="numberdoi" min="0" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-5" id="divlblName">
+                                <p class="control-label">Số người lớn tiêu chuẩn:</p>
+                            </div>
+                            <div class="col-sm-7">
+                                <input class="form-control amount-number-mask" value="@Model.Number_Adult" required="1" id="txtNumber_Adult" name="txtNumber_Adult" placeholder="0" min="0">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-5">
+                                <p class="control-label">Giá theo ngày:</p>
+                            </div>
+                            <div class="input-group col-sm-7">
+                                <input class="form-control amount-double-mask" value="@Model.PriceDay" required="1" id="txtGiatheongay" name="txtGiatheongay" placeholder="0" min="0">
+                                <span class="input-group-addon">VNĐ</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-5">
+                                <p class="control-label">Giá qua đêm:</p>
+                            </div>
+                            <div class="input-group col-sm-7">
+                                <input class="form-control amount-double-mask" value="@Model.PriceNight" required="1" id="txtGiaquadem" name="txtGiaquadem" placeholder="0" min="0">
+                                <span class="input-group-addon">VNĐ</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-5">
+                                <p class="control-label">Giá theo tháng:</p>
+                            </div>
+                            <div class="input-group col-sm-7">
+                                <input class="form-control amount-double-mask" value="@Model.PriceMonth" required="1" id="txtGiatheothang" name="txtGiatheothang" placeholder="0" min="0">
+                                <span class="input-group-addon">VNĐ</span>
+                            </div>
+                        </div>
+
+                        <div class="pricebytime">
+                            @for (int i = 0; i < Model.listHour.Count; i++)
+                            {
+                                var itemptgtnpricebytime = "itemptgtnpricebytime" + Model.listHour[i].Id;
+                                <div class="@itemptgtnpricebytime">
+                                    <div class="form-group">
+                                        <div class="giatheogio col-sm-5" style="display: flex;">
+                                            <div class='col-sm-12 mp'>
+                                                <p class="control-label col-sm-4 mp">Giá:</p>
+                                                <div class="input-group col-sm-8 mp">
+                                                    <input class="form-control amount-number-mask" accept="@Model.listHour[i].Id" value="@Model.listHour[i].numberHours" required="1" id="txtGio_@i" name="txtGio_@i" placeholder="0" min="0">
+                                                    <span class="input-group-addon">H</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-7">
+                                            <div class='col-sm-12 mp'>
+                                                <div class="col-sm-10 mp">
+                                                    <div class="input-group">
+                                                        <input class="form-control amount-double-mask" accept="@Model.listHour[i].Id" required="1" value="@Model.listHour[i].price" id="txtGiatheogio_@i" name="txtGiatheogio_@i" placeholder="0" min="0">
+                                                        <span class="input-group-addon">VNĐ</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2 mp">
+                                                    @if (i == 0)
+                                                    {
+                                                        <i class="fa fa-plus-square" id="addpricemain"></i>
+                                                    }
+                                                    else
+                                                    {
+                                                        <i class="fa fa-remove" onclick="removeMainPrice(@Model.listHour[i].Id)"></i>
+                                                    }
+
+
+                                                    @*<i class="fa fa-remove"></i>*@
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="form-group">
+                            <p class="text-red">Lưu ý *</p>
+                            <textarea class="form-control" rows="2" id="txtLuuy" required="1" name="txtLuuy">@Model.Note</textarea>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.col -->
+                <div class="col-md-4">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-sm-5" id="">
+                                <p id="" class="control-label">Tới ngày</p>
+                            </div>
+                            <div class="col-sm-7">
+
+                                <div class="input-group input-group-sm date-add-picker_tdate_full" id="">
+                                    <input type="text" disabled placeholder="Từ ngày" class="form-control date-picker" value="@Model.dateTo.GetValueOrDefault().ToString("dd/MM/yyyy hh:mm tt")" name="Formdate" id="Formdate">
+                                    <span class="input-group-addon input-group-addon-custom">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        @*Phụ trợ quá theo ngày*@
+                        <div class="form-group">
+                            <div class="col-sm-6 divmaughi">
+                                <p class="control-label">
+                                    <label id="Phutroiquagiotheongay">Phụ trội quá giờ trả theo ngày</label>
+                                </p>
+                            </div>
+                            <div class="col-sm-2">
+                                <i class="fa fa-plus-square" id="addptqgtn"></i>
+                            </div>
+                        </div>
+                        <div class="phutroigiotheongay">
+                            @for (int i = 0; i < @Model.Listxtraday.Count; i++)
+                            {
+                                var itemptgtn = "itemptgtn" + Model.Listxtraday[i].Id;
+                            <div class="@itemptgtn">
+                                <div class="form-group ">
+                                    <div class="giatheogio col-sm-5" style="display: flex;">
+                                        <div class='col-sm-12 mp'>
+                                            <p class="control-label col-sm-4 mp">Quá:</p>
+                                            <div class="input-group col-sm-8 mp">
+                                                <input class="form-control amount-number-mask" value="@Model.Listxtraday[i].numberExtra" required="1" name="txtGioquatheongay_@i" id="@Model.Listxtraday[i].Id" placeholder="0" min="0">
+                                                <span class="input-group-addon">H</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-7" style="display: flex; padding-left: 0px; padding-right: 0px;">
+                                        <div class='col-sm-12 mp'>
+                                            <div class="col-sm-10 mp">
+                                                <div class="input-group">
+                                                    <input class="form-control amount-double-mask" required="1" value="@Model.Listxtraday[i].priceExtra" name="txtGiaquatheongay_@i" id="@Model.Listxtraday[i].Id" placeholder="0" min="0">
+                                                    <span class="input-group-addon">VNĐ</span>
+                                                </div>
+                                            </div>
+                                            <div class="input-group col-sm-2">
+                                                <i class="fa fa-remove" onclick="removeptqgtn(@Model.Listxtraday[i].Id)"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                        <div class="form-group">
+                            <p class="text-red control-label">Quá quy định trên sẽ tính thành 1 ngày</p>
+                        </div>
+
+                        @*Phụ trợ quá theo đêm*@
+                        <div class="form-group">
+                            <div class="col-sm-6 divmaughi" id="Phutroiquagiatheodem">
+                                <p class="control-label">Phụ trội quá giờ trả theo đêm</p>
+                            </div>
+                            <div class="col-sm-2">
+                                <i class="fa fa-plus-square" id="addlatenight"></i>
+                            </div>
+                        </div>
+                        <div class="phutroigiotheodem">
+                            @for (int i = 0; i < Model.Listxtranight.Count; i++)
+                            {
+                                var itemptgtnnight = "itemptgtnnight" + Model.Listxtranight[i].Id;
+                                <div class="@itemptgtnnight">
+                                    <div class="form-group">
+                                        <div class="giatheogio col-sm-5" style="display: flex;">
+                                            <div class='col-sm-12 mp'>
+                                                <p class="control-label col-sm-4 mp">Quá:</p>
+                                                <div class="input-group col-sm-8 mp">
+                                                    <input class="form-control amount-number-mask" value="@Model.Listxtranight[i].numberExtra" required="1" id="@Model.Listxtranight[i].Id" name="txtGioquatheodem_@i" placeholder="0" min="0">
+                                                    <span class="input-group-addon">H</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-7" style="display: flex; padding-left: 0px; padding-right: 0px;">
+                                            <div class='col-sm-12 mp'>
+                                                <div class="col-sm-10 mp">
+                                                    <div class="input-group">
+                                                        <input class="form-control amount-double-mask" value="@Model.Listxtranight[i].priceExtra" required="1" id="@Model.Listxtranight[i].Id" name="txtGiaquatheodem_@i" placeholder="0" min="0">
+                                                        <span class="input-group-addon">VNĐ</span>
+                                                    </div>
+                                                </div>
+                                                <div class="input-group col-sm-2">
+                                                    @*<i class="fa fa-plus-square"></i>
+                                                        <i class="fa fa-remove"></i>*@
+                                                    <i class="fa fa-remove" onclick="removeearly_night(@Model.Listxtranight[i].Id)"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="form-group">
+                            <p class="text-red control-label">Quá quy định trên sẽ tính thành 1 ngày</p>
+                        </div>
+                    </div>
+
+                    <!-- /.form-group -->
+                </div>
+                <!-- /.col -->
+                <div class="col-md-4">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-sm-5" id="">
+                                <p id="" class="control-label">Ngày áp dụng</p>
+                            </div>
+                            <div class="col-sm-7">
+                                <input type="checkbox" @(Model.dayOfWeeks.Contains("2") ? "checked" : "") name="T2" />T2
+                                <input type="checkbox" @(Model.dayOfWeeks.Contains("3") ? "checked" : "") name="T3" />T3
+                                <input type="checkbox" @(Model.dayOfWeeks.Contains("4") ? "checked" : "") name="T4" />T4
+                                <input type="checkbox" @(Model.dayOfWeeks.Contains("5") ? "checked" : "") name="T5" />T5
+                                <input type="checkbox" @(Model.dayOfWeeks.Contains("6") ? "checked" : "") name="T6" />T6
+                                <input type="checkbox" @(Model.dayOfWeeks.Contains("7") ? "checked" : "") name="T7" />T7
+                                <input type="checkbox" @(Model.dayOfWeeks.Contains("8") ? "checked" : "") name="CN" />CN
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        @*Phụ trợ nhận phòng sơm theo ngày*@
+                        <div class="form-group">
+                            <div class="col-sm-6 divmaughi" id="Phutroiquagiatheongay">
+                                <p class="control-label">Phụ trội nhận phòng sớm theo ngày</p>
+                            </div>
+                            <div class="col-sm-2">
+                                <i class="fa fa-plus-square" id="addEarlyDay"></i>
+                            </div>
+                        </div>
+                        <div class="EarlyDay">
+                            @for (int i = 0; i < Model.xEarlyDay.Count; i++)
+                            {
+                                var EarlyDayItem = "EarlyDayItem" + Model.xEarlyDay[i].Id;
+                                <div class="@EarlyDayItem">
+                                    <div class="form-group">
+
+                                        <div class="giatheogio col-sm-5" style="display: flex;">
+                                            <div class='col-sm-12 mp'>
+                                                <p class="control-label col-sm-4 mp">Sớm:</p>
+                                                <div class="input-group col-sm-8 mp">
+                                                    <input class="form-control amount-number-mask" value="@Model.xEarlyDay[i].numberExtra" required="1" id="@Model.xEarlyDay[i].Id" name="txtGiosomtheongay_@i" placeholder="0" min="0">
+                                                    <span class="input-group-addon">H</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-7" style="display: flex; padding-left: 0px; padding-right: 0px;">
+                                            <div class='col-sm-12 mp'>
+                                                <div class="col-sm-10 mp">
+                                                    <div class="input-group">
+                                                        <input class="form-control amount-double-mask" value="@Model.xEarlyDay[i].priceExtra" required="1" id="@Model.xEarlyDay[i].Id" name="txtGiasomtheongay_@i" placeholder="0" min="0">
+                                                        <span class="input-group-addon">VNĐ</span>
+                                                    </div>
+                                                </div>
+                                                <div class="input-group col-sm-2">
+                                                    <i class="fa fa-remove" onclick="removeearly_day(@Model.xEarlyDay[i].Id)"></i>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="form-group">
+                            <p class="text-red control-label">Quá quy định trên sẽ tính thành 1 ngày</p>
+                        </div>
+
+                        @*Phụ trợ nhận phòng sớm theo đêm*@
+                        <div class="form-group">
+                            <div class="col-sm-6 divmaughi" id="Phutroiquagiatheodem">
+                                <p class="control-label">Phụ trội nhận phòng sớm theo đêm</p>
+                            </div>
+                            <div class="col-sm-2">
+                                <i class="fa fa-plus-square" id="addEarlyNight"></i>
+                            </div>
+                        </div>
+                        <div class="EarlyNight">
+                            @for (int i = 0; i < Model.xEarlyNight.Count; i++)
+                            {
+                                var EarlyNightItem = "EarlyNightItem" + Model.xEarlyNight[i].Id;
+                            <div class="@EarlyNightItem">
+                                <div class="form-group">
+                                    <div class="giatheogio col-sm-5" style="display: flex;">
+                                        <div class='col-sm-12 mp'>
+                                            <p class="control-label col-sm-4 mp">Sớm:</p>
+                                            <div class="input-group col-sm-8 mp">
+                                                <input class="form-control amount-number-mask" value="@Model.xEarlyNight[i].numberExtra" required="1" id="@Model.xEarlyNight[i].Id" name="txtGiosomquadem_@i" placeholder="0" min="0">
+                                                <span class="input-group-addon">H</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-7" style="display: flex; padding-left: 0px; padding-right: 0px;">
+                                        <div class='col-sm-12 mp'>
+                                            <div class="col-sm-10 mp">
+                                                <div class="input-group">
+                                                    <input class="form-control amount-double-mask" value="@Model.xEarlyNight[i].priceExtra" required="1" id="@Model.xEarlyNight[i].Id" name="txtGiasomquadem_@i" placeholder="0" min="0">
+                                                    <span class="input-group-addon">VNĐ</span>
+                                                </div>
+                                            </div>
+                                            <div class="input-group col-sm-2">
+                                                <i class="fa fa-remove" onclick="removeearly_nihgt(@Model.xEarlyNight[i].Id)"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                        <div class="form-group">
+                            <p class="text-red control-label">Quá quy định trên sẽ tính thành 1 ngày</p>
+
+                        </div>
+
+                        @*Phụ trợ quá số lượng người lớn*@
+                        <div class="form-group">
+                            <div class="col-sm-6 divmaughi" id="Phutroiquagiatheodem">
+                                <p class="control-label">Phụ trội quá số lượng người lớn</p>
+                            </div>
+                            <div class="col-sm-2">
+                                <i class="fa fa-plus-square" id="AddLimitPerson"></i>
+                            </div>
+                        </div>
+                        <div class="LimitPerson">
+                            @for (int i = 0; i < Model.limitPerson.Count; i++)
+                            {
+                                var LimitPersonItem = "LimitPersonItem" + Model.limitPerson[i].Id;
+                                <div class="@LimitPersonItem">
+                                    <div class="form-group">
+                                        <div class=" col-sm-5" style="display: flex;">
+                                            <div class='col-sm-12 mp'>
+                                                <p class="control-label col-sm-4 mp">Sớm:</p>
+                                                <div class="input-group col-sm-8 mp">
+                                                    <input class="form-control amount-number-mask" value="@Model.limitPerson[i].numberExtra" required="1" id="@Model.limitPerson[i].Id" name="txtsonguoi_@i" placeholder="0" min="0">
+                                                    <span class="input-group-addon">N</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-7" style="display: flex; padding-left: 0px; padding-right: 0px;">
+                                            <div class='col-sm-12 mp'>
+                                                <div class="col-sm-10 mp">
+                                                    <div class="input-group">
+                                                        <input class="form-control amount-double-mask" value="@Model.limitPerson[i].priceExtra" required="1" id="@Model.limitPerson[i].Id" name="txtGiasonguoi_@i" placeholder="0" min="0">
+                                                        <span class="input-group-addon">VNĐ</span>
+                                                    </div>
+                                                </div>
+                                                <div class="input-group col-sm-2">
+                                                    <i class="fa fa-remove" onclick="removeLimitPerson(@Model.limitPerson[i].Id)"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="form-group">
+                            @*<p class="text-red control-label">Quá quy định trên sẽ tính thành 1 ngày</p>*@
+                        </div>
+                        <!-- /.form-group -->
+                        @*Phụ trội trẻ em*@
+                        <div class="form-group">
+                            <div class="col-sm-6 divmaughi" id="">
+                                <p class="control-label">Phụ trội trẻ em</p>
+                            </div>
+                            <div class="col-sm-2">
+                                <i class="fa fa-plus-square" id="AddLimitPerson_Child"></i>
+                            </div>
+                        </div>
+                        <div class="LimitPerson_Child">
+                            @for (int i = 0; i < Model.limitPerson_child.Count; i++)
+                            {
+                                var LimitPersonItem_Child = "LimitPersonItem_Child" + Model.limitPerson_child[i].Id;
+                            <div class="@LimitPersonItem_Child">
+                                <div class="form-group">
+                                    <div class=" col-sm-5" style="display: flex;">
+                                        <div class='col-sm-12 mp'>
+                                            <p class="control-label col-sm-4 mp">Sớm:</p>
+                                            <div class="input-group col-sm-8 mp">
+                                                <input class="form-control amount-number-mask" value="@Model.limitPerson_child[i].numberExtra" required="1" id="@Model.limitPerson_child[i].Id" name="txt_NumberChild_@i" placeholder="0" min="0">
+                                                <span class="input-group-addon">N</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-7" style="display: flex; padding-left: 0px; padding-right: 0px;">
+                                        <div class='col-sm-12 mp'>
+                                            <div class="col-sm-10 mp">
+                                                <div class="input-group">
+                                                    <input class="form-control amount-double-mask" value="@Model.limitPerson_child[i].priceExtra" required="1" id="@Model.limitPerson_child[i].Id" name="txt_Child_@i" placeholder="0" min="0">
+                                                    <span class="input-group-addon">VNĐ</span>
+                                                </div>
+                                            </div>
+                                            <div class="input-group col-sm-2">
+                                                <i class="fa fa-remove" onclick="removeLimitPerson_Child(@Model.limitPerson_child[i].Id)"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                        <div class="form-group">
+                            @*<p class="text-red control-label">Quá quy định trên sẽ tính thành 1 ngày</p>*@
+                        </div>
+                        <!-- /.form-group -->
+                    </div>
+
+
+                </div>
+                <!-- /.row -->
+
+            </div>
+            <div class="form-group">
+                @*<div class="col-sm-4">
+                        <div class=" col-sm-10 divmauxanh" id="dsphongcunghang">
+                            <p class="control-label">Danh sách phòng cùng hạng</p>
+                        </div>
+                        <div class="col-sm-2">
+                            <i id="btnShowDSPhong" class="fa fa-plus-square"></i>
+                        </div>
+                    </div>*@
+                <div class="col-sm-12">
+                    <div>
+                        <!-- Small boxes (Stat box) -->
+
+                        <div class="row">
+                            <div class="RowEndSelect">
+                                @for (int i = 0; i < @Model.ListConfig.Count; i++)
+                                {
+                                <div class="col-lg-1 col-xs-1">
+
+                                    <div class="small-box bg-gray">
+                                        <div class="inner" style="text-align: center;">
+                                            <h5> @Model.ListConfig[i].Name </h5>
+                                            <input type="hidden" id="@Model.ListConfig[i].ID" name="@Model.ListConfig[i].Name" />
+                                        </div>
+                                    </div>
+                                </div>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+<script>
+    countitemptgtn = 0;
+
+</script>

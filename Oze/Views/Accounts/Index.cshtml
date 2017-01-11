@@ -1,0 +1,56 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AccountRoot.cshtml";
+}
+
+@using (Html.BeginForm("Index", "Accounts"))
+{
+    <div class="login-box-width">
+        @*<div class="login-logo">
+              <a href="../../index2.html"><b>Admin</b>LTE</a>
+            </div>*@
+        <!-- /.login-logo -->
+        <div class="login-box-body">
+            @*<p class="login-box-msg">Sign in to start your session</p>*@
+            <div class="login-logo">
+                @*<a href="/Accounts/Login" style=" text-align: center;"><b style="color: #ff5e00; font-size: 50px;font-family:Jokerman">OZE</b><span style="color: #ff5e00; font-size: 35px; font-family: 'Arial Unicode MS'; ">.com.vn</span></a>*@
+                <i class="logo-icon"></i>
+            </div>
+            <form action="../../index2.html" method="post">
+                @*<p class="login-box-msg">Mật khẩu mới sẽ được hệ thống gửi theo email bên dưới!</p>*@
+                <div class="callout callout-info">
+                    <p>@ViewBag.MesgEmail</p>
+                </div>
+                <div class="input-group col-xs-12">
+                    <span class="glyphicon glyphicon-user form-control-feedbacks"></span>
+                    <input type="text" name="username" id="username" class="form-control input-uppercase" placeholder="Tài khoản đăng nhập" autocomplete="off" required>
+                </div> 
+                <div class="row">
+                    <div class="col-xs-7">
+                        <div class="checkbox icheck">
+                            @Html.ActionLink("Đăng nhập", "Login", "Accounts", new { type = "fgpw" }, null)
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-xs-5 text-right">
+                        <div class="checkbox icheck">
+                            @*@Html.ActionLink("Tiếp theo", "ForgotPassword", "Accounts", new { id = "send" })*@
+                            @*<a href="@Url.Action("ForgotPassword", "Accounts", new {firstname="xxxx"})" id="lnk">Search</a>*@
+                            <a href="#" onclick="fn_continue()">Tiếp theo</a>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+        </div>
+        <!-- /.login-box-body -->
+    </div>
+    <!-- /.login-box -->
+    <script>
+        function fn_continue() {
+            var fakedUri = "/Accounts/ForgotPassword?user=xxxx";
+            var uri = fakedUri.replace("xxxx", $("#username").val());
+            window.location.href = uri;
+        }
+    </script>
+}

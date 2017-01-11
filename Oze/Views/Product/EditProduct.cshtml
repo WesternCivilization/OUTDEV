@@ -1,0 +1,80 @@
+﻿@*model oze.data.view_DetailProduct*@
+
+   
+    <div>
+        <form id="dummyProduct" action="javascript:void();">
+            @Html.AntiForgeryToken()
+            <div class="form-group row">
+                <label for="lblnameks" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="lblnameks" class="col-sm-3 control-label">Mã</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" required="1"  maxlength="20" id="Code" name="Code" value="@Model.Code" >
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="lblnameks" class="col-sm-3 control-label">Tên</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="Name" required="1" maxlength="50" name="Name" value="@Model.Name">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="lblnameks" class="col-sm-3 control-label">Đơn vị</label>
+                <div class="col-sm-9">
+                    <select class="form-control" id="UnitID" name="UnitID">
+                        @foreach (var unit in (new Oze.Services.UnitService()).getAll(null))
+                        {
+                            <option value="@unit.Id" @(Model.UnitID == unit.Id ? "selected" : "")>@unit.Name1</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="lblnameks" class="col-sm-3 control-label">Nhà cung cấp</label>
+                <div class="col-sm-9">
+                    <select class="form-control" id="SupplierID" name="SupplierID">
+                        @foreach (var supplier in (new Oze.Services.SupplierService()).getAll(null))
+                        {
+                            <option value="@supplier.Id" @(Model.SupplierID == supplier.Id ? "selected" : "")>@supplier.Name</option>
+                        }
+                    </select>
+                 </div>
+            </div>
+            <div class="form-group row">
+                <label for="lblnameks" class="col-sm-3 control-label">Nhóm dịch vụ</label>
+                <div class="col-sm-9">
+                    <select class="form-control" id="ProductGroupID" name="ProductGroupID">
+                        @foreach (var productGroup in (new Oze.Services.ProductGroupService()).getAll(null))
+                        {
+                            <option value="@productGroup.Id" @(Model.ProductGroupID == productGroup.Id ? "selected" : "")>@productGroup.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+           
+            <div class="form-group row">
+                <label for="lblnameks" class="col-sm-3 control-label">Định mức tối thiểu</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="QuotaMinimize" name="QuotaMinimize" value="@Model.QuotaMinimize" required="1">
+                </div>
+            </div>
+           
+            <div class="form-group row">
+                <label for="lblnameks" class="col-sm-3 control-label">Giá bán</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="SalePrice" name="SalePrice" value="@Model.SalePrice" required="1" number="1">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="lblnameks" class="col-sm-3 control-label">Giá nhập</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="PriceOrder" name="PriceOrder" value="@Model.PriceOrder" required="1" number="1">
+                </div>
+            </div>
+        </form>
+    </div>
+<!--<script src="~/Scripts/oze/SysUser/oze_Supplier.js"></script>-->

@@ -1,0 +1,664 @@
+﻿@{
+    ViewBag.Title = "Giatheophong";
+    Layout = "~/Views/Shared/_Root.cshtml";
+}
+<style>
+    .nav-tabs .active {
+        background-color: #d2d6de !important;
+        border-bottom: 1px solid #f27c2e !important;
+    }
+    .dvtientheongay{
+        display: flex;padding-left:0px;padding-right:0px;}
+     .divmaughi {
+        background-color: #ddd;
+        padding-left: 5px;
+        height: 36px;
+        padding-top: 7px;
+        /*font-size: 15px;*/
+        width: 83%;
+    }
+    .pr10 {
+        padding-right: 10px !important;
+    }
+    .divmauxanh {
+        background-color: #0e4458;
+        padding-left: 5px;
+        height: 36px;
+        padding-top: 7px;
+        color: white;
+        /* font-size: 15px; */
+        width: 32%;
+    }
+    .dvgiatheogio {
+        width: 70%;
+        margin-left: 14px;
+    }
+    .nav-tabs a {
+        font-size: 15px;
+        font-family: Arial;
+        font-weight: bold;
+        text-align: center;
+    }
+        .active a {
+        background-color: #d2d6de !important;
+        font-size: 15px;
+        font-family: Arial;
+        font-weight: bold;
+        text-align:center;
+    }
+    .nav-tabs li a{
+        background-color: transparent;
+    }
+        .nav-tabs li a:hover {
+            background-color: transparent;
+            font-size: 16px;
+            font-family: Arial;
+            font-weight: bold;
+            color: #3c8dbc;
+            border: none;
+        }
+    .nav-tabs .active a:hover {
+        font-size: 15px;
+    }
+    .content{
+        padding-left:5px;
+    }
+
+    .giatheogio {
+        display: flex;
+    }
+    /* Base for label styling */
+    [type="checkbox"]:not(:checked),
+    [type="checkbox"]:checked {
+        position: absolute;
+        left: -9999px;
+    }
+
+        [type="checkbox"]:not(:checked) + label,
+        [type="checkbox"]:checked + label {
+            position: relative;
+            padding-left: 25px;
+            cursor: pointer;
+        }
+
+            /* checkbox aspect */
+            [type="checkbox"]:not(:checked) + label:before,
+            [type="checkbox"]:checked + label:before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 2px;
+                width: 17px;
+                height: 17px;
+                border: 1px solid #aaa;
+                background: #f8f8f8;
+                border-radius: 3px;
+                box-shadow: inset 0 1px 3px rgba(0,0,0,.3);
+            }
+            /* checked mark aspect */
+            [type="checkbox"]:not(:checked) + label:after,
+            [type="checkbox"]:checked + label:after {
+                content: '✔';
+                position: absolute;
+                top: 3px;
+                left: 2px;
+                font-size: 18px;
+                line-height: 0.8;
+                color: #09ad7e;
+                transition: all .2s;
+            }
+            /* checked mark aspect changes */
+            [type="checkbox"]:not(:checked) + label:after {
+                opacity: 0;
+                transform: scale(0);
+            }
+
+            [type="checkbox"]:checked + label:after {
+                opacity: 1;
+                transform: scale(1);
+            }
+    /* disabled checkbox */
+    [type="checkbox"]:disabled:not(:checked) + label:before,
+    [type="checkbox"]:disabled:checked + label:before {
+        box-shadow: none;
+        border-color: #bbb;
+        background-color: #ddd;
+    }
+
+    [type="checkbox"]:disabled:checked + label:before {
+        color: #999;
+    }
+
+    [type="checkbox"]:disabled + label {
+        color: #aaa;
+    }
+    /* accessibility */
+    [type="checkbox"]:checked:focus + label:before,
+    [type="checkbox"]:not(:checked):focus + label:before {
+        border: 1px dotted blue;
+    }
+
+    /* hover style just for information */
+    label:hover:before {
+        border: 1px solid #4778d9 !important;
+    }
+
+    .col-sm-5 {
+        padding-left: 0px;
+        padding-right: 0px !important;
+    }
+
+    .col-sm-7 {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    .form-group {
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    .col-sm-5 p {
+        vertical-align: middle;
+        line-height: normal;
+        padding-top: 3px;
+        margin: 0 0 0px;
+    }
+    .col-sm-2 .fa {
+        padding: 10px 5px 5px 0px;
+        cursor:pointer;
+    }
+    #boottom-div{
+        padding-bottom:15px;
+        margin-right:20px;
+    }
+</style>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "frmRoomtheogia", @name = "frmRoomtheogia" }))
+{
+    
+    
+    <div class="form-horizontal">
+
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="/Room/Giatheophong">Giá theo phòng</a>
+            </li>
+            <li>
+                <a href="/Room/Giatheonguoi">Giá theo người</a>
+            </li>
+        </ul>
+
+        <div class="modal" id="mdModify" tabindex="-1" role="dialog" aria-labelledby="lblTitle">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="lblTitle"></h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="modal-body-content">
+                            <div class="form-group">
+                                <div class="col-sm-4" id="divlblName">
+                                    <b id="lblName">Tên phòng</b>
+                                </div>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtRoomName" name="txtRoomName" placeholder="">
+                                </div>
+                                <div class="col-sm-12">
+                                    <p id="alertDelRoom">Bạn có chắc muốn xóa phòng <label id="lblRoomNameDelete"></label> không ?</p>
+                                    <p id="kq">Thêm mới thành công</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+<!-- Main content -->
+<section class="content">
+    <!-- SELECT2 EXAMPLE -->
+    <div class="box box-default">
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="col-sm-5" id="divlblName">
+                            <p id="lblName">Hạng phòng</p>
+                        </div>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="txtHangRoom" name="txtHangRoom" placeholder="">
+                        </div>
+                     </div>
+                    @*<div class="form-group">
+                        <div class="col-sm-5" id="divlblName">
+                            <p id="lblName">Loại giường:</p>
+                        </div>
+                        <div class="col-sm-4" style="padding-left:15px;">
+                            <input type="checkbox" id="cbodon" />
+                            <label for="cbodon">Đơn</label>
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="checkbox" id="cbodoi" />
+                            <label for="cbodoi">Đôi</label>
+                        </div>
+                    </div>*@
+                    <div class="form-group">
+                        <div class="col-sm-5" id="divlblName">
+                            <p id="lblName">Loại giường:</p>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="col-sm-1">
+                                <p>Đơn</p>
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="number" class="form-control" id="numberdon" min="0" />
+                            </div>
+                            <div class="col-sm-1">
+                                <p>Đôi</p>
+                            </div>
+                            <div class="col-sm-2">
+                                <input class="form-control" type="number" id="numberdoi" min="0" />
+                            </div>
+                        </div>
+                        </div>
+                    <div class="form-group">
+                        <div class="col-sm-5" id="divlblName">
+                            <p>Số người lớn tiêu chuẩn:</p>
+                        </div>
+                        <div class="col-sm-7">
+                            <input type="number" class="form-control" id="txtSonguoilon" name="txtSonguoilon" placeholder="0" min="0">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-5">
+                            <p>Giá theo ngày:</p>
+                        </div>
+                        <div class="input-group col-sm-7">
+                            <input type="number" class="form-control" id="txtGiatheongay" name="txtGiatheongay" placeholder="0" min="0">
+                            <span class="input-group-addon">VNĐ</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-5">
+                            <p>Giá qua đêm:</p>
+                        </div>
+                        <div class="input-group col-sm-7">
+                            <input type="number" class="form-control" id="txtGiaquadem" name="txtGiaquadem" placeholder="0" min="0">
+                            <span class="input-group-addon">VNĐ</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-5">
+                            <p>Giá theo tháng:</p>
+                        </div>
+                        <div class="input-group col-sm-7">
+                            <input type="number" class="form-control" id="txtGiatheothang" name="txtGiatheothang" placeholder="0" min="0">
+                            <span class="input-group-addon">VNĐ</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="giatheogio col-sm-5">
+                            <p>Giá:</p>
+                            <div class="input-group col-sm-3" style=" width: 70%; margin-left: 14px;">
+                                <input type="number" class="form-control" id="txtGio" name="txtGio" placeholder="0" min="0">
+                                <span class="input-group-addon">H</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-7" style="display: flex;padding-left:0px;padding-right:0px;">
+
+                            <div class="input-group col-sm-10" style="padding-right:10px;">
+                                <input type="number" class="form-control" id="txtGiatheogio" name="txtGiatheogio" placeholder="0" min="0">
+                                <span class="input-group-addon">VNĐ</span>
+                            </div>
+                            <div class="input-group col-sm-2">
+                                <i class="fa fa-plus-square"></i>
+                                <i class="fa fa-remove"></i>
+                            </div>
+                        </div>
+                   </div>
+                    <div class="form-group">
+                        <p class="text-red">Lưu ý *</p>
+                        <textarea class="form-control" rows="2" id="txtLuuy" name="txtLuuy"></textarea>
+                    </div>
+
+                    </div>
+                <!-- /.col -->
+                <div class="col-md-4">
+                    @*Phụ trợ quá theo ngày*@
+                    <div class="form-group">
+                        <div class="col-sm-6 divmaughi" >
+                            <p id="Phutroiquagiotheongay">1Phụ trội quá giờ trả theo ngày </p>
+                        </div>
+                        <div class="col-sm-2">
+                            <i class="fa fa-plus-square" id="addptqgtn"></i>
+                        </div>
+                    </div>
+                    <div class="phutroigiotheongay">
+                        <div class="itemptgtn">
+                            <div class="form-group objptgtn">
+                                <div class="giatheogio col-sm-5">
+                                    <p>Quá:</p>
+                                    <div class="input-group col-sm-3 dvgiatheogio">
+                                        <input type="number" class="form-control inputgiotn" name="txtGioquatheongay" placeholder="0" min="0">
+                                        @*<span class="input-group-addon">H</span>*@
+                                    </div>
+                                </div>
+                                <div class="col-sm-7 dvtientheongay">
+                                    <div class="input-group col-sm-10 pr10">
+                                        <input type="number" class="form-control inputgiatn" name="txtGiaquatheongay" placeholder="0" min="0">
+                                        <span class="input-group-addon">VNĐ</span>
+                                    </div>
+                                    <div class="input-group col-sm-2">
+                                        <i class="fa fa-remove" id="removeptqgtn"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <p class="text-red">Quá quy định trên sẽ tính thành 1 ngày</p>
+                    </div>
+                    
+                    @*Phụ trợ quá theo đêm*@
+                    <div class="form-group">
+                        <div class="col-sm-6 divmaughi" id="Phutroiquagiatheodem">
+                            <p>Phụ trội quá giờ trả theo đêm</p>
+                        </div>
+                        <div class="col-sm-2">
+                            <i class="fa fa-plus-square"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="giatheogio col-sm-5" style="display: flex;">
+                            <p>Quá:</p>
+                            <div class="input-group col-sm-3" style=" width: 70%; margin-left: 14px;">
+                                <input type="number" class="form-control" id="txtGioquatheodem" name="txtGioquatheodem" placeholder="0" min="0">
+                                <span class="input-group-addon">H</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-7" style="display: flex;padding-left:0px;padding-right:0px;">
+
+                            <div class="input-group col-sm-10" style="padding-right:10px;">
+                                <input type="number" class="form-control" id="txtGiaquatheodem" name="txtGiaquatheodem" placeholder="0" min="0">
+                                <span class="input-group-addon">VNĐ</span>
+                            </div>
+                            <div class="input-group col-sm-2">
+                                <i class="fa fa-plus-square"></i>
+                                <i class="fa fa-remove"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <p class="text-red">Quá quy định trên sẽ tính thành 1 ngày</p>
+                    </div>
+                   
+                    <!-- /.form-group -->
+                </div>
+                <!-- /.col -->
+                <div class="col-md-4">
+                    @*Phụ trợ nhận phòng sơm theo ngày*@
+                    <div class="form-group">
+                        <div class="col-sm-6 divmaughi" id="Phutroiquagiatheongay">
+                            <p>Phụ trội nhận phòng sớm theo ngày</p>
+                        </div>
+                        <div class="col-sm-2">
+                            <i class="fa fa-plus-square"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="giatheogio col-sm-5" style="display: flex;">
+                            <p>Sớm:</p>
+                            <div class="input-group col-sm-3" style=" width: 70%; margin-left: 14px;">
+                                <input type="number" class="form-control" id="txtGiosomtheongay" name="txtGiosomtheongay" placeholder="0" min="0">
+                                <span class="input-group-addon">H</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-7" style="display: flex;padding-left:0px;padding-right:0px;">
+
+                            <div class="input-group col-sm-10" style="padding-right:10px;">
+                                <input type="number" class="form-control" id="txtGiasomtheongay" name="txtGiasomtheongay" placeholder="0" min="0">
+                                <span class="input-group-addon">VNĐ</span>
+                            </div>
+                            <div class="input-group col-sm-2">
+                                <i class="fa fa-plus-square"></i>
+                                <i class="fa fa-remove"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <p class="text-red">Quá quy định trên sẽ tính thành 1 ngày</p>
+                    </div>
+
+                    @*Phụ trợ nhận phòng sớm theo đêm*@
+                    <div class="form-group">
+                        <div class="col-sm-6 divmaughi" id="Phutroiquagiatheodem">
+                            <p>Phụ trội nhận phòng sớm theo đêm</p>
+                        </div>
+                        <div class="col-sm-2">
+                            <i class="fa fa-plus-square"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="giatheogio col-sm-5" style="display: flex;">
+                            <p>Sớm:</p>
+                            <div class="input-group col-sm-3" style=" width: 70%; margin-left: 14px;">
+                                <input type="number" class="form-control" id="txtGiosomquadem" name="txtGiosomquadem" placeholder="0" min="0">
+                                <span class="input-group-addon">H</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-7" style="display: flex;padding-left:0px;padding-right:0px;">
+
+                            <div class="input-group col-sm-10" style="padding-right:10px;">
+                                <input type="number" class="form-control" id="txtGiasomquadem" name="txtGiasomquadem" placeholder="0" min="0">
+                                <span class="input-group-addon">VNĐ</span>
+                            </div>
+                            <div class="input-group col-sm-2">
+                                <i class="fa fa-plus-square"></i>
+                                <i class="fa fa-remove"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <p class="text-red">Quá quy định trên sẽ tính thành 1 ngày</p>
+                    </div>
+
+                    @*Phụ trợ quá số lượng người lớn*@
+                    <div class="form-group">
+                        <div class="col-sm-6 divmaughi" id="Phutroiquagiatheodem">
+                            <p>Phụ trội quá số lượng người lớn</p>
+                        </div>
+                        <div class="col-sm-2">
+                            <i class="fa fa-plus-square"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="giatheogio col-sm-5" style="display: flex;">
+                            <p>Số người:</p>
+                            <div class="input-group col-sm-3" style=" width: 45%; margin-left: 3px;">
+                                <input type="number" class="form-control" id="txtSonguoi" name="txtsonguoi" placeholder="0" min="0">
+                            </div>
+                        </div>
+                        <div class="col-sm-7" style="display: flex;padding-left:0px;padding-right:0px;">
+
+                            <div class="input-group col-sm-10" style="padding-right:10px;">
+                                <input type="number" class="form-control" id="txtGiasonguoi" name="txtGiasonguoi" placeholder="0" min="0">
+                                <span class="input-group-addon">VNĐ</span>
+                            </div>
+                            <div class="input-group col-sm-2">
+                                <i class="fa fa-plus-square"></i>
+                                <i class="fa fa-remove"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <p class="text-red">Quá quy định trên sẽ tính thành 1 ngày</p>
+                    </div>
+                    <!-- /.form-group -->
+                </div>
+            </div>
+            <!-- /.row -->
+        </div>
+        <div class="form-group">
+            <div class="col-sm-6 divmauxanh" id="dsphongcunghang">
+                <p>Danh sách phòng cùng hạng</p>
+            </div>
+            <div class="col-sm-2">
+                <i id="btnShowDSPhong" class="fa fa-plus-square"></i>
+            </div>
+            
+        </div>
+        <div>
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                @{
+                    for (int i = 0; i < @Model.Count; i++)
+                    {
+                        if (@Model[i].Active != 0)
+                        {
+                            <div class="col-lg-1 col-xs-1">
+                                <!-- small box -->
+                                <div class="small-box bg-gray">
+                                    <div class="inner" style="text-align: center;">
+                                        <h5> @Model[i].Name </h5>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+        </div>
+        <ul class="nav nav-tabs" id="boottom-div">
+            <li id="liAddNew" style="float: right;margin-left: 5px;">
+                <button type="button" id="btnAddNew" class="btn btn-block btn-oze btn-oze-add btn-flat">Cập nhật</button>
+            </li>
+            <li id="liCancel" style="float: right;margin-left: 5px;">
+                <button type="button" id="btnHuyAddNew" class="btn btn-block btn-oze btn-flat"></i>Hủy</button>
+            </li>
+        </ul>
+        <input type="hidden" id="hddRoomType" value="0" />
+    <!-- /.row -->
+</section>
+<!-- /.content -->
+<!-- DataTables -->
+<script>
+    $(document).ready(function () {
+        function removeptqgtn(id) {
+            $('.itemptgtn' + id).remove();
+        }
+
+        $("#btnAddNew").click(function () {
+            var objRoomType = { Name: $('#txtHangRoom').val(), DouldBed: $('#numberdoi').val(), SingBed: $('#numberdon').val(), Note: $('#txtLuuy').val(), UserLimit: $('#txtSonguoilon').val() };
+            $.ajax({
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                type: 'POST',
+                url: '/Room/CreateRoomType',
+                data: JSON.stringify(objRoomType),
+                success: function () {
+                    $('#hddRoomType').val();
+                    $('#Phutroiquagiotheongay').html('Quá giờ trả phòng theo ngày');
+                },
+                failure: function (response) {
+                    $('#Phutroiquagiotheongay').html(response);
+                }
+            });
+        });
+
+
+       
+
+
+
+        /*khai báo phụ trội theo phòng*/
+        var objPTQGTTN = [];
+        var objPTQGTTTD = [];
+        var objPTNPSTN = [];
+        var objNPSTD = [];
+        var objQSLNL = [];
+
+        var countitemptgtn = 1;
+        var obj = [
+            { Name: 'Quá giờ trả phòng theo ngày1', CodePhuTroi: 'QUAGIOTRAPHONGTHEONGAY', ReservationType: 'GIATHEOPHONG', TotalHours: '3' },
+            { Name: 'Quá giờ trả phòng theo ngày1', CodePhuTroi: 'QUAGIOTRAPHONGTHEONGAY', ReservationType: 'GIATHEOPHONG', TotalHours: '3' },
+        ];
+
+        obj = JSON.stringify({ 'obj': obj });
+        $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: '/Room/GetPhutroi',
+            data: obj,
+            success: function () {
+                $('#Phutroiquagiotheongay').html('Quá giờ trả phòng theo ngày');
+            },
+            failure: function (response) {
+                $('#Phutroiquagiotheongay').html(response);
+            }
+        });
+
+        $("#addptqgtn").click(function () {
+            $(".phutroigiotheongay").append('<div class="itemptgtn' + countitemptgtn + '"><div class="form-group objptgtn">' +
+                            '<div class="giatheogio col-sm-5"><p>Quá:</p>'+
+                                '<div class="input-group col-sm-3 dvgiatheogio">' +
+                                    '<input type="number" class="form-control inputgiotn" name="txtGioquatheongay" placeholder="0" min="0"></div></div>'+
+                            '<div class="col-sm-7 dvtientheongay">' +
+                                '<div class="input-group col-sm-10 pr10">'+
+                                    '<input type="number" class="form-control inpugiatm" name="txtGiaquatheongay" placeholder="0" min="0">' +
+                                    '<span class="input-group-addon">VNĐ</span>'+
+                                '</div><div class="input-group col-sm-2"><i class="fa fa-remove" onclick="removeptqgtn('+countitemptgtn+')"></i>' +
+                                '</div></div></div></div>');
+            countitemptgtn++;
+        });
+
+        $("#removeptqgtn").click(function () {
+            $(".itemptgtn").remove();
+        });
+    });
+    $("#btnShowDSPhong").click(function () {
+        var validator = $("#frmRoomtheogia").validate();
+        validator.resetForm();
+        $("#lblTitle").text("Thêm phòng");
+        $("#lblName").text("Tên phòng");
+        $("#mdModify").modal("show");
+    });
+    //$('#liAddNew').click(function () {
+    //    var glstPTQGTTN = [];
+    //    var input = $(".phutroigiotheongay input");
+    //    var obj = {};
+    //    // $(".phutroigiotheongay .objptgtn").each(function () {
+    //    for (var i = 0; i < input.length;i++){
+            
+    //        var flat=false;
+    //        if (i % 2) {
+    //            obj['Number'] = input[i].value;
+    //            flat=true
+    //        } else {
+    //            obj['Money'] = input[i].value;
+    //        }
+    //        if (flat) {
+    //            glstPTQGTTN.push(obj);
+    //            obj = {};
+    //            flat=false;
+    //        }
+            
+    //    }
+    //    console.log(glstPTQGTTN);
+    //    alert(glstPTQGTTN.toString());
+    //});
+</script>
+<script src="~/Themes/plugins/datatables/jquery.dataTables.js"></script>
+<script src="~/Themes/plugins/datatables/dataTables.bootstrap.js"></script>
+<script src="~/Themes/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/oze/oze.RoomConfig.js"></script>

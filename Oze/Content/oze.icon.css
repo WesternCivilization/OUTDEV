@@ -1,0 +1,11 @@
+﻿/*menu*/
+.icon-oze {
+    background:url(/Images/menu.png) no-repeat center;
+    display:inline-block;
+    width: 30px;
+    height:30px;
+}
+.icon-oze-home {
+    background-position: -7px -4px;
+}
+/*/menu*/

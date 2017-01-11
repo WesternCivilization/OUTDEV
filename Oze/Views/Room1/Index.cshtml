@@ -1,0 +1,69 @@
+﻿    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+    <link rel="stylesheet" href="~/Themes/plugins/datatables/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="~/Content/Oze.css">
+    <!--<link rel="stylesheet" href="https://datatables.net/media/css/site.css?_=b05357026107a2e3ca397f642d976192" />-->
+    <div class="tab-title">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a aria-controls="Quản lý NCC" role="tab" data-toggle="tab">Quản lý phòng</a></li>
+            <li id="liAddNew" style="float:right">
+                <button onclick='javascript: editDialog(0);' type="button" class="btn btn-block btn-oze btn-oze-add btn-flat" style="float: right;">
+                    <i class="fa fa-plus" aria-hidden="true"></i>Thêm mới
+                </button>
+            </li>
+        </ul>
+    </div>
+  
+    <section id="content">
+
+    </section>
+<style>
+    body.modal-open .modal.in {
+        display: flex !important;
+        align-items: center;
+    }
+</style>
+<!-- Modal For CRUID -->
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thêm/Sửa</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body-content">
+                    <p>Loading...<img src="/images/load.gif" /></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSave" class="btn btn-default">Lưu</button> <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--script-->
+<script src="~/Themes/plugins/datatables/jquery.dataTables.js"></script>
+<script src="~/Themes/plugins/datatables/dataTables.bootstrap.js"></script>
+<script src="~/Themes/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/oze.common.js"></script>
+<script src="~/Scripts/oze/oze.Room1.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () 
+    {
+        toggleMenu("menu_catdat");
+        searchRoom();
+    });
+    function searchRoom()
+    {
+       
+        showDialogLoading();
+        $("#content").load("/Room1/ListRoom", function () {
+            hideDialogLoading();
+        });
+    }
+</script>
+
+

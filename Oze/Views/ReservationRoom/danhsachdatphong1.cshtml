@@ -1,0 +1,323 @@
+﻿  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+<link rel="stylesheet" href="~/Themes/plugins/datatables/dataTables.bootstrap.css">
+<link rel="stylesheet" href="~/Content/Oze.css">
+<link rel="stylesheet" href="~/Content/hungpvCustom.css">
+<div class="tab-title">
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a aria-controls="Quản lý NCC" role="tab" data-toggle="tab">Danh sách đặt phòng</a></li>
+
+    </ul>
+</div>
+<div class="row">
+    <form id="formSearch" class="form-horizontal MarginTop20">
+        <div class="col-md-2">
+            <div class="form-group form-group-sm">
+                <div class="col-md-12">
+                    <input type="text" placeholder="Mã đặt chỗ" class="form-control txt-border-bot" id="txtSearchCode" name="txtSearchCode">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group form-group-sm">
+                <div class="col-md-12">
+                    <input type="text" placeholder="Tên khách hàng" class="form-control txt-border-bot" id="txtSearchCustomer" name="txtSearchCustomer">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 .col-sm-3">
+            <div class="form-group form-group-sm" style="position:relative;">
+                <label class="col-md-3 control-label" style="text-align:left">Từ(<font color="red">*</font>)</label>
+                <div class="col-md-9">
+                    <div class="input-group input-group-sm date-search-picker_fdate" id="SearchPeriodFormdate">
+                        <input type="text" placeholder="Từ ngày" class="form-control" id="dtFrom">
+                        <span class="input-group-addon input-group-addon-custom">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group form-group-sm">
+                <label class="col-md-3 control-label" style="text-align:left">Tới(<font color="red">*</font>)</label>
+                <div class="col-md-9">
+                    <div class="input-group input-group-sm date-search-picker_tdate" id="SearchPeriodFormdate">
+                        <input type="text" placeholder="Từ ngày" class="form-control" id="dtTo">
+                        <span class="input-group-addon input-group-addon-custom">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group form-group-sm">
+                <label class="col-md-4 control-label" style="text-align:left">Trạng thái</label>
+                <div class="col-md-8">
+                    <select id="ddlStatus" class="form-control">
+                        <option value="0" selected>--Tất cả--</option>
+                        <option value="1" >Chưa xác nhận</option>
+                        <option value="2">Đã xác nhận</option>
+                        <option value="3">Đã nhận phòng</option>
+                        <option value="5">Đã trả phòng</option>
+                        <option value="4">Đã Hủy</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group form-group-sm">
+                <label class="col-md-4 control-label" style="text-align:left">Hạng phòng</label>
+                <div class="col-md-8">
+                    <select id="ddlRoomTypeID" class="form-control">
+                        <option value="0" selected>--Chọn--</option>
+                        @foreach (var roomType in (new Oze.Services.CommService().GetAllRoomType()))
+                        {
+                            <option value="@roomType.Id">@roomType.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group form-group-sm">
+                <label class="col-md-4 control-label" style="text-align:left">Số phòng</label>
+                <div class="col-md-8">
+                    <select id="ddlRoomID" class="form-control">
+                        <option value="0" selected>--Chọn--</option>
+                        @foreach (var roome in (new Oze.Services.RoomService().getAll(null)))
+                        {
+                            var sSelected = "";
+                            if (ViewBag.roomid == roome.Id) 
+                            {
+                                sSelected = "selected";
+                            }
+                            <option value="@roome.Id" @sSelected>@roome.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class=" col-md-offset-10">
+            <button id="btnSearch" class="btn btn-default btn-sm" type="button">Tìm kiếm</button>
+            <button id="btnRefresh" class="btn btn-default btn-sm" type="reset">Làm mới</button>
+        </div>
+    </form>
+    <div class="col-md-12">
+        <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Thông tin</th>
+                    <th>Mã đặt phòng</th>
+                    <th>Thời gian </th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+    <!-- Modal For CRUID -->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Thêm mới</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-body-content">
+                        <p>Loading...<img src="/images/load.gif" /></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnSave" class="btn btn-default">Lưu</button> <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal For CRUID Temp -->
+    <div id="myModalTemp" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Thêm mới</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-body-content">
+                        <p>Loading...<img src="/images/load.gif" /></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--script-->
+    <script src="~/Themes/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="~/Themes/plugins/datatables/dataTables.bootstrap.js"></script>
+    <script src="~/Themes/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/oze.common.js"></script>
+    <script src="~/Scripts/oze/oze.Danhsachdatphong.js"></script>
+    <script src="~/Scripts/oze/oze.ReservationRoom1.js"></script>
+    <script type="text/javascript">
+        var $table;
+        $(document).ready(function () {
+            toggleMenu("menu_letan");
+            g_Reservation = new ReservationRoom();
+
+            showDialogLoading();
+            $table = $('#example').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "initComplete": function (settings, json) {
+                    hideDialogLoading();
+                },
+                "dom": '<"top">rt<"bottom" lip><"clear">',
+                "ajax": {
+                    "url": "/ReservationRoom/searchDanhsachdatphong",
+                    "data": function (d) {
+                        delete d.columns;
+                        d.search = $("#txtSearchCustomer").val();
+                        d.code = $("#txtSearchCode").val();
+                        d.bydate = $("#chkDate").is(':checked') ? 1 : 0;
+                        d.roomid = $("#ddlRoomID").val();
+                        d.roomtypeid = $("#ddlRoomTypeID").val();
+                        d.dtFrom = $("#dtFrom").val();
+                        d.dtTo = $("#dtTo").val();
+                        d.status = $("#ddlStatus").val();
+                    }
+                },
+                "columns":
+                    [
+                    { "data": "STT", "orderable": "false", "width": "35px" },//1
+                      {
+                          "data": null, render: function (data, type, row)//2
+                          {
+                              var sContent = '<span class="info_customer">' + row.CustomerName + '</span><br><span class="info_status">';
+                              if (row.StatusReservation == 1) sContent += "Chưa xác nhận";
+                              else if (row.StatusReservation == 2) sContent += "Đã xác nhận(" + row.RoomName + ")";
+                              else if (row.StatusReservation == 3) sContent += "Đã nhận phòng(" + row.RoomName + ")";
+                              else if (row.StatusReservation == 4) sContent += "Đã hủy";
+                              else if (row.StatusReservation == 5) sContent += "Đã trả phòng";
+
+                              else return sContent += "Không biết";
+                              sContent = sContent + "</span>";
+                              return sContent;
+                          }
+                      },
+                      {
+                          "data": null, render: function (data, type, row)//3
+                          {
+                              var sContent ='<span class="info_bookingcode">' +row.BookingCode + '</span><br>' + row.RoomTypeName;
+                              return sContent;
+
+                          }
+                      },
+                        {
+                            "data": null, render: function (data, type, row) //4
+                            {
+                                return row.Arrive_Date + ' ' + row.Arrive_Time + "<br>"
+                                + row.Leave_Date + ' ' + row.Leave_Time;
+                            }
+                        },
+                        {
+                            "data": null, render: function (data, type, row)//7
+                            {
+                                /*
+                                return "<div style='width:10px;display:inline;padding:3px'><a  href='javascript:doiphongDialog(" + row.ID + ")'><i class='glyphicon glyphicon-ok'></i></a></div>"
+                                       + "<div style='width:10px;display:inline;padding:3px'><a href='javascript:cancelDialog(" + row.ID + ")'><i class='glyphicon glyphicon-remove'></i></a></div>"
+                                       + "<div style='width:10px;display:inline;padding:3px'><a href='javascript:viewDialog(" + row.ID + ")'><i class='glyphicon glyphicon-info-sign'></i></a></div>"
+                                       + "<div style='width:10px;display:inline;padding:3px'><a href='javascript:ganPhongDialog(" + row.ID + ")'><i class='glyphicon glyphicon-asterisk'></i></a></div>";
+                                
+                                if (row.StatusReservation == 1) sContent += "Chưa xác nhận";
+                                else if (row.StatusReservation == 2) sContent += "Đã xác nhận(" + row.RoomName + ")";
+                                else if (row.StatusReservation == 3) sContent += "Đã checkin(" + row.RoomName + ")";
+                                else if (row.StatusReservation == 4) sContent += "Đã hủy";
+                                */
+                                var htmlMenu =
+                                   '<div class="edit-delete-table">' +
+                                       (row.StatusReservation == 1 || row.StatusReservation == 2?'<div class="edit-table" data-toggle="modal" data-backdrop="static"  onclick="javascript:editDialog(' + row.ID + ')">' +
+                                           '<img src="/images/icon/icon-edit.png" style=" border: none;" title="Chỉnh sửa">':'') +
+                                       '</div>' +
+                                       (row.StatusReservation == 1 || row.StatusReservation == 2 ? '<div class="delete-table" data-toggle="modal" data-backdrop="static" onclick="javascript:cancelDialog(' + row.ID + ')">' +
+                                           '<img src="/images/icon/icon-delete.png" style=" border: none;" title="Hủy phòng">':'') +
+                                       '</div>' +
+                                       '<div class="delete-table" data-toggle="modal" data-backdrop="static" onclick="javascript:viewDialog(' + row.ID + ')">' +
+                                                  '<img src="/images/icon/icon-view.png" style=" border: none;" title="Thông tin chi tiết">' +
+                                        '</div>'+
+                                       (row.StatusReservation == 1 ?'<div class="delete-table" data-toggle="modal" data-backdrop="static" onclick="javascript:ganPhongDialog(' + row.ID + ')">' +
+                                                     '<img src="/images/icon/icon-ganphong.png" style=" border: none;" title="Gán phòng">':'') +
+                                       '</div>';
+                                 return htmlMenu;
+                            }
+                        }
+                    ]
+            });
+            $("#txtSearchCode").keypress(function (e) {
+                if (e.which == 13) {
+                    searchGrid();
+                }
+            });
+            $("#txtSearchCustomer").keypress(function (e) {
+                if (e.which == 13) {
+                    searchGrid();
+                }
+            });
+            $("#btnSearch").click(function () {
+                searchGrid();
+            });
+        });
+        /*
+        function changeDate() {
+            if(true)// ($('#chkDate').is(':checked'))
+            {
+                $('#dtFrom').removeAttr("disabled");
+                $('#dtTo').removeAttr("disabled");
+
+
+                $('#dtFrom').datetimepicker({
+                    //debug:true,
+                    //locale: 'vi',
+                    format: 'DD/MM/YYYY',
+                    showTodayButton: true,
+                    maxDate: new Date(2020,10,10),
+                    //defaultDate: new Date(),
+                    showClose: false
+
+                });
+                $('#dtTo').datetimepicker({
+                    //debug:true,
+                    //locale: 'vi',
+                    format: 'DD/MM/YYYY',
+                    showTodayButton: true,
+                    maxDate: new Date(2020, 10, 10),
+                    //defaultDate: new Date(),
+                    showClose: false
+
+                });
+            }
+            else {
+                $('#dtFrom').attr("disabled", "disabled");
+                $('#dtTo').attr("disabled", "disabled");
+            }
+        };
+        */
+        function ganPhongDialog(id)
+        {
+            g_Reservation.AssignRoom(id);
+        }
+        function editDialog(id)
+        {
+            g_Reservation.edit(id);
+        }
+        function cancelDialog(id) {
+            g_Reservation.huyPhong(id);
+        }
+    </script>

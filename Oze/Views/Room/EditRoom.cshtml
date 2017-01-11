@@ -1,0 +1,46 @@
+﻿@using Oze.Models;
+@using Oze.AppCode.DAL;
+@model oze.data.tbl_Unit
+
+   
+    <div>
+        <form id="dummyUnit" action="javascript:void();">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <label for="lblnameks" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="lblnameks" class="col-sm-3 control-label">Tên</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="Name1" required="1" maxlength="50" name="Name1" value="@Model.Name1">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="lblnameks" class="col-sm-3 control-label">Trạng thái</label>
+                <div class="col-sm-9">
+                    <select id="Status" name="Status">
+                        <option value="1" @(Model.Status==1?"selected":"")>Sử dụng</option>
+                        <option value="0" @(Model.Status==0?"selected":"")>Không sử dụng</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="lblnameks" class="col-sm-3 control-label">Trọng số</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="Value" required="1" number="1" name="Value" value="@Model.Value">
+                </div>
+            </div>
+           
+
+            <div class="form-group">
+                <label for="lblnameks" class="col-sm-3 control-label">Mô tả</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="Description" name="Description" value="@Model.Description" required="1">
+                </div>
+            </div>
+        </form>
+    </div>
+<!--<script src="~/Scripts/oze/SysUser/oze_Supplier.js"></script>-->

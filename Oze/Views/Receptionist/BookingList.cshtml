@@ -1,0 +1,323 @@
+﻿@using Oze.Models;
+
+@{
+    ViewBag.Title = "Danh sách đặt phòng";
+}
+<link href="~/Content/datetimepicker/bootstrap-datetimepicker.css" rel="stylesheet" />
+<div class="tab-title">
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a aria-controls="@ViewBag.Title" role="tab" data-toggle="tab">@ViewBag.Title</a></li>
+    </ul>
+</div>
+<script>
+    m_test = '@Html.Raw(Json.Encode(ViewData["loaihinh"]))';
+</script>
+@*<div class="group-control">*@
+    @*top*@
+    <div class="group-top">
+        <div class="form-group col-md-3 not-padding-right">
+            <div class="col-md-4 not-padding">
+                <label class="lbl-name">Loại hình:</label>
+            </div>
+
+            <div class="col-md-8 not-padding">
+                @Html.DropDownList("GroupType", (SelectList)ViewData["loaihinh"], "---Chọn---", new { @class = "form-control dll-content", @data = "GroupType", @id= "ddlReservationType" })
+                @*<select id="ddlType" class="form-control">
+                    <option value="0" selected>Chọn</option>
+                    <option value="1">Theo người</option>
+                    <option value="2">Theo phòng</option>
+                </select>*@
+            </div>
+        </div>
+        <div class="form-group col-md-3 not-padding-right">
+            <div class="col-md-4 not-padding">
+                <label class="lbl-name">Trạng thái:</label>
+            </div>
+            <div class="col-md-8 not-padding">
+                @Html.DropDownList("GroupType", (SelectList)ViewData["trangthai"], new { @class = "form-control dll-content", @data = "GroupType", @id = "ddlReservationStatus" })
+                @*<select id="ddlStatus" class="form-control">
+                    <option value="1" selected>Đã đặt</option>
+                    <option value="2">Chưa đến</option>
+                </select>*@
+            </div>
+        </div>
+        <div class="form-group col-md-3 not-padding-right">
+            <div class="col-md-4 not-padding">
+                <label class="lbl-name">Số phòng:</label>
+            </div>
+            <div class="col-md-8 not-padding">
+                @Html.DropDownList("GroupType", (SelectList)ViewData["Room"], "---Chọn---", new { @class = "form-control dll-content", @data = "GroupType", @id= "ddlRoom" })
+                @*<select id="ddlRoom" class="form-control">
+                    <option value="0" selected>Chọn</option>
+                    <option value="1">101</option>
+                    <option value="2">102</option>
+                    <option value="3">103</option>
+                    <option value="4">201</option>
+                    <option value="5">202</option>
+                    <option value="6">203</option>
+                </select>*@
+            </div>
+        </div>
+        <div class="form-group col-md-3 not-padding-right">
+            <div class="col-md-4 not-padding">
+                <label class="lbl-name">Hạng phòng:</label>
+            </div>
+            <div class="col-md-8 not-padding">
+                @Html.DropDownList("GroupType", (SelectList)ViewData["hangphong"], "---Chọn---", new { @class = "form-control dll-content", @data = "GroupType", @id = "ddlRoomType" })
+                @*<select id="ddlRoomType" class="form-control">
+                    <option value="0" selected>Chọn</option>
+                    <option value="1">Tiêu chuẩn 1 giường đơn</option>
+                    <option value="2">Tiêu chuẩn 1 giường đôi</option>
+                    <option value="3">Tiêu chuẩn 2 giường đơn</option>
+                    <option value="4">Tiêu chuẩn 2 giường đôi</option>
+                </select>*@
+            </div>
+        </div>
+    </div>
+
+    @*bottom*@
+    <div class="group-bottom">
+
+        <div class="col-md-3 not-padding-right">
+            <div class="col-md-1 not-padding">
+                <label class="cbx-content">
+                    <input type="checkbox" class="minimal-red" id="cbxDate" />
+                </label>
+            </div>
+            <div class="col-md-3 not-padding">
+                <label class="lbl-name">Từ ngày:</label>
+            </div>
+            <!-- Date -->
+            <div class="input-group date col-md-8 not-padding">
+                    <input type="text" class="form-control pull-right pick-date" id="dpkArriveDate" disabled>
+                <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 not-padding-right">
+            <div class="col-md-4 not-padding">
+                <label class="lbl-name">Đến:</label>
+            </div>
+            <!-- Date -->
+            <div class="input-group date col-md-8 not-padding">
+                <input type="text" class="form-control pull-right pick-date" id="dpkLeaveDate" disabled>
+                <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group col-md-2 not-padding-right">
+            <input class="form-control txt-border-bot" placeholder="Mã đặt phòng" id="txtBookingCode" />
+        </div>
+        <div class="form-group col-md-2 not-padding-right">
+            <input class="form-control txt-border-bot" placeholder="Họ tên khách hàng" id="txtCustomerName" />
+        </div>
+        <div class="form-group col-md-2 not-padding-right">
+            <a id="btnSearch" class="btn btn-block btn-oze btn-oze-add btn-flat not-padding-right pull-right">Tìm kiếm</a>
+        </div>
+    </div>
+@*</div>*@
+<div class="clearfix"></div>
+<div class="group-grid hide">
+    <table id="tbBookingList" class="table table-striped table-bordered nowrap table-hover" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <td class="no-sort">STT</td>
+                <td>Họ tên</td>
+                <td>Mã đặt phòng</td>
+                <td>Loại hình</td>  
+                <td>Thời gian nhận</td>
+                <td>Thời gian trả</td>
+                <td>Trạng thái</td>
+                <td class="no-sort th-modify">Thao tác</td>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+<div class="group-footer">
+    <div class="col-md-12 pagination-table not-padding"></div>
+</div>
+<!--modal doi -->
+@using (Html.BeginForm())
+{
+    <div class="modal modal-detail-booking fade" id="mdSetRoom" tabindex="-1" role="dialog" aria-labelledby="lblTitle">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="lblTitle">
+                        <i class="icon-modify icon-set"></i>
+                        <p>Gán phòng</p>
+                    </h4>
+                </div>
+                <div class="modal-body  clearfix">
+                    <div class="modal-body-content">
+                        <div class="co-md-12 form-group">
+                            <div class="col-md-6 customer-info">
+                                <div class="col-md-12 space-row">
+                                    <div class="txt-left col-md-4">
+                                        <p>Hạng phòng:</p>
+                                    </div>
+                                    <div class="txt-middle col-md-8 space-row">
+                                        @Html.DropDownList("roomType", (SelectList)ViewData["hangphong"], "---Chọn---", new { @class = "form-control dll-content required", @data = "roomType", @id = "ddlRoomType", @for="roomType" })
+                                        @*<select id="ddlRoomLevel" class="form-control">
+                                            <option value="0" selected>Chọn</option>
+                                            <option value="1">Tiêu chuẩn 1 giường đơn</option>
+                                            <option value="2">Tiêu chuẩn 1 giường đôi</option>
+                                            <option value="3">Tiêu chuẩn 2 giường đơn</option>
+                                            <option value="4">Tiêu chuẩn 2 giường đôi</option>
+                                        </select>*@
+                                    </div>
+                                </div>
+                                <div class="col-md-12 space-row">
+                                    <div class="txt-left col-md-4">
+                                        <p>Số phòng:</p>
+                                    </div>
+                                    <div class="txt-middle col-md-8 space-row">
+                                        @Html.DropDownList("room", (SelectList)ViewData["Room"], "---Chọn---", new { @class = "form-control dll-content required", @data = "RoomID", @id = "ddlRoom", @for = "room" })
+                                        @*<select id="ddlRoom" class="form-control">
+                                            <option value="0" selected>Chọn</option>
+                                            <option value="1">101</option>
+                                            <option value="2">102</option>
+                                            <option value="3">103</option>
+                                            <option value="4">201</option>
+                                            <option value="5">202</option>
+                                            <option value="6">203</option>
+                                        </select>*@
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 booking-info">
+                                <div class="group-content">
+                                    <div class="group-top">
+                                        <div class="col-md-12 space-row">
+                                            <div class="txt-left col-md-4 space-row">
+                                                <p>Mã phòng:</p>
+                                            </div>
+                                            <div class="txt-middle col-md-8 space-row">
+                                                <p data="RoomID" class="txtRoom">KS123</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 space-row">
+                                            <div class="txt-left col-md-4 space-row">
+                                                <p>Giá thời điểm:</p>
+                                            </div>
+                                            <div class="txt-middle col-md-8 space-row">
+                                                <p data="Holiday" class="txtStartPrice"></p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12 space-row">
+                                            <div class="txt-left col-md-4 space-row">
+                                                <p>Khung giá phòng:</p>
+                                            </div>
+                                            <div class="txt-middle col-md-8 space-row">
+                                                <p data="khunggio" class="txtKhungGia">Giá giờ</p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12 space-row">
+                                            <div class="txt-left col-md-4 space-row">
+                                                <p>Giá phòng:</p>
+                                            </div>
+                                            <div class="txt-middle col-md-8 space-row">
+                                                <p data="Price" class="txtGiaPhong">70 000</p><p> VNĐ</p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12 space-row">
+                                            <div class="txt-left col-md-4 space-row">
+                                                <p>Ngày giờ đến:</p>
+                                            </div>
+                                            <div class="txt-middle col-md-8 space-row">
+                                                <p data="Arrive_Date" class="txtArriveDate">05/11/2016 10:00</p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12 space-row">
+                                            <div class="txt-left col-md-4 space-row">
+                                                <p>Ngày giờ đi:</p>
+                                            </div>
+                                            <div class="txt-middle col-md-8 space-row">
+                                                <p data="Leave_Date" class="txtLeaveDate">05/11/2016 12:00</p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12 space-row">
+                                            <div class="txt-left col-md-4 space-row">
+                                                <p>Người lớn:</p>
+                                            </div>
+                                            <div class="txt-middle col-md-8 space-row">
+                                                <p data="Number_People" class="txtNguoiLon">02</p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12 space-row">
+                                            <div class="txt-left col-md-4 space-row">
+                                                <p>Trẻ em:</p>
+                                            </div>
+                                            <div class="txt-middle col-md-8 space-row">
+                                                <p data="Number_Children" class="txtTreEm">01</p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12 space-row">
+                                            <div class="txt-left col-md-4 space-row">
+                                                <p>Phương thức thanh toán:</p>
+                                            </div>
+                                            <div class="txt-middle col-md-8 space-row">
+                                                <p data="PaymentTypeName" class="txtMoney">Tiền mặt</p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12 space-row">
+                                            <div class="txt-left col-md-4 space-row">
+                                                <p>Giảm trừ:</p>
+                                            </div>
+                                            <div class="txt-middle col-md-8 space-row">
+                                                <p data="Deduction" class="txtSaleOff">Không có</p><p> VNĐ</p>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-12 space-row">
+                                            <div class="txt-left col-md-4 space-row">
+                                                <p>Trả trước:</p>
+                                            </div>
+                                            <div class="txt-middle col-md-8 space-row">
+                                                <p data="Deposit" class="txtTraTtruoc">50 000</p><p> VNĐ</p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer clearfix">
+                    <button id="btnSave" type="button" class="btn btn-block btn-oze btn-oze-add btn-flat btn-save">
+                        <div class="btn-border"><p>Lưu</p></div>
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+        <!-- /.modal -->
+}
+<!--/modal doi -->
+@section Scripts {
+    @Scripts.Render("~/bundles/datatable")
+}
+<script src="~/Scripts/datetimepicker/moment.js"></script>
+<script src="~/Scripts/datetimepicker/bootstrap-datetimepicker.js"></script>
+<script src="~/Scripts/pagination/jquery.twbsPagination.js"></script>
+<script src="~/Scripts/oze/oze.bookingList.js"></script>

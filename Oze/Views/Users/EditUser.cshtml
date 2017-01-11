@@ -1,0 +1,127 @@
+﻿@using Oze.Models;
+@using Oze.AppCode.DAL;
+@using Oze.AppCode.Util;
+
+@model oze.data.view_DetailUser
+@{
+    var lstHotel = (new Oze.Services.HotelService()).GetAll(null);
+}
+  <!-- end to test -->
+<div>
+    <form id="dummyUsers" action="javascript:void();">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label"></label>
+            <div class="col-sm-9">
+                <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label">Tên</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="FullName" required="1" name="FullName" value="@Model.FullName">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label">Tên truy cập</label>
+            <div class="col-sm-9">
+                <input type="text" @(Model.ID == 0 ? "" : "readonly='1'") class="form-control" maxlength="30" id="UserName" name="UserName" value="@Model.UserName">
+            </div>
+        </div>
+        @if (Model.ID == 0)
+        {
+            <div class="form-group row">
+                <label for="lblnameks" class="col-sm-3 control-label">Mật khẩu</label>
+                <div class="col-sm-9">
+                    <input type="password" class="form-control" id="Password" required="1" maxlength="30" name="Password" >
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="lblnameks" class="col-sm-3 control-label">Xác nhận mật khẩu</label>
+                <div class="col-sm-9">
+                    <input type="password" class="form-control" equalto="#Password" id="ConfirmPassword" required="1" maxlength="30" name="ConfirmPassword">
+                </div>
+            </div>
+        }
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label">Email</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="Email" email="1" name="Email" required="1" value="@Model.Email" data-rule-email="true">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label">ID/CMND</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="IdentityNumber" required="1" name="IdentityNumber" value="@Model.IdentityNumber">
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label">Địa chỉ</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="Address" name="Address" value="@Model.Address">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label">Điện thoại</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="Mobile" maxlength="12" name="Mobile" value="@Model.Mobile">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label">Trạng thái</label>
+            <div class="col-sm-9">
+                <select class="form-control" id="Status" name="Status" value="@Model.Status">
+                    <option value="1" @(Model.Status == 1 ? "selected" : "")>Đang sử dụng</option>
+                    <option value="0" @(Model.Status == 0 ? "selected" : "")>Không sử dụng</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label">Active?</label>
+            <div class="col-sm-9">
+                <select class="form-control" id="IsActive" name="IsActive">
+                    <option value="1" @(Model.IsActive == 1  ? "selected" : "")>Active</option>
+                    <option value="0" @(Model.IsActive == 0 ? "selected" : "")>Disactive</option>
+                </select>
+            </div>
+        </div>
+        <hr />
+        <div class="form-group row">
+            <label for="lblnameks" class="col-sm-3 control-label">Khách sạn</label>
+            <div class="col-sm-9">
+                <select required="1" class="form-control" id="SysHotelID" name="SysHotelID" onchange="javascript: $('#divRight').css('display', $('#SysHotelID').val()>0?'block':'none');">
+                    @{
+                        
+                        if(lstHotel.Count>1){ <option value="0" @(((Model.SysHotelID ?? 0) == 0) ? "selected" : "")>===Lựa khách sạn===</option>}
+                        foreach (var hotel in lstHotel)
+                        {
+                            <option value="@hotel.Id" @(((Model.SysHotelID ?? 0) == hotel.Id) ? "selected" : "")>@hotel.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group row" id="divRight" style="display:@((((Model.SysHotelID ?? 0) == 0) && (lstHotel.Count>1)) ? "none" : "block")">
+            <label for="lblnameks" class="col-sm-3 control-label">Phân quyền khách sạn</label>
+            <div class="col-sm-9">
+              @foreach (var groupType in (new Oze.Services.SysUserService()).GetAllGroupType())
+              {
+                  if (((groupType.code.ToLower()=="superadmin" && comm.IsSuperAdmin())) || groupType.code.ToLower()!="superadmin" ) 
+                  { 
+                     <label class="radio-inline"><input type="radio" required="1" name="grouptypeid" name="grouptypeid" value="@groupType.Id" @(Model.grouptypeid == groupType.Id ? "checked" : "")>@groupType.NameVN</label>
+                  }
+                  else
+                  { 
+                  }  
+               }
+            </div>
+        </div>
+    </form>
+
+ </div>
+<script type="text/javascript">
+    $(document).ready(function () { $("#dummyUsers").validate({ onfocusout: true}); });
+ </script>
